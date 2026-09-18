@@ -282,7 +282,8 @@
     "song": "Song",
     "dietary": "Allergies",
     "editContent": "Edit invitation",
-    "editContentHint": "Texts, photos, schedule and gifts. You can edit until it is published."
+    "editContentHint": "Texts, photos, schedule and gifts. You can edit until it is published.",
+    "downloadPdf": "Download PDF"
   },
   "store": {
     "title": "Build your invitation",

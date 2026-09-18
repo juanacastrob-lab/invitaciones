@@ -72,6 +72,10 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
                 <dt className="text-xs text-stone-500">Tarjeta de WhatsApp</dt>
                 <dd><a className="underline" href={`/i/${event.slug}/opengraph-image`} target="_blank">ver imagen</a></dd>
               </div>
+              <div>
+                <dt className="text-xs text-stone-500">Invitación en PDF (paquete Básico o para imprimir)</dt>
+                <dd className="flex gap-3">{event.languages.map((l) => <a key={l} className="underline" href={`/admin/events/${id}/invitation.pdf?lang=${l}`} target="_blank">{l.toUpperCase()}</a>)}</dd>
+              </div>
             </dl>
           </section>
 

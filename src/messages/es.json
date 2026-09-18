@@ -282,7 +282,8 @@
     "song": "Canción",
     "dietary": "Alergias",
     "editContent": "Editar invitación",
-    "editContentHint": "Textos, fotos, itinerario y regalos. Puedes editar hasta que se publique."
+    "editContentHint": "Textos, fotos, itinerario y regalos. Puedes editar hasta que se publique.",
+    "downloadPdf": "Descargar PDF"
   },
   "store": {
     "title": "Arma tu invitación",
