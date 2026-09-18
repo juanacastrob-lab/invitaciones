@@ -6,6 +6,7 @@ import { requireRole } from '@/lib/auth';
 import { getEvent, listGuests, listMessages } from '@/lib/admin/queries';
 import { SessionBar } from '@/components/auth/SessionBar';
 import { PanelGuests } from '@/components/panel/PanelGuests';
+import { ApproveBox } from '@/components/panel/ApproveBox';
 import { GuestsManager } from '@/components/admin/GuestsManager';
 import { Badge, LinkButton } from '@/components/ui';
 import { STATUS_LABEL, STATUS_TONE } from '@/lib/admin/labels';
@@ -59,6 +60,14 @@ export default async function PanelEventPage({ params, searchParams }: { params:
             {editable ? <LinkButton href={`/panel/${id}/contenido${lang ? `?lang=${lang}` : ''}`} variant="primary">{t('editContent')}</LinkButton> : null}
           </div>
         </div>
+
+        {event.status === 'en_revision' ? (
+          <div className="mt-6">
+            <NextIntlClientProvider locale={locale} messages={{ panel: messages.panel }}>
+              <ApproveBox eventId={id} previewHref={`/i/${event.slug}?preview=${event.preview_key}`} editHref={`/panel/${id}/contenido${lang ? `?lang=${lang}` : ''}`} />
+            </NextIntlClientProvider>
+          </div>
+        ) : null}
 
         <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {kpis.map(([label, value]) => (

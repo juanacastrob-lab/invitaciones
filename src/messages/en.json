@@ -283,7 +283,13 @@
     "dietary": "Allergies",
     "editContent": "Edit invitation",
     "editContentHint": "Texts, photos, schedule and gifts. You can edit until it is published.",
-    "downloadPdf": "Download PDF"
+    "downloadPdf": "Download PDF",
+    "approve": {
+      "title": "Your invitation is ready for review",
+      "body": "Open it and check texts, dates and venues. If something is off, edit it or message us. When it is perfect, approve it and it goes live: from then on your guests can open it.",
+      "button": "Approve and publish",
+      "confirm": "Approve and publish the invitation? After that, changes are made by the team."
+    }
   },
   "store": {
     "title": "Build your invitation",

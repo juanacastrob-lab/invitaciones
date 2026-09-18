@@ -283,7 +283,13 @@
     "dietary": "Alergias",
     "editContent": "Editar invitación",
     "editContentHint": "Textos, fotos, itinerario y regalos. Puedes editar hasta que se publique.",
-    "downloadPdf": "Descargar PDF"
+    "downloadPdf": "Descargar PDF",
+    "approve": {
+      "title": "Tu invitación está lista para revisar",
+      "body": "Ábrela, revisa textos, fechas y lugares. Si algo no cuadra, edítala o escríbenos. Cuando esté perfecta, apruébala y queda publicada: desde ese momento tus invitados ya pueden abrirla.",
+      "button": "Aprobar y publicar",
+      "confirm": "¿Aprobar y publicar la invitación? Después los cambios los hace el equipo."
+    }
   },
   "store": {
     "title": "Arma tu invitación",

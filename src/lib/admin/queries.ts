@@ -175,3 +175,42 @@ export async function listPricing(): Promise<{ packages: PriceRow[]; extras: Pri
   const num = (r: Record<string, unknown>) => ({ ...r, price: Number(r.price) }) as PriceRow;
   return { packages: (packages ?? []).map(num), extras: (extras ?? []).map(num) };
 }
+
+// -----------------------------------------------------------------------------
+// Bitácora
+// -----------------------------------------------------------------------------
+
+export interface ActivityRow { id: string; actor_label: string; entity: string; entity_id: string | null; entity_label: string | null; action: string; detail: string | null; created_at: string }
+
+/** Últimos movimientos, con nombre de quien los hizo y del evento tocado. */
+export async function listActivity(limit = 200): Promise<ActivityRow[]> {
+  const supabase = await supabaseServer();
+  const { data: log } = await supabase
+    .from('activity_log')
+    .select('id, actor, entity, entity_id, action, data, created_at')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+  const rows = log ?? [];
+  const actorIds = Array.from(new Set(rows.map((r) => r.actor).filter(Boolean))) as string[];
+  const eventIds = Array.from(new Set(rows.filter((r) => r.entity === 'event' && r.entity_id).map((r) => r.entity_id))) as string[];
+  const [{ data: actors }, { data: events }] = await Promise.all([
+    actorIds.length ? supabase.from('profiles').select('user_id, email, name').in('user_id', actorIds) : Promise.resolve({ data: [] as { user_id: string; email: string | null; name: string | null }[] }),
+    eventIds.length ? supabase.from('events').select('id, slug').in('id', eventIds) : Promise.resolve({ data: [] as { id: string; slug: string }[] }),
+  ]);
+  const actorBy = new Map((actors ?? []).map((a) => [a.user_id, a.name || a.email || a.user_id.slice(0, 8)]));
+  const slugBy = new Map((events ?? []).map((e) => [e.id, e.slug]));
+  return rows.map((r) => {
+    const d = (r.data ?? {}) as Record<string, unknown>;
+    const detail = r.action === 'status' ? `${d.from} → ${d.to}` : r.action === 'role' ? `→ ${d.to}` : r.action === 'paid' && d.reference ? `ref. ${d.reference}` : r.action === 'approved' ? `como ${d.by}` : null;
+    return {
+      id: r.id,
+      actor_label: r.actor ? (actorBy.get(r.actor) ?? 'alguien') : 'sistema',
+      entity: r.entity,
+      entity_id: r.entity_id,
+      entity_label: r.entity === 'event' && r.entity_id ? (slugBy.get(r.entity_id) ?? (typeof d.slug === 'string' ? d.slug : null)) : null,
+      action: r.action,
+      detail,
+      created_at: r.created_at,
+    };
+  });
+}

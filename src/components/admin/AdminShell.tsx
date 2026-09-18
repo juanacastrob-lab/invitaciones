@@ -6,6 +6,7 @@ const NAV = [
   { href: '/admin/events', label: 'Eventos' },
   { href: '/admin/orders', label: 'Pedidos' },
   { href: '/admin/leads', label: 'Prospectos' },
+  { href: '/admin/log', label: 'Bitácora' },
   { href: '/admin/pricing', label: 'Precios', admin: true },
   { href: '/admin/team', label: 'Equipo', admin: true },
 ];
