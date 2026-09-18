@@ -397,6 +397,7 @@
     "noTable": "— no table —",
     "export": "Export by table",
     "print": "Print",
-    "summary": "{tables} tables · {assigned} of {total} guests seated"
+    "summary": "{tables} tables · {assigned} of {total} guests seated",
+    "edit": "Edit"
   }
 }

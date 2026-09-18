@@ -35,19 +35,31 @@ export function LinkButton({
   return <a className={`${base} ${styles} ${className}`} {...props} />;
 }
 
-export const inputClass =
-  'w-full rounded-sm border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-stone-600 focus:outline-none disabled:bg-stone-50';
+const inputBase =
+  'rounded-sm border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-stone-600 focus:outline-none disabled:bg-stone-50';
+
+/**
+ * Los campos ocupan todo el ancho salvo que se les dé uno (w-28, w-40...).
+ * Tailwind no deja que una clase "gane" por venir después: si se combinan
+ * w-full y w-32, decide el orden de la hoja de estilos. Por eso aquí se
+ * quita w-full cuando hay un ancho explícito.
+ */
+export function inputClassWith(className = ''): string {
+  return `${inputBase} ${/(^|\s)w-/.test(className) ? '' : 'w-full'} ${className}`;
+}
+
+export const inputClass = `${inputBase} w-full`;
 
 export function Input({ className = '', ...props }: ComponentProps<'input'>) {
-  return <input className={`${inputClass} ${className}`} {...props} />;
+  return <input className={inputClassWith(className)} {...props} />;
 }
 
 export function Select({ className = '', ...props }: ComponentProps<'select'>) {
-  return <select className={`${inputClass} ${className}`} {...props} />;
+  return <select className={inputClassWith(className)} {...props} />;
 }
 
 export function Textarea({ className = '', ...props }: ComponentProps<'textarea'>) {
-  return <textarea className={`${inputClass} min-h-24 ${className}`} {...props} />;
+  return <textarea className={inputClassWith(`min-h-24 ${className}`)} {...props} />;
 }
 
 export function Field({ label, children, hint }: { label: string; children: ReactNode; hint?: string }) {

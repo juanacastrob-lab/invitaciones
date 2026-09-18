@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { createTable, bulkCreateTables, updateTable, deleteTable, assignTable } from '@/actions/tables';
 import type { GuestRow, TableRow } from '@/lib/admin/queries';
 import type { ActionResult } from '@/schemas/admin';
-import { Button, Input, Notice, inputClass } from '@/components/ui';
+import { Button, Input, Notice, inputClass, inputClassWith } from '@/components/ui';
 
 /**
  * Acomodo de mesas. Lo usan el equipo (admin), los novios y el planner
@@ -48,10 +48,12 @@ export function TablesManager({ eventId, tables, guests, exportHref }: { eventId
             return (
               <li key={tb.table_id} className={`rounded-sm border bg-white p-3 ${over ? 'border-red-300' : 'border-stone-200'}`}>
                 {editing === tb.table_id ? (
-                  <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); const f = new FormData(e.currentTarget); run(() => updateTable(eventId, tb.table_id, { name: f.get('name'), capacity: f.get('capacity') || '' })); setEditing(null); }}>
-                    <Input name="name" defaultValue={tb.name} required className="flex-1" />
-                    <Input name="capacity" type="number" min={1} max={100} defaultValue={tb.capacity ?? ''} placeholder={t('capacity')} className="w-20" />
-                    <Button type="submit" variant="secondary" disabled={pending}>{t('save')}</Button>
+                  <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const f = new FormData(e.currentTarget); run(() => updateTable(eventId, tb.table_id, { name: f.get('name'), capacity: f.get('capacity') || '' })); setEditing(null); }}>
+                    <Input name="name" defaultValue={tb.name} required aria-label={t('name')} />
+                    <div className="flex gap-2">
+                      <Input name="capacity" type="number" min={1} max={100} defaultValue={tb.capacity ?? ''} placeholder={t('capacity')} className="w-28" />
+                      <Button type="submit" variant="secondary" disabled={pending} className="flex-1">{t('save')}</Button>
+                    </div>
                   </form>
                 ) : (
                   <>
@@ -65,7 +67,7 @@ export function TablesManager({ eventId, tables, guests, exportHref }: { eventId
                       {guests.filter((g) => g.table_id === tb.table_id).map((g) => <li key={g.id}>{g.display_name} <span className="text-stone-400">· {g.passes}</span></li>)}
                     </ul>
                     <div className="mt-2 flex gap-1 print:hidden">
-                      <Button variant="ghost" onClick={() => setEditing(tb.table_id)}>{t('save') === 'Guardar' ? 'Editar' : 'Edit'}</Button>
+                      <Button variant="ghost" onClick={() => setEditing(tb.table_id)}>{t('edit')}</Button>
                       <Button variant="ghost" className="text-red-700" disabled={pending} onClick={() => { if (confirm(t('deleteConfirm'))) run(() => deleteTable(eventId, tb.table_id)); }}>{t('delete')}</Button>
                     </div>
                   </>
@@ -76,15 +78,21 @@ export function TablesManager({ eventId, tables, guests, exportHref }: { eventId
         </ul>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2 print:hidden">
-          <form className="flex gap-2 rounded-sm border border-stone-200 bg-white p-3" onSubmit={(e) => { e.preventDefault(); const form = e.currentTarget; const f = new FormData(form); run(() => createTable(eventId, { name: f.get('name'), capacity: f.get('capacity') || '' })); form.reset(); }}>
-            <Input name="name" placeholder={t('namePlaceholder')} required className="flex-1" />
-            <Input name="capacity" type="number" min={1} max={100} placeholder={t('capacity')} className="w-24" />
-            <Button type="submit" variant="secondary" disabled={pending}>{t('add')}</Button>
+          <form className="space-y-2 rounded-sm border border-stone-200 bg-white p-3" onSubmit={(e) => { e.preventDefault(); const form = e.currentTarget; const f = new FormData(form); run(() => createTable(eventId, { name: f.get('name'), capacity: f.get('capacity') || '' })); form.reset(); }}>
+            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-stone-500">{t('add')}</p>
+            <Input name="name" placeholder={t('namePlaceholder')} required aria-label={t('name')} />
+            <div className="flex gap-2">
+              <Input name="capacity" type="number" min={1} max={100} placeholder={t('capacity')} className="w-28" />
+              <Button type="submit" variant="secondary" disabled={pending} className="flex-1">{t('add')}</Button>
+            </div>
           </form>
-          <form className="flex gap-2 rounded-sm border border-stone-200 bg-white p-3" onSubmit={(e) => { e.preventDefault(); const f = new FormData(e.currentTarget); run(() => bulkCreateTables(eventId, Number(f.get('count')), f.get('capacity') ? Number(f.get('capacity')) : undefined, t('namePlaceholder').replace(/\s*1$/, ''))); }}>
-            <Input name="count" type="number" min={1} max={60} placeholder={t('bulkCount')} required className="w-28" />
-            <Input name="capacity" type="number" min={1} max={100} placeholder={t('bulkCapacity')} className="flex-1" />
-            <Button type="submit" variant="secondary" disabled={pending}>{t('bulk')}</Button>
+          <form className="space-y-2 rounded-sm border border-stone-200 bg-white p-3" onSubmit={(e) => { e.preventDefault(); const f = new FormData(e.currentTarget); run(() => bulkCreateTables(eventId, Number(f.get('count')), f.get('capacity') ? Number(f.get('capacity')) : undefined, t('namePlaceholder').replace(/\s*1$/, ''))); }}>
+            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-stone-500">{t('bulk')} <span className="normal-case tracking-normal text-stone-400">· {t('bulkHelp')}</span></p>
+            <div className="flex gap-2">
+              <Input name="count" type="number" min={1} max={60} placeholder={t('bulkCount')} required className="w-28" />
+              <Input name="capacity" type="number" min={1} max={100} placeholder={t('bulkCapacity')} className="flex-1" />
+            </div>
+            <Button type="submit" variant="secondary" disabled={pending} className="w-full">{t('bulk')}</Button>
           </form>
         </div>
       </section>
@@ -98,11 +106,11 @@ export function TablesManager({ eventId, tables, guests, exportHref }: { eventId
         <ul className="divide-y divide-stone-200 rounded-sm border border-stone-200 bg-white">
           {visible.map((g) => (
             <li key={g.id} className="flex items-center justify-between gap-3 p-3">
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium">{g.display_name}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium leading-snug">{g.display_name}</p>
                 <p className="text-xs text-stone-500">{g.passes} · {g.status === 'confirmed' ? `✓ ${g.confirmed_count}` : g.status === 'declined' ? '✗' : '…'}{g.group_tag ? ` · ${g.group_tag}` : ''}</p>
               </div>
-              <select className={`${inputClass} w-40`} value={g.table_id ?? ''} disabled={pending} onChange={(e) => run(() => assignTable(eventId, g.id, e.target.value || null))}>
+              <select className={inputClassWith('w-32 shrink-0')} value={g.table_id ?? ''} disabled={pending} onChange={(e) => run(() => assignTable(eventId, g.id, e.target.value || null))}>
                 <option value="">{t('noTable')}</option>
                 {tables.map((tb) => <option key={tb.table_id} value={tb.table_id}>{tb.name}</option>)}
               </select>

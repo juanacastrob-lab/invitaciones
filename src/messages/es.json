@@ -397,6 +397,7 @@
     "noTable": "— sin mesa —",
     "export": "Exportar por mesa",
     "print": "Imprimir",
-    "summary": "{tables} mesas · {assigned} de {total} invitados acomodados"
+    "summary": "{tables} mesas · {assigned} de {total} invitados acomodados",
+    "edit": "Editar"
   }
 }
