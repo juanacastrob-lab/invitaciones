@@ -177,6 +177,11 @@
     },
     "legal": {
       "privacy": "Aviso de privacidad"
+    },
+    "pass": {
+      "title": "Tu pase",
+      "body": "Muéstralo en la entrada el día del evento. También puedes tomarle captura de pantalla.",
+      "people": "{count, plural, one {# persona} other {# personas}}"
     }
   },
   "auth": {
@@ -289,7 +294,8 @@
       "body": "Ábrela, revisa textos, fechas y lugares. Si algo no cuadra, edítala o escríbenos. Cuando esté perfecta, apruébala y queda publicada: desde ese momento tus invitados ya pueden abrirla.",
       "button": "Aprobar y publicar",
       "confirm": "¿Aprobar y publicar la invitación? Después los cambios los hace el equipo."
-    }
+    },
+    "checkin": "Check-in del día"
   },
   "store": {
     "title": "Arma tu invitación",

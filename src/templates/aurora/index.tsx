@@ -12,6 +12,8 @@ import { CopyButton } from '@/components/invitation/CopyButton';
 import { MusicPlayer } from '@/components/invitation/MusicPlayer';
 import { RsvpForm } from '@/components/invitation/RsvpForm';
 import { resolveTemplate, templateCssVars } from '@/templates/registry';
+import QRCode from 'qrcode';
+import { getSiteUrl } from '@/lib/env';
 
 interface Props {
   invitation: Invitation;
@@ -95,6 +97,12 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
   const heading = theme.heading === 'sans' ? 'font-sans font-light tracking-tight' : 'font-serif';
   const radius = theme.radius === 'xl' ? 'rounded-2xl' : 'rounded-sm';
   const onPhoto = theme.cover === 'split' && Boolean(c.cover?.photo);
+
+  // Pase con QR: solo en el link personal, confirmado y con check-in activado.
+  const showPass = Boolean(event.checkin_enabled && token && guest && guest.status === 'confirmed' && guest.confirmed_count > 0);
+  const passQr = showPass
+    ? await QRCode.toDataURL(`${getSiteUrl() ?? ''}/i/${event.slug}/${token}`, { margin: 1, width: 320, color: { dark: theme.colors.ink, light: theme.colors.paper } })
+    : null;
 
   const sections: Record<SectionId, React.ReactNode> = {
     // -------------------------------------------------------------- portada
@@ -444,6 +452,16 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
           <p className="mb-6 text-center text-sm leading-relaxed text-[var(--muted)]">
             {text(c.rsvp?.note)}
           </p>
+        ) : null}
+
+        {showPass && guest && passQr ? (
+          <div className={`mb-8 border border-[var(--line)] bg-[var(--accent-soft)] p-5 text-center ${radius}`}>
+            <p className="text-[0.65rem] uppercase tracking-[0.3em] text-[var(--muted)]">{t('pass.title')}</p>
+            <img src={passQr} alt="QR" className={`mx-auto mt-4 w-40 ${radius}`} />
+            <p className={`mt-4 ${heading} text-xl text-[var(--ink)]`}>{guest.display_name}</p>
+            <p className="text-xs text-[var(--muted)]">{t('pass.people', { count: guest.confirmed_count })}</p>
+            <p className="mt-3 text-xs leading-relaxed text-[var(--muted)]">{t('pass.body')}</p>
+          </div>
         ) : null}
 
         {guest && token ? (

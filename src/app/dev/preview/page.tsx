@@ -17,11 +17,11 @@ export const dynamic = 'force-dynamic';
 export default async function DevPreview({
   searchParams,
 }: {
-  searchParams: Promise<{ lang?: string; token?: string; type?: string; template?: string }>;
+  searchParams: Promise<{ lang?: string; token?: string; type?: string; template?: string; confirmed?: string }>;
 }) {
   if (process.env.NODE_ENV === 'production') notFound();
 
-  const { lang, token, type, template } = await searchParams;
+  const { lang, token, type, template, confirmed } = await searchParams;
   const conToken = token === '1';
   // ?type=xv: la plantilla de un evento de una sola persona, para revisar el diseño.
   const content = isEventType(type) && type !== 'boda'
@@ -42,6 +42,7 @@ export default async function DevPreview({
       rsvp_deadline: '2027-02-13T23:59:59-06:00',
       allow_public_rsvp: false,
       og_image_url: null,
+      checkin_enabled: true,
       content: conToken
         ? content
         : // Sin token, la base quita los datos bancarios antes de responder.
@@ -57,8 +58,8 @@ export default async function DevPreview({
           display_name: 'Familia López Ramírez',
           passes: 4,
           language: 'es',
-          status: 'pending',
-          confirmed_count: 0,
+          status: confirmed === '1' ? 'confirmed' : 'pending',
+          confirmed_count: confirmed === '1' ? 3 : 0,
           group_tag: 'Familia',
           responded_at: null,
           response: null,

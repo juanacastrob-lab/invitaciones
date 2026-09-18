@@ -177,6 +177,11 @@
     },
     "legal": {
       "privacy": "Privacy notice"
+    },
+    "pass": {
+      "title": "Your pass",
+      "body": "Show it at the entrance on the day. A screenshot works too.",
+      "people": "{count, plural, one {# person} other {# people}}"
     }
   },
   "auth": {
@@ -289,7 +294,8 @@
       "body": "Open it and check texts, dates and venues. If something is off, edit it or message us. When it is perfect, approve it and it goes live: from then on your guests can open it.",
       "button": "Approve and publish",
       "confirm": "Approve and publish the invitation? After that, changes are made by the team."
-    }
+    },
+    "checkin": "Day-of check-in"
   },
   "store": {
     "title": "Build your invitation",

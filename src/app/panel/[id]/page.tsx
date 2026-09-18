@@ -58,6 +58,7 @@ export default async function PanelEventPage({ params, searchParams }: { params:
             <LinkButton href={`/panel/${id}/invitacion.pdf?lang=${locale}`} target="_blank">{t('downloadPdf')}</LinkButton>
             <LinkButton href={`/panel/${id}/mesas${lang ? `?lang=${lang}` : ''}`}>{locale === 'es' ? 'Mesas' : 'Tables'}</LinkButton>
             {editable ? <LinkButton href={`/panel/${id}/contenido${lang ? `?lang=${lang}` : ''}`} variant="primary">{t('editContent')}</LinkButton> : null}
+            {event.checkin_enabled && event.status === 'publicado' ? <LinkButton href={`/checkin/${id}`}>{t('checkin')}</LinkButton> : null}
           </div>
         </div>
 

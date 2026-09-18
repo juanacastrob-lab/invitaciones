@@ -10,6 +10,7 @@ export interface EventRow {
   type: EventType;
   package_code: string | null;
   template: string;
+  checkin_enabled: boolean;
   languages: string[];
   default_language: string;
   timezone: string;
@@ -33,6 +34,8 @@ export interface EventStats {
   pending: number;
   opened_pending: number;
   sent: number;
+  checked_in?: number;
+  checked_in_people?: number;
 }
 
 export interface GuestRow {
@@ -52,10 +55,12 @@ export interface GuestRow {
   opened_at: string | null;
   responded_at: string | null;
   reminder_count: number;
+  checked_in_at?: string | null;
+  checked_in_count?: number;
 }
 
 const EVENT_COLS =
-  'id, slug, status, type, package_code, template, languages, default_language, timezone, country, rsvp_deadline, allow_public_rsvp, show_private_gifts, preview_key, og_image_url, content, created_at, updated_at';
+  'id, slug, status, type, package_code, template, checkin_enabled, languages, default_language, timezone, country, rsvp_deadline, allow_public_rsvp, show_private_gifts, preview_key, og_image_url, content, created_at, updated_at';
 
 export async function listEvents(): Promise<(EventRow & { stats: EventStats })[]> {
   const supabase = await supabaseServer();

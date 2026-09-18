@@ -25,6 +25,7 @@ export const eventBasics = z
     rsvpDeadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().or(z.literal('')),
     allowPublicRsvp: z.boolean().default(false),
     showPrivateGifts: z.boolean().default(true),
+    checkinEnabled: z.boolean().default(false),
   })
   .refine((v) => v.languages.includes(v.defaultLanguage), {
     path: ['defaultLanguage'],

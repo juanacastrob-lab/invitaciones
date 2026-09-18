@@ -23,6 +23,7 @@ export interface EventBasicsValues {
   rsvpDeadline: string;
   allowPublicRsvp: boolean;
   showPrivateGifts: boolean;
+  checkinEnabled: boolean;
 }
 
 export function EventBasicsForm({ eventId, initial, packages = [] }: { eventId?: string; initial: EventBasicsValues; packages?: { code: string; name: string; country: string }[] }) {
@@ -50,6 +51,7 @@ export function EventBasicsForm({ eventId, initial, packages = [] }: { eventId?:
       rsvpDeadline: f.get('rsvpDeadline') || '',
       allowPublicRsvp: f.get('allowPublicRsvp') === 'on',
       showPrivateGifts: f.get('showPrivateGifts') === 'on',
+      checkinEnabled: f.get('checkinEnabled') === 'on',
     };
     start(async () => {
       setResult(eventId ? await updateEventBasics(eventId, values) : await createEvent(values));
@@ -126,6 +128,10 @@ export function EventBasicsForm({ eventId, initial, packages = [] }: { eventId?:
           <input type="checkbox" name="showPrivateGifts" defaultChecked={initial.showPrivateGifts} /> Mostrar datos bancarios (solo con link personal)
         </label>
       </div>
+
+      <label className="flex items-center gap-2 text-sm">
+        <input type="checkbox" name="checkinEnabled" defaultChecked={initial.checkinEnabled} /> Pase con QR y check-in el día del evento (extra o paquete Premium)
+      </label>
 
       {result ? <Notice kind={result.ok ? 'ok' : 'error'}>{result.ok ? result.message : result.error}</Notice> : null}
 

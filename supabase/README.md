@@ -33,6 +33,7 @@ normal y no rompe nada.
 | `015_storage.sql` | Bucket `event-media` (publico de lectura, 6 MB, webp/jpg/png) para las fotos que se suben desde el editor. Se puede repetir |
 | `016_team_pricing.sql` | Equipo por invitación (team_invites, rpc_invite_staff, rpc_set_role con candados), correo en profiles y paquete por evento (events.package_code) |
 | `017_approve.sql` | rpc_approve_event: los novios aprueban desde el panel y la invitacion pasa de en_revision a publicado |
+| `018_checkin.sql` | Pase con QR y check-in: events.checkin_enabled, guests.checked_in_at/count, rpc_checkin, rpc_get_invitation con la bandera y event_stats con llegadas |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr
@@ -78,6 +79,10 @@ equipo siempre pueda y que quede en la bitacora.
 equipo: solo el admin invita o cambia roles, nadie se vuelve admin desde la
 app, el staff no puede cambiar precios, y quien entra con un correo invitado
 queda como staff.
+
+`tests/017_approve_test.sql` y `tests/018_checkin_test.sql` cubren la
+aprobacion desde el panel y el check-in (acceso, tope en pases, automatico,
+deshacer).
 
 Se corren contra un Postgres desechable (no contra Supabase), aplicando primero
 `tests/_supabase_shim.sql`, que imita lo mínimo de Supabase (`auth.users`,

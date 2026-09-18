@@ -22,6 +22,7 @@ const guestSchema = z.object({
   confirmed_count: z.number().int().nonnegative(),
   group_tag: z.string().nullable(),
   responded_at: z.string().nullable(),
+  checked_in_at: z.string().nullable().optional(),
   response: z
     .object({
       attending: z.boolean(),
@@ -50,6 +51,7 @@ const invitationSchema = z.object({
     rsvp_deadline: z.string().nullable(),
     allow_public_rsvp: z.boolean(),
     og_image_url: z.string().nullable(),
+    checkin_enabled: z.boolean().default(false),
     content: eventContent,
   }),
   guest: guestSchema.nullable(),

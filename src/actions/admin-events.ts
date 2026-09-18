@@ -35,6 +35,7 @@ export async function createEvent(raw: unknown): Promise<ActionResult<{ id: stri
       rsvp_deadline: b.rsvpDeadline ? `${b.rsvpDeadline}T23:59:59` : null,
       allow_public_rsvp: b.allowPublicRsvp,
       show_private_gifts: b.showPrivateGifts,
+      checkin_enabled: b.checkinEnabled,
       content: templateContent({ partnerA: b.partnerA, partnerB: b.partnerB || undefined, startsAt: b.startsAt, type: b.type }),
       created_by: me.userId,
     })
@@ -76,6 +77,7 @@ export async function updateEventBasics(id: string, raw: unknown): Promise<Actio
       rsvp_deadline: b.rsvpDeadline ? `${b.rsvpDeadline}T23:59:59` : null,
       allow_public_rsvp: b.allowPublicRsvp,
       show_private_gifts: b.showPrivateGifts,
+      checkin_enabled: b.checkinEnabled,
       content,
     })
     .eq('id', id);

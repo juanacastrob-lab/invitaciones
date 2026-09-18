@@ -40,7 +40,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
             <EventBasicsForm eventId={id} initial={{
               slug: event.slug, type: event.type, packageCode: event.package_code ?? '', template: event.template, partnerA: c.couple.partnerA, partnerB: c.couple.partnerB ?? '', startsAt: c.startsAt,
               timezone: event.timezone, country: event.country, languages: event.languages, defaultLanguage: event.default_language,
-              rsvpDeadline: event.rsvp_deadline ? event.rsvp_deadline.slice(0, 10) : '', allowPublicRsvp: event.allow_public_rsvp, showPrivateGifts: event.show_private_gifts,
+              rsvpDeadline: event.rsvp_deadline ? event.rsvp_deadline.slice(0, 10) : '', allowPublicRsvp: event.allow_public_rsvp, showPrivateGifts: event.show_private_gifts, checkinEnabled: event.checkin_enabled,
             }} packages={pricing.packages.filter((p) => p.active)} />
           </section>
 
@@ -72,6 +72,12 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
                 <dt className="text-xs text-stone-500">Tarjeta de WhatsApp</dt>
                 <dd><a className="underline" href={`/i/${event.slug}/opengraph-image`} target="_blank">ver imagen</a></dd>
               </div>
+              {event.checkin_enabled ? (
+                <div>
+                  <dt className="text-xs text-stone-500">Check-in del día del evento</dt>
+                  <dd className="flex items-center gap-1 break-all"><a className="underline" href={`/checkin/${id}`} target="_blank">/checkin/…</a><CopyButton value={`${site}/checkin/${id}`} /></dd>
+                </div>
+              ) : null}
               <div>
                 <dt className="text-xs text-stone-500">Invitación en PDF (paquete Básico o para imprimir)</dt>
                 <dd className="flex gap-3">{event.languages.map((l) => <a key={l} className="underline" href={`/admin/events/${id}/invitation.pdf?lang=${l}`} target="_blank">{l.toUpperCase()}</a>)}</dd>
@@ -88,6 +94,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
               <dt className="text-stone-500">No asisten</dt><dd>{event.stats.declined}</dd>
               <dt className="text-stone-500">Pendientes</dt><dd>{event.stats.pending}</dd>
               <dt className="text-stone-500">Abrieron sin confirmar</dt><dd>{event.stats.opened_pending}</dd>
+              {event.checkin_enabled ? <><dt className="text-stone-500">Llegaron</dt><dd>{event.stats.checked_in_people ?? 0} personas ({event.stats.checked_in ?? 0} inv.)</dd></> : null}
             </dl>
           </section>
 
