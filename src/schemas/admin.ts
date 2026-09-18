@@ -12,6 +12,7 @@ export const eventBasics = z
       .toLowerCase()
       .regex(/^[a-z0-9-]{3,60}$/, 'Solo letras minúsculas, números y guiones (3 a 60).'),
     type: z.enum(EVENT_TYPES).default('boda'),
+    packageCode: z.string().trim().max(40).optional().or(z.literal('')),
     partnerA: z.string().trim().min(1).max(80),
     partnerB: z.string().trim().max(80).optional().or(z.literal('')),
     startsAt: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, 'Fecha y hora inválidas.'),

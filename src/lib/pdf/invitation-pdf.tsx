@@ -145,15 +145,18 @@ function InvitationDoc({ content: c, timezone, locale, url, qr, rsvpDeadline }: 
             </View>
           ) : null}
 
-          <View style={s.rsvpBox}>
-            {qr ? <Image src={qr} style={s.qr} /> : null}
-            <View style={{ flex: 1 }}>
-              <Text style={s.title}>{text(c.rsvp?.title) ?? t.rsvp}</Text>
-              {text(c.rsvp?.note) ? <Text style={s.body}>{text(c.rsvp?.note)}</Text> : null}
-              {deadline ? <Text style={s.small}>{t.deadline} {deadline}</Text> : null}
-              {url ? <Text style={s.small}>{t.scan}: {url}</Text> : null}
+          {/* Sin sección RSVP (paquete Básico) no se pide confirmar ni hay QR. */}
+          {on('rsvp') ? (
+            <View style={s.rsvpBox}>
+              {qr ? <Image src={qr} style={s.qr} /> : null}
+              <View style={{ flex: 1 }}>
+                <Text style={s.title}>{text(c.rsvp?.title) ?? t.rsvp}</Text>
+                {text(c.rsvp?.note) ? <Text style={s.body}>{text(c.rsvp?.note)}</Text> : null}
+                {deadline ? <Text style={s.small}>{t.deadline} {deadline}</Text> : null}
+                {url ? <Text style={s.small}>{t.scan}: {url}</Text> : null}
+              </View>
             </View>
-          </View>
+          ) : null}
 
           <Text style={s.footer}>{t.madeWith} {APP_NAME}</Text>
         </View>

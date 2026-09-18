@@ -6,6 +6,8 @@ const NAV = [
   { href: '/admin/events', label: 'Eventos' },
   { href: '/admin/orders', label: 'Pedidos' },
   { href: '/admin/leads', label: 'Prospectos' },
+  { href: '/admin/pricing', label: 'Precios', admin: true },
+  { href: '/admin/team', label: 'Equipo', admin: true },
 ];
 
 export function AdminShell({ me, title, actions, children, current }: {
@@ -19,8 +21,8 @@ export function AdminShell({ me, title, actions, children, current }: {
     <div className="min-h-dvh bg-stone-50 text-stone-900">
       <SessionBar me={me} />
       <nav className="border-b border-stone-200 bg-white px-6">
-        <div className="mx-auto flex max-w-5xl gap-6 text-xs uppercase tracking-[0.2em]">
-          {NAV.map((n) => (
+        <div className="mx-auto flex max-w-5xl gap-6 overflow-x-auto whitespace-nowrap text-xs uppercase tracking-[0.2em]">
+          {NAV.filter((n) => !n.admin || me.role === 'admin').map((n) => (
             <a
               key={n.href}
               href={n.href}

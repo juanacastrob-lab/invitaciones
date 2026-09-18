@@ -10,6 +10,7 @@ import { EVENT_TYPES, EVENT_TYPE_LABEL, needsTwoNames, type EventType } from '@/
 export interface EventBasicsValues {
   slug: string;
   type: EventType;
+  packageCode: string;
   partnerA: string;
   partnerB: string;
   startsAt: string;
@@ -22,7 +23,7 @@ export interface EventBasicsValues {
   showPrivateGifts: boolean;
 }
 
-export function EventBasicsForm({ eventId, initial }: { eventId?: string; initial: EventBasicsValues }) {
+export function EventBasicsForm({ eventId, initial, packages = [] }: { eventId?: string; initial: EventBasicsValues; packages?: { code: string; name: string; country: string }[] }) {
   const [pending, start] = useTransition();
   const [result, setResult] = useState<ActionResult | null>(null);
   const [type, setType] = useState<EventType>(initial.type);
@@ -35,6 +36,7 @@ export function EventBasicsForm({ eventId, initial }: { eventId?: string; initia
     const values = {
       slug: f.get('slug'),
       type,
+      packageCode: f.get('packageCode') || '',
       partnerA: f.get('partnerA'),
       partnerB: f.get('partnerB'),
       startsAt: f.get('startsAt'),
@@ -53,11 +55,19 @@ export function EventBasicsForm({ eventId, initial }: { eventId?: string; initia
 
   return (
     <form onSubmit={submit} className="space-y-5">
-      <Field label="Tipo de evento">
-        <Select value={type} onChange={(e) => setType(e.target.value as EventType)}>
-          {EVENT_TYPES.map((k) => <option key={k} value={k}>{EVENT_TYPE_LABEL[k].es}</option>)}
-        </Select>
-      </Field>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Tipo de evento">
+          <Select value={type} onChange={(e) => setType(e.target.value as EventType)}>
+            {EVENT_TYPES.map((k) => <option key={k} value={k}>{EVENT_TYPE_LABEL[k].es}</option>)}
+          </Select>
+        </Field>
+        <Field label="Paquete" hint="Básico = solo PDF: la sección de confirmación se apaga sola.">
+          <Select name="packageCode" defaultValue={initial.packageCode}>
+            <option value="">Sin paquete</option>
+            {packages.map((p) => <option key={`${p.code}-${p.country}`} value={p.code}>{p.name} · {p.country}</option>)}
+          </Select>
+        </Field>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label={two ? 'Nombre 1' : 'Nombre de quien celebra'}><Input name="partnerA" defaultValue={initial.partnerA} required maxLength={80} /></Field>

@@ -21,7 +21,7 @@ export default async function EventsPage() {
             <li key={e.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
               <div>
                 <a href={`/admin/events/${e.id}`} className="font-medium hover:underline">{c.couple ? eventNames(c.couple) : e.slug}</a>
-                <p className="text-xs text-stone-500">{EVENT_TYPE_LABEL[e.type]?.es ?? e.type} · /i/{e.slug} · {c.startsAt?.slice(0, 10)} · {e.languages.join('/')}</p>
+                <p className="text-xs text-stone-500">{EVENT_TYPE_LABEL[e.type]?.es ?? e.type}{e.package_code ? ` · ${e.package_code}` : ''} · /i/{e.slug} · {c.startsAt?.slice(0, 10)} · {e.languages.join('/')}</p>
               </div>
               <div className="flex items-center gap-4 text-xs text-stone-600">
                 <span>{e.stats.guests} inv. · {e.stats.passes} pases</span>

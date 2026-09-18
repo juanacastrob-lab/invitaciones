@@ -26,6 +26,7 @@ export async function createEvent(raw: unknown): Promise<ActionResult<{ id: stri
     .insert({
       slug: b.slug,
       type: b.type,
+      package_code: b.packageCode || null,
       timezone: b.timezone,
       country: b.country,
       languages: b.languages,
@@ -65,6 +66,7 @@ export async function updateEventBasics(id: string, raw: unknown): Promise<Actio
     .update({
       slug: b.slug,
       type: b.type,
+      package_code: b.packageCode || null,
       timezone: b.timezone,
       country: b.country,
       languages: b.languages,

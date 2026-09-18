@@ -31,6 +31,7 @@ normal y no rompe nada.
 | `013_tables.sql` | Mesas: tabla event_tables, guests.table_id, rpc_assign_table (novios pueden acomodar aun publicado) y vista table_stats. Tambien pone `security_invoker` en event_stats y table_stats para que las vistas respeten RLS |
 | `014_content_editor.sql` | Tipos de evento primera_comunion y confirmacion, y rpc_update_event_content para que novios y planner guarden el contenido desde el panel (solo en borrador o en revision) |
 | `015_storage.sql` | Bucket `event-media` (publico de lectura, 6 MB, webp/jpg/png) para las fotos que se suben desde el editor. Se puede repetir |
+| `016_team_pricing.sql` | Equipo por invitación (team_invites, rpc_invite_staff, rpc_set_role con candados), correo en profiles y paquete por evento (events.package_code) |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr
@@ -71,6 +72,11 @@ las vistas `event_stats` y `table_stats` solo muestren los eventos de cada quien
 `tests/014_content_test.sql` (requiere 001..014) comprueba que los novios
 solo guarden contenido en borrador o en revision, que un ajeno no pueda, que el
 equipo siempre pueda y que quede en la bitacora.
+
+`tests/016_team_test.sql` (requiere 001..016) comprueba los candados del
+equipo: solo el admin invita o cambia roles, nadie se vuelve admin desde la
+app, el staff no puede cambiar precios, y quien entra con un correo invitado
+queda como staff.
 
 Se corren contra un Postgres desechable (no contra Supabase), aplicando primero
 `tests/_supabase_shim.sql`, que imita lo mínimo de Supabase (`auth.users`,

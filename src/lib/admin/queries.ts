@@ -8,6 +8,7 @@ export interface EventRow {
   slug: string;
   status: EventStatus;
   type: EventType;
+  package_code: string | null;
   languages: string[];
   default_language: string;
   timezone: string;
@@ -53,7 +54,7 @@ export interface GuestRow {
 }
 
 const EVENT_COLS =
-  'id, slug, status, type, languages, default_language, timezone, country, rsvp_deadline, allow_public_rsvp, show_private_gifts, preview_key, og_image_url, content, created_at, updated_at';
+  'id, slug, status, type, package_code, languages, default_language, timezone, country, rsvp_deadline, allow_public_rsvp, show_private_gifts, preview_key, og_image_url, content, created_at, updated_at';
 
 export async function listEvents(): Promise<(EventRow & { stats: EventStats })[]> {
   const supabase = await supabaseServer();
@@ -144,4 +145,33 @@ export async function listTables(eventId: string): Promise<TableRow[]> {
     .order('sort_order')
     .order('name');
   return (data ?? []) as TableRow[];
+}
+
+// -----------------------------------------------------------------------------
+// Equipo y precios (solo admin; la RLS devuelve vacío a los demás)
+// -----------------------------------------------------------------------------
+
+export interface ProfileRow { user_id: string; email: string | null; name: string | null; role: 'admin' | 'staff' | 'client'; created_at: string }
+export interface InviteRow { id: string; email: string; accepted_at: string | null; created_at: string }
+
+export async function listTeam(): Promise<{ profiles: ProfileRow[]; invites: InviteRow[] }> {
+  const supabase = await supabaseServer();
+  const [{ data: profiles }, { data: invites }] = await Promise.all([
+    supabase.from('profiles').select('user_id, email, name, role, created_at').order('role').order('created_at'),
+    supabase.from('team_invites').select('id, email, accepted_at, created_at').is('accepted_at', null).order('created_at'),
+  ]);
+  return { profiles: (profiles ?? []) as ProfileRow[], invites: (invites ?? []) as InviteRow[] };
+}
+
+export interface PriceRow { id: string; code: string; name: string; description?: string | null; country: string; currency: string; price: number; active: boolean; features?: string[]; included_in?: string[] }
+
+/** Todos los paquetes y extras, activos o no, sin caché: es la pantalla de precios. */
+export async function listPricing(): Promise<{ packages: PriceRow[]; extras: PriceRow[] }> {
+  const supabase = await supabaseServer();
+  const [{ data: packages }, { data: extras }] = await Promise.all([
+    supabase.from('packages').select('id, code, name, country, currency, price, active, features').order('country').order('price'),
+    supabase.from('extras').select('id, code, name, description, country, currency, price, active, included_in').order('country').order('sort_order'),
+  ]);
+  const num = (r: Record<string, unknown>) => ({ ...r, price: Number(r.price) }) as PriceRow;
+  return { packages: (packages ?? []).map(num), extras: (extras ?? []).map(num) };
 }

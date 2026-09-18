@@ -124,7 +124,7 @@ export async function createOrder(raw: unknown): Promise<OrderResult> {
  */
 export async function provisionOrder(orderId: string): Promise<{ eventId: string } | null> {
   const admin = supabaseAdmin();
-  const { data: o } = await admin.from('orders').select('id, event_id, contact, build_mode, planner_email, country, event_type').eq('id', orderId).single();
+  const { data: o } = await admin.from('orders').select('id, event_id, contact, build_mode, planner_email, country, event_type, package_code').eq('id', orderId).single();
   if (!o) return null;
   if (o.event_id) return { eventId: o.event_id };
 
@@ -132,10 +132,12 @@ export async function provisionOrder(orderId: string): Promise<{ eventId: string
   const startsAt = `${c.event_date ?? new Date(Date.now() + 180 * 86400_000).toISOString().slice(0, 10)}T17:00`;
   const slug = slugFromNames(c.partner_a, c.partner_b ?? undefined, randomBytes(2).toString('hex'));
   const content = templateContent({ partnerA: c.partner_a, partnerB: c.partner_b ?? undefined, startsAt, type: isEventType(o.event_type) ? o.event_type : 'boda' });
+  // Básico es solo PDF: sin confirmación de asistencia.
+  if (o.package_code === 'basico') content.sectionOrder = content.sectionOrder.filter((s) => s !== 'rsvp');
 
   const { data: ev, error } = await admin
     .from('events')
-    .insert({ slug, type: o.event_type, country: o.country, languages: ['es', 'en'], default_language: 'es', content, status: 'borrador' })
+    .insert({ slug, type: o.event_type, package_code: o.package_code, country: o.country, languages: ['es', 'en'], default_language: 'es', content, status: 'borrador' })
     .select('id')
     .single();
   if (error || !ev) {
