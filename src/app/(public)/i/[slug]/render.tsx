@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { headers } from 'next/headers';
 import type { Metadata } from 'next';
 import { getInvitation, localeFor, markOpened, type Invitation } from '@/lib/invitations';
 import { pickText } from '@/schemas/event-content';
@@ -24,6 +25,14 @@ export async function loadOrNotFound(
   return { invitation, locale: localeFor(invitation) };
 }
 
+async function requestOrigin(): Promise<string | undefined> {
+  const h = await headers();
+  const host = h.get('x-forwarded-host') ?? h.get('host');
+  if (!host) return undefined;
+  const proto = h.get('x-forwarded-proto') ?? (host.startsWith('localhost') ? 'http' : 'https');
+  return `${proto}://${host}`;
+}
+
 export async function invitationMetadata(
   slug: string,
   token: string | undefined,
@@ -38,7 +47,10 @@ export async function invitationMetadata(
 
   const title = pickText(c.og?.title, locale) ?? couple;
   const description = pickText(c.og?.description, locale) ?? '';
-  const siteUrl = getSiteUrl();
+  // La imagen y el og:url se arman con el dominio desde el que se abrió el
+  // link (dev, netlify.app o holaboda.mx), no con la variable de entorno:
+  // WhatsApp tiene que poder bajar la foto del mismo lugar que la página.
+  const siteUrl = (await requestOrigin()) ?? getSiteUrl();
 
   return {
     title,
