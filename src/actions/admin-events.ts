@@ -6,31 +6,12 @@ import { requireRole } from '@/lib/auth';
 import { supabaseServer } from '@/lib/supabase/server';
 import { eventBasics, eventStatusInput, type ActionResult } from '@/schemas/admin';
 import { eventContent, type EventContent } from '@/schemas/event-content';
-import { demoEventContent } from '@/demo/demo-event';
+import { templateContent } from '@/lib/admin/template';
 import { NEXT_STATUS, type EventStatus } from '@/lib/admin/labels';
 
 function firstIssue(e: { issues: { path: PropertyKey[]; message: string }[] }): { error: string; field?: string } {
   const i = e.issues[0];
   return { error: i?.message ?? 'Datos inválidos.', field: i?.path.map(String).join('.') };
-}
-
-/** El contenido que se copia al crear un evento nuevo desde la plantilla. */
-function templateContent(b: { partnerA: string; partnerB: string; startsAt: string }): EventContent {
-  const base = structuredClone(demoEventContent);
-  base.couple = { partnerA: b.partnerA, partnerB: b.partnerB };
-  base.startsAt = b.startsAt;
-  base.og = {
-    title: { es: `${b.partnerA} & ${b.partnerB}`, en: `${b.partnerA} & ${b.partnerB}` },
-    description: base.og?.description,
-  };
-  base.cover = { headline: base.cover?.headline, tagline: undefined, photo: undefined };
-  base.story = undefined;
-  base.gallery = undefined;
-  base.gifts = base.gifts ? { ...base.gifts, links: [], bank: undefined, envelopes: false } : undefined;
-  base.lodging = undefined;
-  base.sectionOrder = ['cover', 'countdown', 'itinerary', 'dressCode', 'gifts', 'faq', 'rsvp'];
-  for (const act of base.itinerary?.acts ?? []) act.startsAt = b.startsAt;
-  return base;
 }
 
 export async function createEvent(raw: unknown): Promise<ActionResult<{ id: string }>> {

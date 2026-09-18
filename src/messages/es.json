@@ -281,5 +281,96 @@
     "status_": "Estado de la invitación",
     "song": "Canción",
     "dietary": "Alergias"
+  },
+  "store": {
+    "title": "Arma tu invitación",
+    "steps": {
+      "package": "Paquete",
+      "extras": "Extras",
+      "mode": "Quién la arma",
+      "contact": "Tus datos",
+      "payment": "Pago"
+    },
+    "next": "Continuar",
+    "back": "Atrás",
+    "package": {
+      "title": "Elige tu paquete",
+      "includes": "Incluye",
+      "chosen": "Elegido",
+      "choose": "Elegir",
+      "popular": "El más pedido"
+    },
+    "extras": {
+      "title": "¿Quieres agregar algo?",
+      "subtitle": "Todo es opcional. Lo que tu paquete ya incluye no aparece aquí.",
+      "included": "Incluido en tu paquete",
+      "none": "Tu paquete ya lo incluye todo."
+    },
+    "mode": {
+      "title": "¿Quién arma la invitación?",
+      "team": {
+        "t": "Ustedes nos cuentan, nosotros la hacemos",
+        "d": "Nos mandan textos y fotos por WhatsApp; nosotros la armamos y ustedes solo aprueban. Es lo más común."
+      },
+      "self": {
+        "t": "Nosotros mismos",
+        "d": "Les damos acceso al editor: llenan los espacios, suben fotos y publican cuando quieran. Siempre pueden pedirnos ayuda."
+      },
+      "planner": {
+        "t": "Mi wedding planner",
+        "d": "Le damos acceso a su planner para que administre la invitación y la lista de invitados."
+      },
+      "plannerEmail": "Correo de tu wedding planner"
+    },
+    "contact": {
+      "title": "Tus datos",
+      "partnerA": "Nombre de uno",
+      "partnerB": "Nombre del otro (opcional)",
+      "email": "Correo",
+      "emailHelp": "Ahí te mandamos tu acceso y el recibo.",
+      "phone": "WhatsApp",
+      "country": "País",
+      "eventDate": "Fecha del evento (opcional)"
+    },
+    "payment": {
+      "title": "Pago",
+      "summary": "Resumen",
+      "package": "Paquete",
+      "total": "Total",
+      "card": "Tarjeta",
+      "cardHelp": "Pasarela de prueba: no se hace ningún cargo real. Usa cualquier número de 16 dígitos.",
+      "cardNumber": "Número de tarjeta",
+      "cardName": "Nombre en la tarjeta",
+      "cardExp": "Vence (MM/AA)",
+      "cardCvc": "CVC",
+      "transfer": "Transferencia o depósito",
+      "transferHelp": "Te mostramos los datos bancarios al confirmar. Tu pedido queda apartado y lo activamos en cuanto veamos el pago.",
+      "consent": "Acepto el <link>aviso de privacidad</link> y que me contacten por WhatsApp y correo.",
+      "pay": "Pagar {total}",
+      "reserve": "Apartar mi pedido",
+      "sending": "Procesando…"
+    },
+    "done": {
+      "paid": "¡Listo! Pedido #{number} pagado.",
+      "pending": "Pedido #{number} apartado.",
+      "paidBody": "Ya tienes tu invitación apartada. En las próximas horas te escribimos por WhatsApp para empezar.",
+      "pendingBody": "Haz la transferencia con estos datos y mándanos el comprobante por WhatsApp. En cuanto lo veamos, activamos tu pedido.",
+      "bank": "Banco",
+      "holder": "A nombre de",
+      "clabe": "CLABE",
+      "concept": "Concepto",
+      "email": "Te mandamos un correo con tu acceso: desde ahí vas a poder ver tu invitación y tus invitados.",
+      "whatsapp": "Escribirnos por WhatsApp"
+    },
+    "errors": {
+      "invalid": "Revisa los campos marcados.",
+      "phone_invalid": "Ese número no parece válido para el país elegido.",
+      "consent_required": "Necesitamos tu consentimiento para continuar.",
+      "package_unavailable": "Ese paquete ya no está disponible.",
+      "card_declined": "La tarjeta fue rechazada (simulado: prueba con otro número).",
+      "planner_email_required": "Escribe el correo de tu wedding planner.",
+      "too_many_attempts": "Demasiados intentos. Espera un momento.",
+      "unknown": "Algo falló de nuestro lado. Intenta de nuevo o escríbenos por WhatsApp."
+    }
   }
 }

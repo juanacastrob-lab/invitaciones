@@ -105,7 +105,7 @@ export async function Landing({ locale }: { locale: Locale }) {
                         </li>
                       ))}
                     </ul>
-                    <a href={`#formulario`} data-package={p.code} className="mt-5 rounded-full border border-stone-300 px-4 py-2 text-center text-xs uppercase tracking-[0.2em] text-stone-700">
+                    <a href={`/comprar?paquete=${p.code}${locale === 'es' ? '' : '&lang=en'}`} className="mt-5 rounded-full border border-stone-300 px-4 py-2 text-center text-xs uppercase tracking-[0.2em] text-stone-700 hover:border-stone-900">
                       {t('packages.choose')}
                     </a>
                   </div>

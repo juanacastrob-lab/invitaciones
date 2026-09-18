@@ -4,6 +4,7 @@ import type { SessionProfile } from '@/lib/auth';
 
 const NAV = [
   { href: '/admin/events', label: 'Eventos' },
+  { href: '/admin/orders', label: 'Pedidos' },
   { href: '/admin/leads', label: 'Prospectos' },
 ];
 

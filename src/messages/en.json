@@ -281,5 +281,96 @@
     "status_": "Invitation status",
     "song": "Song",
     "dietary": "Allergies"
+  },
+  "store": {
+    "title": "Build your invitation",
+    "steps": {
+      "package": "Package",
+      "extras": "Extras",
+      "mode": "Who builds it",
+      "contact": "Your details",
+      "payment": "Payment"
+    },
+    "next": "Continue",
+    "back": "Back",
+    "package": {
+      "title": "Choose your package",
+      "includes": "Includes",
+      "chosen": "Chosen",
+      "choose": "Choose",
+      "popular": "Most popular"
+    },
+    "extras": {
+      "title": "Want to add anything?",
+      "subtitle": "All optional. Whatever your package already includes isn't listed here.",
+      "included": "Included in your package",
+      "none": "Your package already includes everything."
+    },
+    "mode": {
+      "title": "Who builds the invitation?",
+      "team": {
+        "t": "You tell us, we build it",
+        "d": "Send us texts and photos on WhatsApp; we build it and you just approve. The most common choice."
+      },
+      "self": {
+        "t": "We'll do it ourselves",
+        "d": "You get access to the editor: fill in the blanks, upload photos and publish whenever you want. You can always ask us for help."
+      },
+      "planner": {
+        "t": "My wedding planner",
+        "d": "We give your planner access to manage the invitation and the guest list."
+      },
+      "plannerEmail": "Your wedding planner's email"
+    },
+    "contact": {
+      "title": "Your details",
+      "partnerA": "One name",
+      "partnerB": "The other name (optional)",
+      "email": "Email",
+      "emailHelp": "We'll send your access and receipt there.",
+      "phone": "WhatsApp",
+      "country": "Country",
+      "eventDate": "Event date (optional)"
+    },
+    "payment": {
+      "title": "Payment",
+      "summary": "Summary",
+      "package": "Package",
+      "total": "Total",
+      "card": "Card",
+      "cardHelp": "Test gateway: no real charge is made. Use any 16-digit number.",
+      "cardNumber": "Card number",
+      "cardName": "Name on card",
+      "cardExp": "Expires (MM/YY)",
+      "cardCvc": "CVC",
+      "transfer": "Bank transfer",
+      "transferHelp": "We'll show you the bank details on confirmation. Your order is reserved and activated as soon as we see the payment.",
+      "consent": "I accept the <link>privacy notice</link> and being contacted on WhatsApp and email.",
+      "pay": "Pay {total}",
+      "reserve": "Reserve my order",
+      "sending": "Processing…"
+    },
+    "done": {
+      "paid": "Done! Order #{number} paid.",
+      "pending": "Order #{number} reserved.",
+      "paidBody": "Your invitation is reserved. We'll message you on WhatsApp in the next few hours to get started.",
+      "pendingBody": "Make the transfer with these details and send us the receipt on WhatsApp. We'll activate your order as soon as we see it.",
+      "bank": "Bank",
+      "holder": "Account holder",
+      "clabe": "CLABE",
+      "concept": "Reference",
+      "email": "We sent you an email with your access: from there you'll see your invitation and your guests.",
+      "whatsapp": "Message us on WhatsApp"
+    },
+    "errors": {
+      "invalid": "Please check the highlighted fields.",
+      "phone_invalid": "That number doesn't look valid for the selected country.",
+      "consent_required": "We need your consent to continue.",
+      "package_unavailable": "That package is no longer available.",
+      "card_declined": "Card declined (simulated: try another number).",
+      "planner_email_required": "Enter your wedding planner's email.",
+      "too_many_attempts": "Too many attempts. Please wait a moment.",
+      "unknown": "Something went wrong on our side. Try again or message us on WhatsApp."
+    }
   }
 }

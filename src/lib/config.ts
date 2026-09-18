@@ -47,3 +47,10 @@ export function enabledAuthProviders(): AuthProvider[] {
  */
 export const LEGAL_ENTITY = process.env.NEXT_PUBLIC_LEGAL_ENTITY ?? 'Juan Antonio Castro Basurto';
 export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? 'juanacastrob@gmail.com';
+
+/** Datos para pagar por transferencia. PROVISIONALES hasta que Juan los confirme. */
+export const BANK_DETAILS = {
+  bank: process.env.NEXT_PUBLIC_BANK_NAME ?? 'BBVA',
+  holder: process.env.NEXT_PUBLIC_BANK_HOLDER ?? LEGAL_ENTITY,
+  clabe: process.env.NEXT_PUBLIC_BANK_CLABE ?? '000000000000000000',
+};
