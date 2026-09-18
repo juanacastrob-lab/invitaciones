@@ -50,7 +50,8 @@ export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, 
     }
   });
 
-  const isReminder = templateKey !== 'invite';
+  const isReminder = templateKey === 'reminder_pending' || templateKey === 'reminder_opened';
+  const tracks = templateKey === 'invite' || isReminder;
   const withEmail = visible.filter((g) => g.email);
 
   /** Manda en tandas de 10: cada llamada al servidor dura pocos segundos. */
@@ -61,7 +62,7 @@ export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, 
     setMailing({ ...state });
     for (let i = 0; i < targets.length; i += 10) {
       const chunk = targets.slice(i, i + 10);
-      const r = await sendGuestEmails({ eventId, guestIds: chunk.map((g) => g.id), templateKey, bodies: { es: bodyFor('es'), en: bodyFor('en') }, siteUrl });
+      const r = await sendGuestEmails({ eventId, guestIds: chunk.map((g) => g.id), templateKey: templateKey as 'invite', bodies: { es: bodyFor('es'), en: bodyFor('en') }, siteUrl });
       if (r.ok && r.data) { state.sent += r.data.sent; state.failed.push(...r.data.failed); }
       else { state.failed.push(...chunk.map((g) => ({ name: g.display_name, error: r.ok ? 'sin respuesta' : r.error }))); }
       state.done += chunk.length;
@@ -77,7 +78,7 @@ export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, 
           <div>
             <p className="mb-1 text-[0.65rem] uppercase tracking-[0.2em] text-stone-500">Plantilla</p>
             <Select value={templateKey} onChange={(e) => setTemplateKey(e.target.value)}>
-              {keys.map((k) => <option key={k} value={k}>{{ invite: 'Invitación', reminder_pending: 'Recordatorio: no ha confirmado', reminder_opened: 'Recordatorio: abrió sin confirmar' }[k] ?? k}</option>)}
+              {keys.map((k) => <option key={k} value={k}>{{ invite: 'Invitación', reminder_pending: 'Recordatorio: no ha confirmado', reminder_opened: 'Recordatorio: abrió sin confirmar', save_the_date: 'Save the date (link general)', thank_you: 'Agradecimiento (después del evento)' }[k] ?? k}</option>)}
             </Select>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -122,7 +123,7 @@ export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, 
       <ul className="divide-y divide-stone-200 rounded-sm border border-stone-200 bg-white">
         {visible.map((g) => {
           const locale: Locale = g.language === 'en' ? 'en' : 'es';
-          const link = guestLink(siteUrl, slug, g.token);
+          const link = templateKey === 'save_the_date' ? `${siteUrl}/i/${slug}/save-the-date` : templateKey === 'thank_you' ? `${guestLink(siteUrl, slug, g.token)}/gracias` : guestLink(siteUrl, slug, g.token);
           const message = buildGuestMessage({ template: bodyFor(locale), guestName: g.display_name, passes: g.passes, locale, couple, startsAt, timezone, link });
           return (
             <li key={g.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
@@ -141,9 +142,11 @@ export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, 
                   <Button variant="secondary" onClick={() => navigator.clipboard.writeText(message)}>Copiar mensaje</Button>
                 )}
                 {emailEnabled && g.email ? <Button variant="secondary" disabled={!published} onClick={() => mailList([g])}>Correo</Button> : null}
-                <Button variant="secondary" disabled={pending} onClick={() => start(async () => { await markSent(eventId, g.id, isReminder); })}>
-                  {isReminder ? 'Marcar recordado' : 'Marcar enviado'}
-                </Button>
+                {tracks ? (
+                  <Button variant="secondary" disabled={pending} onClick={() => start(async () => { await markSent(eventId, g.id, isReminder); })}>
+                    {isReminder ? 'Marcar recordado' : 'Marcar enviado'}
+                  </Button>
+                ) : null}
               </div>
             </li>
           );

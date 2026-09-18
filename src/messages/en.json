@@ -182,6 +182,16 @@
       "title": "Your pass",
       "body": "Show it at the entrance on the day. A screenshot works too.",
       "people": "{count, plural, one {# person} other {# people}}"
+    },
+    "saveTheDate": {
+      "title": "Save the date",
+      "soon": "The full invitation is coming soon.",
+      "calendar": "Save the date"
+    },
+    "thankYou": {
+      "default": "Thank you for being with us",
+      "hello": "{name}, thank you for being with us.",
+      "back": "See the invitation"
     }
   },
   "auth": {
@@ -523,6 +533,14 @@
     "pasteLink": "Paste link",
     "removePhoto": "Remove",
     "noPhoto": "No photo",
-    "uploadError": "The photo could not be uploaded. Try another one or paste a link."
+    "uploadError": "The photo could not be uploaded. Try another one or paste a link.",
+    "saveTheDate": {
+      "title": "Save the date",
+      "hint": "A light page with the date, to send months ahead. The team turns it on in the event settings; the link is /i/your-slug/save-the-date."
+    },
+    "thankYou": {
+      "title": "Thank-you note",
+      "hint": "After the event. Each guest sees it on their personal link, with their name. No text, no page."
+    }
   }
 }

@@ -196,6 +196,18 @@ export const rsvp = z.object({
   askMessage: z.boolean().default(true),
 });
 
+/** Save the date: la fecha y una nota; sale meses antes de la invitación. */
+export const saveTheDate = z.object({
+  note: localizedText.optional(),
+});
+
+/** Agradecimiento después del evento, en el link personal. */
+export const thankYou = z.object({
+  title: localizedText.optional(),
+  body: localizedText,
+  photo: image.optional(),
+});
+
 // -----------------------------------------------------------------------------
 // Contenido completo
 // -----------------------------------------------------------------------------
@@ -238,6 +250,9 @@ export const eventContent = z
     music: music.optional(),
     faq: faq.optional(),
     rsvp: rsvp.optional(),
+
+    saveTheDate: saveTheDate.optional(),
+    thankYou: thankYou.optional(),
   })
   .superRefine((value, ctx) => {
     // Una sección listada pero sin datos deja un hueco en la invitación.

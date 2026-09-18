@@ -9,6 +9,8 @@ const SUBJECT: Record<string, Record<Locale, (pareja: string) => string>> = {
   invite: { es: (p) => `${p}: tu invitación`, en: (p) => `${p}: your invitation` },
   reminder_pending: { es: (p) => `${p}: ¿nos confirmas?`, en: (p) => `${p}: can you RSVP?` },
   reminder_opened: { es: (p) => `${p}: te falta confirmar`, en: (p) => `${p}: one step left` },
+  save_the_date: { es: (p) => `Save the date · ${p}`, en: (p) => `Save the date · ${p}` },
+  thank_you: { es: (p) => `${p}: gracias por acompañarnos`, en: (p) => `${p}: thank you for being with us` },
 };
 
 export function escapeHtml(s: string): string {

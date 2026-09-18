@@ -16,7 +16,7 @@ import type { EventContent } from '@/schemas/event-content';
 const input = z.object({
   eventId: z.string().uuid(),
   guestIds: z.array(z.string().uuid()).min(1).max(10), // por tanda: la función de Netlify tiene pocos segundos
-  templateKey: z.enum(['invite', 'reminder_pending', 'reminder_opened']),
+  templateKey: z.enum(['invite', 'reminder_pending', 'reminder_opened', 'save_the_date', 'thank_you']),
   bodies: z.object({ es: z.string().min(1).max(4000), en: z.string().min(1).max(4000) }),
   siteUrl: z.string().url(),
 });
@@ -34,8 +34,13 @@ export async function sendGuestEmails(raw: unknown): Promise<ActionResult<{ sent
 
   const event = await getEvent(eventId);
   if (!event) return { ok: false, error: 'Evento no encontrado.' };
-  if (event.status !== 'publicado') return { ok: false, error: 'Publica el evento antes de mandar correos: los links no abren todavía.' };
   const c = event.content as unknown as EventContent;
+  if (templateKey === 'save_the_date') {
+    if (!event.save_the_date_enabled) return { ok: false, error: 'Activa el save the date en Datos antes de mandarlo.' };
+  } else if (event.status !== 'publicado' && event.status !== 'finalizado') {
+    return { ok: false, error: 'Publica el evento antes de mandar correos: los links no abren todavía.' };
+  }
+  if (templateKey === 'thank_you' && !c.thankYou) return { ok: false, error: 'Escribe el agradecimiento en Contenido antes de mandarlo.' };
   const couple = eventNames(c.couple);
 
   const supabase = await supabaseServer();
@@ -47,17 +52,20 @@ export async function sendGuestEmails(raw: unknown): Promise<ActionResult<{ sent
 
   let sent = 0;
   const failed: { name: string; error: string }[] = [];
-  const isReminder = templateKey !== 'invite';
+  const isReminder = templateKey === 'reminder_pending' || templateKey === 'reminder_opened';
+  const tracks = templateKey === 'invite' || isReminder;
 
   for (const g of guests ?? []) {
     if (!g.email) { failed.push({ name: g.display_name, error: 'sin correo' }); continue; }
     const locale: Locale = g.language === 'en' ? 'en' : 'es';
-    const link = guestLink(siteUrl, event.slug, g.token);
+    const personal = guestLink(siteUrl, event.slug, g.token);
+    const link = templateKey === 'save_the_date' ? `${siteUrl}/i/${event.slug}/save-the-date` : templateKey === 'thank_you' ? `${personal}/gracias` : personal;
     const message = buildGuestMessage({ template: bodies[locale], guestName: g.display_name, passes: g.passes, locale, couple, startsAt: c.startsAt, timezone: event.timezone, link });
     const mail = renderGuestEmail({ templateKey, locale, couple, message, link, appName: APP_NAME });
     const r = await sendEmail({ to: g.email, ...mail, replyTo: CONTACT_EMAIL });
     if (!r.ok) { failed.push({ name: g.display_name, error: r.error }); continue; }
     sent += 1;
+    if (!tracks) continue;
     await supabase
       .from('guests')
       .update(isReminder ? { reminder_count: (g.reminder_count ?? 0) + 1 } : { sent_at: new Date().toISOString() })

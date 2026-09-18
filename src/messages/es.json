@@ -182,6 +182,16 @@
       "title": "Tu pase",
       "body": "Muéstralo en la entrada el día del evento. También puedes tomarle captura de pantalla.",
       "people": "{count, plural, one {# persona} other {# personas}}"
+    },
+    "saveTheDate": {
+      "title": "Save the date",
+      "soon": "La invitación completa llega pronto.",
+      "calendar": "Aparta la fecha"
+    },
+    "thankYou": {
+      "default": "Gracias por acompañarnos",
+      "hello": "{name}, gracias por estar con nosotros.",
+      "back": "Ver la invitación"
     }
   },
   "auth": {
@@ -523,6 +533,14 @@
     "pasteLink": "Pegar link",
     "removePhoto": "Quitar",
     "noPhoto": "Sin foto",
-    "uploadError": "No se pudo subir la foto. Intenta con otra o pega un link."
+    "uploadError": "No se pudo subir la foto. Intenta con otra o pega un link.",
+    "saveTheDate": {
+      "title": "Save the date",
+      "hint": "Una página ligera con la fecha, para mandar meses antes. El equipo la activa en Datos del evento; el link es /i/tu-slug/save-the-date."
+    },
+    "thankYou": {
+      "title": "Agradecimiento",
+      "hint": "Después del evento. Cada invitado lo ve en su link personal, con su nombre. Sin texto, no existe."
+    }
   }
 }

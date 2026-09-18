@@ -113,3 +113,36 @@ export function localeFor(invitation: Invitation, requested?: string | null) {
     requested,
   });
 }
+
+// -----------------------------------------------------------------------------
+// Save the date
+// -----------------------------------------------------------------------------
+
+import { localizedText, image as imageSchema } from '@/schemas/event-content';
+
+const saveTheDateSchema = z.object({
+  slug: z.string(),
+  type: z.string(),
+  template: z.string(),
+  languages: z.array(z.string()).min(1),
+  default_language: z.string(),
+  timezone: z.string(),
+  couple: z.object({ partnerA: z.string(), partnerB: z.string().optional() }),
+  startsAt: z.string(),
+  cover: z.object({ headline: localizedText.optional(), tagline: localizedText.optional(), photo: imageSchema.optional() }).nullable().optional(),
+  og: z.object({ title: localizedText.optional(), description: localizedText.optional(), image: z.string().optional() }).nullable().optional(),
+  note: localizedText.nullable().optional(),
+  venue: z.string().nullable().optional(),
+});
+
+export type SaveTheDate = z.infer<typeof saveTheDateSchema>;
+
+/** Solo lo que necesita la página del save the date; `null` si no está activo. */
+export const getSaveTheDate = cache(async function getSaveTheDate(slug: string): Promise<SaveTheDate | null> {
+  const { data, error } = await supabaseAdmin().rpc('rpc_get_save_the_date', { p_slug: slug });
+  if (error) throw new Error(`No se pudo leer el save the date: ${error.message}`);
+  if (data === null) return null;
+  const parsed = saveTheDateSchema.safeParse(data);
+  if (!parsed.success) throw new Error(`Save the date de "${slug}" inválido: ${parsed.error.issues.map((i) => i.path.join('.')).join(', ')}`);
+  return parsed.data;
+});

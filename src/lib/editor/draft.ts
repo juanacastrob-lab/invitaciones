@@ -31,6 +31,8 @@ export interface Draft {
   couple: { partnerA: string; partnerB: string };
   startsAt: string;
   og: { title: LT; description: LT; image: string };
+  saveTheDate: { note: LT };
+  thankYou: { title: LT; body: LT; photoUrl: string; photoAlt: LT };
   /** Secciones visibles, en orden. Las demás se guardan si están completas. */
   sectionOrder: SectionId[];
   cover: { headline: LT; tagline: LT; photoUrl: string; photoAlt: LT };
@@ -78,6 +80,8 @@ export function toDraft(c: EventContent): Draft {
     couple: { partnerA: c.couple.partnerA, partnerB: c.couple.partnerB ?? '' },
     startsAt: c.startsAt,
     og: { title: lt(c.og?.title), description: lt(c.og?.description), image: c.og?.image ?? '' },
+    saveTheDate: { note: lt(c.saveTheDate?.note) },
+    thankYou: { title: lt(c.thankYou?.title), body: lt(c.thankYou?.body), photoUrl: c.thankYou?.photo?.url ?? '', photoAlt: lt(c.thankYou?.photo?.alt) },
     sectionOrder: [...c.sectionOrder],
     cover: { headline: lt(c.cover?.headline), tagline: lt(c.cover?.tagline), photoUrl: c.cover?.photo?.url ?? '', photoAlt: lt(c.cover?.photo?.alt) },
     countdown: { label: lt(c.countdown?.label) },
@@ -244,6 +248,8 @@ export function fromDraft(d: Draft): unknown {
     startsAt: d.startsAt,
     og: { title: outLT(d.og.title), description: outLT(d.og.description), image: s(d.og.image) },
     sectionOrder: d.sectionOrder,
+    saveTheDate: outLT(d.saveTheDate.note) ? { note: outLT(d.saveTheDate.note) } : undefined,
+    thankYou: outLT(d.thankYou.body) ? { title: outLT(d.thankYou.title), body: outLT(d.thankYou.body), photo: photo(d.thankYou.photoUrl, d.thankYou.photoAlt) } : undefined,
   };
   for (const id of SECTION_IDS) {
     const value = sectionValue(d, id);

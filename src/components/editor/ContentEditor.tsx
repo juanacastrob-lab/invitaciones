@@ -51,6 +51,8 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
     if ((SECTION_IDS as readonly string[]).includes(id)) return t(`sections.${id as SectionId}`);
     if (id === 'couple' || id === 'startsAt') return t('basics.title');
     if (id === 'og') return t('og.title');
+    if (id === 'saveTheDate') return t('saveTheDate.title');
+    if (id === 'thankYou') return t('thankYou.title');
     return id;
   };
 
@@ -288,6 +290,18 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
         {lt(t('og.ogTitle'), draft.og.title, (d, v) => { d.og.title = v; })}
         {lt(t('og.description'), draft.og.description, (d, v) => { d.og.description = v; })}
         <PhotoField label={t('og.image')} value={draft.og.image} onChange={(v) => patch((d) => { d.og.image = v; })} eventId={eventId} kind="og" hint={t('og.imageHint')} />
+      </SectionCard>
+
+      <SectionCard id="saveTheDate" title={t('saveTheDate.title')} enabled labels={labels} error={errorFor('saveTheDate')}>
+        <p className="text-xs text-stone-400">{t('saveTheDate.hint')}</p>
+        {lt(t('fields.note'), draft.saveTheDate.note, (d, v) => { d.saveTheDate.note = v; }, { multiline: true })}
+      </SectionCard>
+
+      <SectionCard id="thankYou" title={t('thankYou.title')} enabled labels={labels} error={errorFor('thankYou')}>
+        <p className="text-xs text-stone-400">{t('thankYou.hint')}</p>
+        {lt(t('fields.sectionTitle'), draft.thankYou.title, (d, v) => { d.thankYou.title = v; })}
+        {lt(t('fields.body'), draft.thankYou.body, (d, v) => { d.thankYou.body = v; }, { multiline: true })}
+        {photoFields(draft.thankYou.photoUrl, draft.thankYou.photoAlt, (d, v) => { d.thankYou.photoUrl = v; }, (d, v) => { d.thankYou.photoAlt = v; })}
       </SectionCard>
 
       {bar}
