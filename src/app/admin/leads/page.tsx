@@ -1,6 +1,6 @@
 import { requireRole } from '@/lib/auth';
 import { supabaseServer } from '@/lib/supabase/server';
-import { SessionBar } from '@/components/auth/SessionBar';
+import { AdminShell } from '@/components/admin/AdminShell';
 import { whatsappLink } from '@/lib/config';
 
 export const dynamic = 'force-dynamic';
@@ -17,13 +17,8 @@ export default async function LeadsPage() {
     .limit(200);
 
   return (
-    <div className="min-h-dvh bg-stone-50 text-stone-900">
-      <SessionBar me={me} />
-      <main className="mx-auto max-w-3xl px-6 py-10">
-        <div className="flex items-baseline justify-between">
-          <h1 className="font-serif text-3xl">Prospectos</h1>
-          <p className="text-xs text-stone-500">{leads?.length ?? 0}</p>
-        </div>
+    <AdminShell me={me} title="Prospectos" current="/admin/leads" actions={<span className="text-xs text-stone-500">{leads?.length ?? 0}</span>}>
+      <div>
 
         {!leads?.length ? (
           <p className="mt-6 text-sm text-stone-500">Todavía no llega ninguno. Cuando alguien llene el formulario de la portada, aparece aquí.</p>
@@ -59,7 +54,7 @@ export default async function LeadsPage() {
             ))}
           </ul>
         )}
-      </main>
-    </div>
+      </div>
+    </AdminShell>
   );
 }

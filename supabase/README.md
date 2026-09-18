@@ -24,6 +24,7 @@ normal y no rompe nada.
 | `006_packages_mx.sql` | Los 4 paquetes de Mexico con los precios de Juan; US y CA quedan inactivos hasta tener precio |
 | `007_demo_rename.sql` | Renombra el demo a juan-y-ana y refresca su contenido sin cambiar tokens. Generado |
 | `008_leads.sql` | Prospectos que llegan desde la landing, con RLS |
+| `009_admin.sql` | Pais del evento, bitacora (log_activity) y la vista event_stats para el admin |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr
