@@ -28,3 +28,11 @@ export function enabledAuthProviders(): AuthProvider[] {
     .map((s) => s.trim().toLowerCase())
     .filter((s): s is AuthProvider => (AUTH_PROVIDERS as readonly string[]).includes(s));
 }
+
+/**
+ * Responsable del tratamiento de datos y correo para derechos ARCO.
+ * Por ley tienen que aparecer en el aviso de privacidad. Cuando Juan abra
+ * una empresa, se cambian en Netlify sin tocar código.
+ */
+export const LEGAL_ENTITY = process.env.NEXT_PUBLIC_LEGAL_ENTITY ?? 'Juan Antonio Castro Basurto';
+export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? 'juanacastrob@gmail.com';

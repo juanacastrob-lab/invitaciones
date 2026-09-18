@@ -21,6 +21,7 @@ normal y no rompe nada.
 | `003_guest_access.sql` | Funciones por las que entra un invitado sin cuenta, y el rate limit |
 | `004_rsvp.sql` | Confirmacion de asistencia, con todas las validaciones del lado de la base |
 | `005_seed_packages_templates.sql` | Paquetes con precios PROVISIONALES por pais y plantillas de WhatsApp es/en. Se puede repetir |
+| `006_packages_mx.sql` | Los 4 paquetes de Mexico con los precios de Juan; US y CA quedan inactivos hasta tener precio |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr

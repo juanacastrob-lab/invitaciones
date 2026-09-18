@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { APP_NAME, isLocale } from '@/lib/config';
+import { APP_NAME, CONTACT_EMAIL, LEGAL_ENTITY, isLocale } from '@/lib/config';
 
 export const metadata: Metadata = {
   title: `Aviso de privacidad · ${APP_NAME}`,
@@ -9,9 +9,10 @@ export const metadata: Metadata = {
 /**
  * Aviso de privacidad (MX) / Privacy notice (US, CA).
  *
- * BORRADOR: cubre lo que exige la LFPDPPP en México y lo básico de US/CA para
- * un formulario de confirmación. Antes de vender, Juan debe revisarlo con un
- * abogado y poner el nombre legal del responsable y un correo de contacto.
+ * Cubre lo que exige la LFPDPPP en México y lo básico de US/CA para un
+ * formulario de confirmación. Responsable y correo salen de config, para
+ * cambiarlos cuando haya empresa. Conviene que un abogado lo revise antes de
+ * escalar.
  */
 export default async function PrivacyPage({
   searchParams,
@@ -29,9 +30,10 @@ export default async function PrivacyPage({
       {en ? (
         <div className="mt-6 space-y-4 text-sm leading-relaxed">
           <p>
-            This invitation is operated by {APP_NAME} on behalf of the hosts of the event. When you
-            RSVP, we collect the name(s) you enter, your attendance, and any optional details you
-            choose to share (meal choice, dietary needs, song request, message).
+            <strong>Data controller:</strong> {LEGAL_ENTITY}, operating {APP_NAME} on behalf of the
+            hosts of the event. When you RSVP, we collect the name(s) you enter, your attendance,
+            and any optional details you choose to share (meal choice, dietary needs, song request,
+            message).
           </p>
           <p>
             We use this information for one purpose only: to organize this event and share your
@@ -41,17 +43,17 @@ export default async function PrivacyPage({
           <p>
             Your data is stored on secure servers and kept until the hosts close the event. You can
             ask to see, correct, or delete your information at any time by contacting the hosts or
-            writing to us.
+            writing to <a className="underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
           </p>
           <p className="text-stone-500">Last updated: {new Date().getFullYear()}.</p>
         </div>
       ) : (
         <div className="mt-6 space-y-4 text-sm leading-relaxed">
           <p>
-            Esta invitación es operada por {APP_NAME} a nombre de los anfitriones del evento. Al
-            confirmar tu asistencia recabamos los nombres que escribas, si asistes o no, y los
-            datos opcionales que decidas compartir (platillo, restricciones alimentarias, canción,
-            mensaje).
+            <strong>Responsable:</strong> {LEGAL_ENTITY}, quien opera {APP_NAME} a nombre de los
+            anfitriones del evento. Al confirmar tu asistencia recabamos los nombres que escribas,
+            si asistes o no, y los datos opcionales que decidas compartir (platillo, restricciones
+            alimentarias, canción, mensaje).
           </p>
           <p>
             Usamos estos datos con una sola finalidad: organizar este evento y entregar tu
@@ -62,7 +64,7 @@ export default async function PrivacyPage({
             Tus datos se guardan en servidores seguros y se conservan hasta que los anfitriones
             cierren el evento. Puedes ejercer tus derechos ARCO (acceso, rectificación,
             cancelación y oposición) en cualquier momento a través de los anfitriones o
-            escribiéndonos.
+            escribiendo a <a className="underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
           </p>
           <p className="text-stone-500">Última actualización: {new Date().getFullYear()}.</p>
         </div>
