@@ -19,6 +19,7 @@ normal y no rompe nada.
 | `001_init.sql` | Tablas, tipos, índices y RLS de toda la Fase 1 |
 | `002_demo_event.sql` | Evento demo (es/en) con invitados de prueba. Generado, no editar a mano |
 | `003_guest_access.sql` | Funciones por las que entra un invitado sin cuenta, y el rate limit |
+| `004_rsvp.sql` | Confirmacion de asistencia, con todas las validaciones del lado de la base |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr
@@ -45,6 +46,11 @@ admin.
 invalido o de otro evento no filtra nada, que un borrador no se asoma sin su
 llave de revision, que los datos bancarios solo salen en el link personal, y
 que la respuesta nunca incluye la lista de invitados.
+
+`tests/004_rsvp_test.sql` comprueba la confirmacion: que nadie confirme mas
+personas que pases, que "no asisto" no cuele acompanantes, que el menu solo
+acepte platillos del evento, que pasada la fecha limite se cierre, y que
+cambiar de opinion conserve el historial completo.
 
 Se corren contra un Postgres desechable (no contra Supabase), aplicando primero
 `tests/_supabase_shim.sql`, que imita lo mínimo de Supabase (`auth.users`,
