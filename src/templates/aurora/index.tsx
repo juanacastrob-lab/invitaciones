@@ -125,10 +125,11 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
             </p>
           ) : null}
 
-          <h1 className="mt-6 font-serif text-[2.75rem] leading-[1.1] text-[var(--ink)] sm:text-6xl">
-            {c.couple.partnerA}
-            <span className="mx-3 text-[var(--accent)]">&</span>
-            {c.couple.partnerB}
+          {/* Cada nombre en su renglón: "Juan Antonio" nunca se parte a la mitad. */}
+          <h1 className="mt-6 flex flex-col items-center font-serif text-[2.75rem] leading-[1.1] text-[var(--ink)] sm:text-6xl">
+            <span>{c.couple.partnerA}</span>
+            <span className="my-1 text-3xl text-[var(--accent)] sm:text-4xl" aria-hidden>&</span>
+            <span>{c.couple.partnerB}</span>
           </h1>
 
           <div className="mt-7 flex items-center justify-center gap-4">

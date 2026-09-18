@@ -217,6 +217,8 @@ export const eventContent = z
       .object({
         title: localizedText.optional(),
         description: localizedText.optional(),
+        /** Foto para la tarjeta de WhatsApp. JPEG o PNG: el generador no lee WebP. */
+        image: z.string().min(1).optional(),
       })
       .optional(),
 

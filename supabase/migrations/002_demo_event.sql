@@ -10,7 +10,7 @@
 
 insert into events (
   slug, type, template, languages, default_language, timezone, status,
-  content, rsvp_deadline, allow_public_rsvp, show_private_gifts
+  content, rsvp_deadline, allow_public_rsvp, show_private_gifts, og_image_url
 )
 values (
   'juan-y-ana',
@@ -35,7 +35,8 @@ values (
     "description": {
       "es": "Nos casamos en Tepoztlán y queremos que estés ahí. Confirma tu asistencia.",
       "en": "We are getting married in Tepoztlán and we want you there. Please RSVP."
-    }
+    },
+    "image": "/demo/portada-og.jpg"
   },
   "sectionOrder": [
     "cover",
@@ -60,7 +61,7 @@ values (
       "en": "Hacienda Santa Elena · Tepoztlán, Morelos"
     },
     "photo": {
-      "url": "/demo/portada.svg",
+      "url": "/demo/portada.webp",
       "alt": {
         "es": "Juan Antonio y Ana Marcela tomados de la mano al atardecer",
         "en": "Juan Antonio and Ana Marcela holding hands at sunset"
@@ -83,7 +84,7 @@ values (
       "en": "We met on a rainy afternoon in a café in Mexico City, both waiting for the storm to pass. Twelve years later we are still waiting together: for buses, for grocery lines, for test results, for the new year. Now we are waiting for you."
     },
     "photo": {
-      "url": "/demo/historia.svg",
+      "url": "/demo/historia.webp",
       "alt": {
         "es": "La pareja riendo",
         "en": "The couple laughing"
@@ -245,31 +246,31 @@ values (
     },
     "photos": [
       {
-        "url": "/demo/galeria-1.svg",
+        "url": "/demo/galeria-1.webp",
         "alt": {
-          "es": "En la playa",
-          "en": "At the beach"
+          "es": "Al atardecer",
+          "en": "At sunset"
         }
       },
       {
-        "url": "/demo/galeria-2.svg",
+        "url": "/demo/galeria-2.webp",
         "alt": {
-          "es": "La propuesta",
-          "en": "The proposal"
+          "es": "En el muelle",
+          "en": "On the dock"
         }
       },
       {
-        "url": "/demo/galeria-3.svg",
+        "url": "/demo/galeria-3.webp",
         "alt": {
-          "es": "Con la familia",
-          "en": "With family"
+          "es": "Rumbo a la fiesta",
+          "en": "Off to the party"
         }
       },
       {
-        "url": "/demo/galeria-4.svg",
+        "url": "/demo/galeria-4.webp",
         "alt": {
-          "es": "De viaje",
-          "en": "Travelling"
+          "es": "Bajo el velo",
+          "en": "Under the veil"
         }
       }
     ]
@@ -362,12 +363,14 @@ values (
 }$demo$::jsonb,
   '2027-02-13 23:59:59-06',
   false,
-  true
+  true,
+  '/demo/og.jpg'
 )
 on conflict (slug) do update
-  set content   = excluded.content,
-      languages = excluded.languages,
-      status    = excluded.status;
+  set content      = excluded.content,
+      languages    = excluded.languages,
+      status       = excluded.status,
+      og_image_url = excluded.og_image_url;
 
 -- Invitados de prueba, con pases variados para enseñar los distintos casos.
 -- El token de cada uno lo genera la base: aleatorio y no adivinable.

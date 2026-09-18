@@ -6,8 +6,8 @@
 -- =============================================================================
 
 update events
-   set slug    = 'juan-y-ana',
-       content = $demo${
+   set slug         = 'juan-y-ana',
+       content      = $demo${
   "version": 1,
   "couple": {
     "partnerA": "Juan Antonio",
@@ -22,7 +22,8 @@ update events
     "description": {
       "es": "Nos casamos en Tepoztlán y queremos que estés ahí. Confirma tu asistencia.",
       "en": "We are getting married in Tepoztlán and we want you there. Please RSVP."
-    }
+    },
+    "image": "/demo/portada-og.jpg"
   },
   "sectionOrder": [
     "cover",
@@ -47,7 +48,7 @@ update events
       "en": "Hacienda Santa Elena · Tepoztlán, Morelos"
     },
     "photo": {
-      "url": "/demo/portada.svg",
+      "url": "/demo/portada.webp",
       "alt": {
         "es": "Juan Antonio y Ana Marcela tomados de la mano al atardecer",
         "en": "Juan Antonio and Ana Marcela holding hands at sunset"
@@ -70,7 +71,7 @@ update events
       "en": "We met on a rainy afternoon in a café in Mexico City, both waiting for the storm to pass. Twelve years later we are still waiting together: for buses, for grocery lines, for test results, for the new year. Now we are waiting for you."
     },
     "photo": {
-      "url": "/demo/historia.svg",
+      "url": "/demo/historia.webp",
       "alt": {
         "es": "La pareja riendo",
         "en": "The couple laughing"
@@ -232,31 +233,31 @@ update events
     },
     "photos": [
       {
-        "url": "/demo/galeria-1.svg",
+        "url": "/demo/galeria-1.webp",
         "alt": {
-          "es": "En la playa",
-          "en": "At the beach"
+          "es": "Al atardecer",
+          "en": "At sunset"
         }
       },
       {
-        "url": "/demo/galeria-2.svg",
+        "url": "/demo/galeria-2.webp",
         "alt": {
-          "es": "La propuesta",
-          "en": "The proposal"
+          "es": "En el muelle",
+          "en": "On the dock"
         }
       },
       {
-        "url": "/demo/galeria-3.svg",
+        "url": "/demo/galeria-3.webp",
         "alt": {
-          "es": "Con la familia",
-          "en": "With family"
+          "es": "Rumbo a la fiesta",
+          "en": "Off to the party"
         }
       },
       {
-        "url": "/demo/galeria-4.svg",
+        "url": "/demo/galeria-4.webp",
         "alt": {
-          "es": "De viaje",
-          "en": "Travelling"
+          "es": "Bajo el velo",
+          "en": "Under the veil"
         }
       }
     ]
@@ -346,7 +347,8 @@ update events
     "askSong": true,
     "askMessage": true
   }
-}$demo$::jsonb
+}$demo$::jsonb,
+       og_image_url = '/demo/og.jpg'
  where slug in ('ana-y-luis', 'juan-y-ana');
 
 select '/i/' || e.slug || '/' || g.token as link, g.display_name as invitado, g.passes as pases

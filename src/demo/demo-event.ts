@@ -29,6 +29,7 @@ export const demoEventContent: EventContent = {
       es: 'Nos casamos en Tepoztlán y queremos que estés ahí. Confirma tu asistencia.',
       en: 'We are getting married in Tepoztlán and we want you there. Please RSVP.',
     },
+    image: '/demo/portada-og.jpg',
   },
 
   sectionOrder: [
@@ -52,7 +53,7 @@ export const demoEventContent: EventContent = {
       en: 'Hacienda Santa Elena · Tepoztlán, Morelos',
     },
     photo: {
-      url: '/demo/portada.svg',
+      url: '/demo/portada.webp',
       alt: {
         es: 'Juan Antonio y Ana Marcela tomados de la mano al atardecer',
         en: 'Juan Antonio and Ana Marcela holding hands at sunset',
@@ -71,7 +72,7 @@ export const demoEventContent: EventContent = {
       en: 'We met on a rainy afternoon in a café in Mexico City, both waiting for the storm to pass. Twelve years later we are still waiting together: for buses, for grocery lines, for test results, for the new year. Now we are waiting for you.',
     },
     photo: {
-      url: '/demo/historia.svg',
+      url: '/demo/historia.webp',
       alt: { es: 'La pareja riendo', en: 'The couple laughing' },
     },
   },
@@ -198,10 +199,10 @@ export const demoEventContent: EventContent = {
   gallery: {
     title: { es: 'Nosotros', en: 'Us' },
     photos: [
-      { url: '/demo/galeria-1.svg', alt: { es: 'En la playa', en: 'At the beach' } },
-      { url: '/demo/galeria-2.svg', alt: { es: 'La propuesta', en: 'The proposal' } },
-      { url: '/demo/galeria-3.svg', alt: { es: 'Con la familia', en: 'With family' } },
-      { url: '/demo/galeria-4.svg', alt: { es: 'De viaje', en: 'Travelling' } },
+      { url: '/demo/galeria-1.webp', alt: { es: 'Al atardecer', en: 'At sunset' } },
+      { url: '/demo/galeria-2.webp', alt: { es: 'En el muelle', en: 'On the dock' } },
+      { url: '/demo/galeria-3.webp', alt: { es: 'Rumbo a la fiesta', en: 'Off to the party' } },
+      { url: '/demo/galeria-4.webp', alt: { es: 'Bajo el velo', en: 'Under the veil' } },
     ],
   },
 

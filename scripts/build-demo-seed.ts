@@ -41,7 +41,7 @@ const sql = `-- ================================================================
 
 insert into events (
   slug, type, template, languages, default_language, timezone, status,
-  content, rsvp_deadline, allow_public_rsvp, show_private_gifts
+  content, rsvp_deadline, allow_public_rsvp, show_private_gifts, og_image_url
 )
 values (
   ${sqlText(DEMO_SLUG)},
@@ -54,12 +54,14 @@ values (
   $demo$${json}$demo$::jsonb,
   '2027-02-13 23:59:59-06',
   false,
-  true
+  true,
+  '/demo/og.jpg'
 )
 on conflict (slug) do update
-  set content   = excluded.content,
-      languages = excluded.languages,
-      status    = excluded.status;
+  set content      = excluded.content,
+      languages    = excluded.languages,
+      status       = excluded.status,
+      og_image_url = excluded.og_image_url;
 
 -- Invitados de prueba, con pases variados para enseñar los distintos casos.
 -- El token de cada uno lo genera la base: aleatorio y no adivinable.
@@ -102,8 +104,9 @@ const rename = `-- =============================================================
 -- =============================================================================
 
 update events
-   set slug    = ${sqlText(DEMO_SLUG)},
-       content = $demo$${json}$demo$::jsonb
+   set slug         = ${sqlText(DEMO_SLUG)},
+       content      = $demo$${json}$demo$::jsonb,
+       og_image_url = '/demo/og.jpg'
  where slug in (${sqlText(DEMO_PREVIOUS_SLUG)}, ${sqlText(DEMO_SLUG)});
 
 select '/i/' || e.slug || '/' || g.token as link, g.display_name as invitado, g.passes as pases

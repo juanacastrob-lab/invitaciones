@@ -53,11 +53,9 @@ export async function invitationMetadata(
       ...(invitation.event.og_image_url ? { images: [invitation.event.og_image_url] } : {}),
       ...(siteUrl ? { url: `${siteUrl}/i/${slug}` } : {}),
     },
-    twitter: {
-      card: invitation.event.og_image_url ? 'summary_large_image' : 'summary',
-      title,
-      description,
-    },
+    // La imagen la genera opengraph-image.tsx (junto a este archivo); solo se
+    // sobreescribe si el evento trae una subida a mano en og_image_url.
+    twitter: { card: 'summary_large_image', title, description },
     ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
   };
 }
