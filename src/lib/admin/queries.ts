@@ -11,6 +11,8 @@ export interface EventRow {
   package_code: string | null;
   template: string;
   checkin_enabled: boolean;
+  auto_reminders: boolean;
+  reminder_days: number[];
   languages: string[];
   default_language: string;
   timezone: string;
@@ -60,7 +62,7 @@ export interface GuestRow {
 }
 
 const EVENT_COLS =
-  'id, slug, status, type, package_code, template, checkin_enabled, languages, default_language, timezone, country, rsvp_deadline, allow_public_rsvp, show_private_gifts, preview_key, og_image_url, content, created_at, updated_at';
+  'id, slug, status, type, package_code, template, checkin_enabled, auto_reminders, reminder_days, languages, default_language, timezone, country, rsvp_deadline, allow_public_rsvp, show_private_gifts, preview_key, og_image_url, content, created_at, updated_at';
 
 export async function listEvents(): Promise<(EventRow & { stats: EventStats })[]> {
   const supabase = await supabaseServer();

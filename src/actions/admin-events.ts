@@ -36,6 +36,8 @@ export async function createEvent(raw: unknown): Promise<ActionResult<{ id: stri
       allow_public_rsvp: b.allowPublicRsvp,
       show_private_gifts: b.showPrivateGifts,
       checkin_enabled: b.checkinEnabled,
+      auto_reminders: b.autoReminders,
+      reminder_days: b.reminderDays,
       content: templateContent({ partnerA: b.partnerA, partnerB: b.partnerB || undefined, startsAt: b.startsAt, type: b.type }),
       created_by: me.userId,
     })
@@ -78,6 +80,8 @@ export async function updateEventBasics(id: string, raw: unknown): Promise<Actio
       allow_public_rsvp: b.allowPublicRsvp,
       show_private_gifts: b.showPrivateGifts,
       checkin_enabled: b.checkinEnabled,
+      auto_reminders: b.autoReminders,
+      reminder_days: b.reminderDays,
       content,
     })
     .eq('id', id);

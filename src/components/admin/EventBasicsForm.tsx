@@ -7,6 +7,7 @@ import { Button, Field, Input, Select, Notice } from '@/components/ui';
 import { TIMEZONES } from '@/lib/admin/labels';
 import { EVENT_TYPES, EVENT_TYPE_LABEL, needsTwoNames, type EventType } from '@/lib/event-types';
 import { TEMPLATE_IDS, TEMPLATES } from '@/templates/registry';
+import { parseReminderDays } from '@/lib/reminders';
 
 export interface EventBasicsValues {
   slug: string;
@@ -24,6 +25,8 @@ export interface EventBasicsValues {
   allowPublicRsvp: boolean;
   showPrivateGifts: boolean;
   checkinEnabled: boolean;
+  autoReminders: boolean;
+  reminderDays: number[];
 }
 
 export function EventBasicsForm({ eventId, initial, packages = [] }: { eventId?: string; initial: EventBasicsValues; packages?: { code: string; name: string; country: string }[] }) {
@@ -52,6 +55,8 @@ export function EventBasicsForm({ eventId, initial, packages = [] }: { eventId?:
       allowPublicRsvp: f.get('allowPublicRsvp') === 'on',
       showPrivateGifts: f.get('showPrivateGifts') === 'on',
       checkinEnabled: f.get('checkinEnabled') === 'on',
+      autoReminders: f.get('autoReminders') === 'on',
+      reminderDays: parseReminderDays(String(f.get('reminderDays') ?? '')),
     };
     start(async () => {
       setResult(eventId ? await updateEventBasics(eventId, values) : await createEvent(values));
@@ -132,6 +137,15 @@ export function EventBasicsForm({ eventId, initial, packages = [] }: { eventId?:
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" name="checkinEnabled" defaultChecked={initial.checkinEnabled} /> Pase con QR y check-in el día del evento (extra o paquete Premium)
       </label>
+
+      <div className="grid gap-4 sm:grid-cols-[auto_1fr] sm:items-end">
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" name="autoReminders" defaultChecked={initial.autoReminders} /> Recordatorios automáticos por correo a quien no ha confirmado
+        </label>
+        <Field label="Días antes de la fecha límite" hint="Separados por coma. Ej: 7,3 = un recordatorio a 7 días y otro a 3. Sin fecha límite se cuenta desde la fecha del evento. Solo a invitados con correo y con el correo configurado en Netlify.">
+          <Input name="reminderDays" defaultValue={initial.reminderDays.join(',')} className="w-40" />
+        </Field>
+      </div>
 
       {result ? <Notice kind={result.ok ? 'ok' : 'error'}>{result.ok ? result.message : result.error}</Notice> : null}
 

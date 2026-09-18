@@ -31,6 +31,12 @@ Correo a invitados (opcional): `RESEND_API_KEY` (se crea en resend.com) y
 dominio, que van en Netlify DNS). Sin esas dos variables, el boton de correo
 en la cola de envio aparece apagado y todo lo demas sigue igual.
 
+Recordatorios automaticos: ademas del correo, `CRON_SECRET` (un texto largo al
+azar). Una funcion programada de Netlify (`netlify/functions/reminders-cron.mts`,
+cada 15 minutos) llama a `/api/cron/reminders` con ese secreto, y la app manda
+el recordatorio a los pendientes con correo de los eventos que lo tengan
+activado, en los "dias antes" configurados en Datos del evento.
+
 ## Ramas y donde ver cada cosa
 
 - `main` = produccion: https://holaboda.mx. Solo se hace merge cuando Juan lo pide.

@@ -34,6 +34,7 @@ normal y no rompe nada.
 | `016_team_pricing.sql` | Equipo por invitación (team_invites, rpc_invite_staff, rpc_set_role con candados), correo en profiles y paquete por evento (events.package_code) |
 | `017_approve.sql` | rpc_approve_event: los novios aprueban desde el panel y la invitacion pasa de en_revision a publicado |
 | `018_checkin.sql` | Pase con QR y check-in: events.checkin_enabled, guests.checked_in_at/count, rpc_checkin, rpc_get_invitation con la bandera y event_stats con llegadas |
+| `019_auto_reminders.sql` | Recordatorios automaticos: events.auto_reminders / reminder_days y guests.auto_reminder_milestone. Se puede repetir |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr

@@ -40,7 +40,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
             <EventBasicsForm eventId={id} initial={{
               slug: event.slug, type: event.type, packageCode: event.package_code ?? '', template: event.template, partnerA: c.couple.partnerA, partnerB: c.couple.partnerB ?? '', startsAt: c.startsAt,
               timezone: event.timezone, country: event.country, languages: event.languages, defaultLanguage: event.default_language,
-              rsvpDeadline: event.rsvp_deadline ? event.rsvp_deadline.slice(0, 10) : '', allowPublicRsvp: event.allow_public_rsvp, showPrivateGifts: event.show_private_gifts, checkinEnabled: event.checkin_enabled,
+              rsvpDeadline: event.rsvp_deadline ? event.rsvp_deadline.slice(0, 10) : '', allowPublicRsvp: event.allow_public_rsvp, showPrivateGifts: event.show_private_gifts, checkinEnabled: event.checkin_enabled, autoReminders: event.auto_reminders, reminderDays: event.reminder_days ?? [7, 3],
             }} packages={pricing.packages.filter((p) => p.active)} />
           </section>
 
