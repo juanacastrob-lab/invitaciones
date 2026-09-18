@@ -17,6 +17,11 @@ normal y no rompe nada.
 | Archivo | Qué hace |
 |---|---|
 | `001_init.sql` | Tablas, tipos, índices y RLS de toda la Fase 1 |
+| `002_demo_event.sql` | Evento demo (es/en) con invitados de prueba. Generado, no editar a mano |
+
+`002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
+el contenido de la base y el que espera la app nunca se separan. Se puede correr
+las veces que haga falta: actualiza el evento y no duplica invitados.
 
 ## Después de la primera migración
 
