@@ -65,6 +65,8 @@ export default async function DevPreview({
       invitation={invitation}
       locale={isLocale(lang) ? lang : DEFAULT_LOCALE}
       path="/dev/preview"
+      token={conToken ? 'token-de-prueba' : undefined}
+      previewMode
     />
   );
 }

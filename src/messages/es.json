@@ -67,11 +67,49 @@
       "attending": "Ahí estaremos",
       "notAttending": "No podremos ir",
       "change": "Cambiar mi respuesta",
-      "peopleConfirmed": "{count, plural, one {# persona confirmada} other {# personas confirmadas}}"
+      "peopleConfirmed": "{count, plural, one {# persona confirmada} other {# personas confirmadas}}",
+      "question": "¿Nos acompañas?",
+      "yes": "Sí, ahí estaremos",
+      "no": "No podremos ir",
+      "howMany": "¿Cuántos van a venir?",
+      "ofPasses": "de {passes}",
+      "names": "¿Quiénes vienen?",
+      "namePlaceholder": "Nombre",
+      "menu": "Platillo",
+      "menuFor": "Platillo para {name}",
+      "choose": "Elige",
+      "dietary": "Alergias o restricciones alimentarias",
+      "dietaryPlaceholder": "Ej. sin gluten, vegetariano, alergia a nueces",
+      "song": "Una canción que no puede faltar",
+      "songPlaceholder": "Ej. Como la flor · Selena",
+      "message": "Un mensaje para los novios",
+      "messagePlaceholder": "Opcional",
+      "consent": "Acepto que mis datos se usen solo para organizar este evento, según el <link>aviso de privacidad</link>.",
+      "submit": "Confirmar",
+      "sending": "Guardando…",
+      "thanksYes": "¡Gracias! Te esperamos.",
+      "thanksNo": "Gracias por avisarnos. Te vamos a extrañar.",
+      "saved": "Respuesta guardada",
+      "errors": {
+        "too_many_attempts": "Demasiados intentos. Espera un rato y vuelve a intentar.",
+        "not_found": "Esta invitación ya no está disponible.",
+        "invalid_token": "Este link no es válido. Pide a quien te invitó que te lo reenvíe.",
+        "closed": "El plazo para confirmar ya cerró. Si necesitas cambiar algo, escríbenos.",
+        "invalid_payload": "Faltó algo en el formulario. Revísalo e intenta de nuevo.",
+        "invalid_count": "Dinos cuántas personas vienen.",
+        "too_many_passes": "Tu invitación es para {passes} personas como máximo.",
+        "too_many_names": "Hay más nombres que personas confirmadas.",
+        "menu_invalid": "Elige un platillo de la lista.",
+        "consent_required": "Necesitamos tu consentimiento para guardar la respuesta.",
+        "unknown": "Algo falló de nuestro lado. Intenta de nuevo en un momento."
+      }
     },
     "language": {
       "switch": "English",
       "current": "Español"
+    },
+    "legal": {
+      "privacy": "Aviso de privacidad"
     }
   }
 }

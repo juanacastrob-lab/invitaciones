@@ -84,5 +84,5 @@ export async function InvitationPage({
   const locale = localeFor(invitation, requestedLang);
   const path = token ? `/i/${slug}/${token}` : `/i/${slug}`;
 
-  return <AuroraTemplate invitation={invitation} locale={locale} path={path} />;
+  return <AuroraTemplate invitation={invitation} locale={locale} path={path} token={token} />;
 }

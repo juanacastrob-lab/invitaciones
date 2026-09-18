@@ -1,4 +1,5 @@
-import { getTranslations } from 'next-intl/server';
+import { getMessages, getTranslations } from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
 import type { Locale } from '@/lib/config';
 import type { Invitation } from '@/lib/invitations';
 import { pickText, type SectionId } from '@/schemas/event-content';
@@ -8,6 +9,7 @@ import { Reveal } from '@/components/invitation/Reveal';
 import { Countdown } from '@/components/invitation/Countdown';
 import { CopyButton } from '@/components/invitation/CopyButton';
 import { MusicPlayer } from '@/components/invitation/MusicPlayer';
+import { RsvpForm } from '@/components/invitation/RsvpForm';
 import { auroraCssVars } from './theme';
 
 interface Props {
@@ -15,6 +17,10 @@ interface Props {
   locale: Locale;
   /** La misma URL en la que está el invitado, para el switch de idioma. */
   path: string;
+  /** Solo en el link personal. */
+  token?: string;
+  /** En /dev/preview no hay base: el formulario simula el guardado. */
+  previewMode?: boolean;
 }
 
 // -----------------------------------------------------------------------------
@@ -74,8 +80,9 @@ function LinkButton({
 // Plantilla
 // -----------------------------------------------------------------------------
 
-export async function AuroraTemplate({ invitation, locale, path }: Props) {
+export async function AuroraTemplate({ invitation, locale, path, token, previewMode }: Props) {
   const t = await getTranslations({ locale, namespace: 'invitation' });
+  const messages = await getMessages({ locale });
   const { event, guest, access } = invitation;
   const c = event.content;
   const tz = event.timezone;
@@ -416,14 +423,28 @@ export async function AuroraTemplate({ invitation, locale, path }: Props) {
           </p>
         ) : null}
 
-        {guest ? (
-          <div className="rounded-sm border border-[var(--line)] p-6 text-center">
-            <p className="font-serif text-2xl text-[var(--ink)]">{guest.display_name}</p>
-            <p className="mt-2 text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
-              {t('guestBanner.passes', { count: guest.passes })}
-            </p>
-            <p className="mt-1 text-xs text-[var(--muted)]">{t('guestBanner.reserved')}</p>
-          </div>
+        {guest && token ? (
+          <NextIntlClientProvider locale={locale} messages={{ invitation: messages.invitation }}>
+            <RsvpForm
+              slug={event.slug}
+              token={token}
+              guest={guest}
+              locale={locale}
+              closed={Boolean(event.rsvp_deadline && new Date(event.rsvp_deadline) < new Date())}
+              privacyHref={`/legal/privacidad?lang=${locale}`}
+              previewMode={previewMode}
+              config={{
+                askMenu: c.rsvp?.askMenu ?? false,
+                menuOptions: (c.rsvp?.menuOptions ?? []).map((o) => ({
+                  id: o.id,
+                  label: text(o.label) ?? o.id,
+                })),
+                askDietary: c.rsvp?.askDietary ?? false,
+                askSong: c.rsvp?.askSong ?? false,
+                askMessage: c.rsvp?.askMessage ?? true,
+              }}
+            />
+          </NextIntlClientProvider>
         ) : (
           <div className="rounded-sm bg-[var(--accent-soft)] p-6 text-center">
             <p className="text-sm font-medium text-[var(--ink)]">{t('generalNotice.title')}</p>

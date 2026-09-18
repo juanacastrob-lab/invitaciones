@@ -67,11 +67,49 @@
       "attending": "We'll be there",
       "notAttending": "We can't make it",
       "change": "Change my answer",
-      "peopleConfirmed": "{count, plural, one {# person confirmed} other {# people confirmed}}"
+      "peopleConfirmed": "{count, plural, one {# person confirmed} other {# people confirmed}}",
+      "question": "Will you join us?",
+      "yes": "Yes, we'll be there",
+      "no": "We can't make it",
+      "howMany": "How many are coming?",
+      "ofPasses": "of {passes}",
+      "names": "Who's coming?",
+      "namePlaceholder": "Name",
+      "menu": "Meal",
+      "menuFor": "Meal for {name}",
+      "choose": "Choose",
+      "dietary": "Allergies or dietary restrictions",
+      "dietaryPlaceholder": "E.g. gluten-free, vegetarian, nut allergy",
+      "song": "A song that can't be missing",
+      "songPlaceholder": "E.g. Como la flor · Selena",
+      "message": "A message for the couple",
+      "messagePlaceholder": "Optional",
+      "consent": "I agree that my details are used only to organize this event, as described in the <link>privacy notice</link>.",
+      "submit": "Confirm",
+      "sending": "Saving…",
+      "thanksYes": "Thank you! See you there.",
+      "thanksNo": "Thanks for letting us know. We'll miss you.",
+      "saved": "Answer saved",
+      "errors": {
+        "too_many_attempts": "Too many attempts. Please wait a bit and try again.",
+        "not_found": "This invitation is no longer available.",
+        "invalid_token": "This link isn't valid. Ask whoever invited you to resend it.",
+        "closed": "The RSVP deadline has passed. If you need to change something, get in touch.",
+        "invalid_payload": "Something's missing in the form. Please check and try again.",
+        "invalid_count": "Tell us how many people are coming.",
+        "too_many_passes": "Your invitation is for up to {passes} people.",
+        "too_many_names": "There are more names than confirmed people.",
+        "menu_invalid": "Please choose a meal from the list.",
+        "consent_required": "We need your consent to save your answer.",
+        "unknown": "Something went wrong on our side. Please try again in a moment."
+      }
     },
     "language": {
       "switch": "Español",
       "current": "English"
+    },
+    "legal": {
+      "privacy": "Privacy notice"
     }
   }
 }
