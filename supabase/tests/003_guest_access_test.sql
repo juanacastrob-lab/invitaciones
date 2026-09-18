@@ -26,40 +26,40 @@ from events where slug = 'otra-boda'
 \echo ''
 \echo '--- link general de un evento publicado ---'
 select t_check('deja ver el evento', 'public',
-  rpc_get_invitation('ana-y-luis') ->> 'access');
+  rpc_get_invitation('juan-y-ana') ->> 'access');
 select t_check('no trae datos de ningun invitado', 'null',
-  coalesce(rpc_get_invitation('ana-y-luis') -> 'guest', 'null'::jsonb)::text);
+  coalesce(rpc_get_invitation('juan-y-ana') -> 'guest', 'null'::jsonb)::text);
 select t_check('esconde los datos bancarios', 'false',
-  (rpc_get_invitation('ana-y-luis') -> 'event' -> 'content' -> 'gifts' ? 'bank')::text);
+  (rpc_get_invitation('juan-y-ana') -> 'event' -> 'content' -> 'gifts' ? 'bank')::text);
 select t_check('apaga los sobres', 'false',
-  rpc_get_invitation('ana-y-luis') -> 'event' -> 'content' -> 'gifts' ->> 'envelopes');
+  rpc_get_invitation('juan-y-ana') -> 'event' -> 'content' -> 'gifts' ->> 'envelopes');
 
 \echo ''
 \echo '--- link personal con token valido ---'
 select t_check('reconoce el token', 'token',
-  rpc_get_invitation('ana-y-luis', (select token from guests where display_name = 'Mariana Ruiz')) ->> 'access');
+  rpc_get_invitation('juan-y-ana', (select token from guests where display_name = 'Mariana Ruiz')) ->> 'access');
 select t_check('saluda por su nombre', 'Mariana Ruiz',
-  rpc_get_invitation('ana-y-luis', (select token from guests where display_name = 'Mariana Ruiz')) -> 'guest' ->> 'display_name');
+  rpc_get_invitation('juan-y-ana', (select token from guests where display_name = 'Mariana Ruiz')) -> 'guest' ->> 'display_name');
 select t_check('trae sus pases', '2',
-  rpc_get_invitation('ana-y-luis', (select token from guests where display_name = 'Mariana Ruiz')) -> 'guest' ->> 'passes');
+  rpc_get_invitation('juan-y-ana', (select token from guests where display_name = 'Mariana Ruiz')) -> 'guest' ->> 'passes');
 select t_check('si muestra los datos bancarios', 'true',
-  (rpc_get_invitation('ana-y-luis', (select token from guests where display_name = 'Mariana Ruiz')) -> 'event' -> 'content' -> 'gifts' ? 'bank')::text);
+  (rpc_get_invitation('juan-y-ana', (select token from guests where display_name = 'Mariana Ruiz')) -> 'event' -> 'content' -> 'gifts' ? 'bank')::text);
 
 \echo ''
 \echo '--- token invalido: se cae al link general, sin dar pistas ---'
 select t_check('no reconoce el token', 'false',
-  rpc_get_invitation('ana-y-luis', 'estoyInventando') ->> 'token_valid');
+  rpc_get_invitation('juan-y-ana', 'estoyInventando') ->> 'token_valid');
 select t_check('no inventa un invitado', 'null',
-  coalesce(rpc_get_invitation('ana-y-luis', 'estoyInventando') -> 'guest', 'null'::jsonb)::text);
+  coalesce(rpc_get_invitation('juan-y-ana', 'estoyInventando') -> 'guest', 'null'::jsonb)::text);
 select t_check('sigue escondiendo lo bancario', 'false',
-  (rpc_get_invitation('ana-y-luis', 'estoyInventando') -> 'event' -> 'content' -> 'gifts' ? 'bank')::text);
+  (rpc_get_invitation('juan-y-ana', 'estoyInventando') -> 'event' -> 'content' -> 'gifts' ? 'bank')::text);
 
 \echo ''
 \echo '--- token de OTRO evento: no sirve aqui ---'
 select t_check('no da acceso cruzado', 'false',
-  rpc_get_invitation('ana-y-luis', 'TOKEN-DE-OTRO-EVENTO') ->> 'token_valid');
+  rpc_get_invitation('juan-y-ana', 'TOKEN-DE-OTRO-EVENTO') ->> 'token_valid');
 select t_check('no filtra al invitado ajeno', 'null',
-  coalesce(rpc_get_invitation('ana-y-luis', 'TOKEN-DE-OTRO-EVENTO') -> 'guest', 'null'::jsonb)::text);
+  coalesce(rpc_get_invitation('juan-y-ana', 'TOKEN-DE-OTRO-EVENTO') -> 'guest', 'null'::jsonb)::text);
 
 \echo ''
 \echo '--- borrador: invisible sin la llave de revision ---'
@@ -80,20 +80,20 @@ select t_check('no existe = nada', 'null',
 \echo ''
 \echo '--- nunca salen datos internos ---'
 select t_check('no expone la lista de invitados', 'false',
-  (rpc_get_invitation('ana-y-luis', (select token from guests where display_name = 'Mariana Ruiz'))::text like '%Familia Contreras%')::text);
+  (rpc_get_invitation('juan-y-ana', (select token from guests where display_name = 'Mariana Ruiz'))::text like '%Familia Contreras%')::text);
 select t_check('no expone la llave de revision', 'false',
-  (rpc_get_invitation('ana-y-luis')::text like '%' || (select preview_key from events where slug = 'ana-y-luis') || '%')::text);
+  (rpc_get_invitation('juan-y-ana')::text like '%' || (select preview_key from events where slug = 'juan-y-ana') || '%')::text);
 select t_check('no expone el id del evento', 'false',
-  (rpc_get_invitation('ana-y-luis')::text like '%' || (select id::text from events where slug = 'ana-y-luis') || '%')::text);
+  (rpc_get_invitation('juan-y-ana')::text like '%' || (select id::text from events where slug = 'juan-y-ana') || '%')::text);
 select t_check('no expone el token de nadie mas', 'false',
-  (rpc_get_invitation('ana-y-luis')::text like '%' || (select token from guests where display_name = 'Jorge Hernández') || '%')::text);
+  (rpc_get_invitation('juan-y-ana')::text like '%' || (select token from guests where display_name = 'Jorge Hernández') || '%')::text);
 
 \echo ''
 \echo '--- show_private_gifts apagado: ni con token ---'
 begin;
-  update events set show_private_gifts = false where slug = 'ana-y-luis';
+  update events set show_private_gifts = false where slug = 'juan-y-ana';
   select t_check('respeta el interruptor', 'false',
-    (rpc_get_invitation('ana-y-luis', (select token from guests where display_name = 'Mariana Ruiz')) -> 'event' -> 'content' -> 'gifts' ? 'bank')::text);
+    (rpc_get_invitation('juan-y-ana', (select token from guests where display_name = 'Mariana Ruiz')) -> 'event' -> 'content' -> 'gifts' ? 'bank')::text);
 rollback;
 
 \echo ''
@@ -102,10 +102,10 @@ do $$
 declare tk text; primera timestamptz; segunda timestamptz;
 begin
   select token into tk from guests where display_name = 'Jorge Hernández';
-  perform rpc_mark_opened('ana-y-luis', tk);
+  perform rpc_mark_opened('juan-y-ana', tk);
   select opened_at into primera from guests where token = tk;
   perform pg_sleep(0.05);
-  perform rpc_mark_opened('ana-y-luis', tk);
+  perform rpc_mark_opened('juan-y-ana', tk);
   select opened_at into segunda from guests where token = tk;
 
   if primera is null then raise notice '  FALLA no marco la apertura';
@@ -118,7 +118,9 @@ $$;
 do $$
 declare tk text; antes timestamptz;
 begin
-  select token into tk from guests where display_name = 'Sarah Whitfield';
+  -- Un invitado que todavía no abre (Sarah ya abrió en la prueba anterior).
+  select token into tk from guests
+   where event_id = (select id from events where slug = 'juan-y-ana') and opened_at is null limit 1;
   perform rpc_mark_opened('otra-boda', tk);   -- slug que no le toca
   select opened_at into antes from guests where token = tk;
   if antes is null then raise notice '  OK   no marca si el slug no corresponde';
