@@ -69,7 +69,10 @@ export async function getInvitation(
     p_preview_key: previewKey ?? null,
   });
 
-  if (error) throw new Error(`No se pudo leer la invitación: ${error.message}`);
+  if (error) {
+    console.error(`[invitacion] Supabase falló leyendo "${slug}":`, error);
+    throw new Error(`No se pudo leer la invitación: ${error.message}`);
+  }
   if (data === null) return null;
 
   const parsed = invitationSchema.safeParse(data);

@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { getInvitation, localeFor } from '@/lib/invitations';
 import { pickText } from '@/schemas/event-content';
 import { buildIcs } from '@/lib/dates';
+import { getSiteUrl } from '@/lib/env';
 
 /** El archivo que abre el calendario de iPhone, Outlook y casi todo lo demás. */
 export async function GET(
@@ -23,9 +24,7 @@ export async function GET(
     startsAt: c.startsAt,
     timeZone: invitation.event.timezone,
     uid: `${slug}@holaboda`,
-    url: process.env.NEXT_PUBLIC_SITE_URL
-      ? `${process.env.NEXT_PUBLIC_SITE_URL}/i/${slug}`
-      : undefined,
+    url: getSiteUrl() ? `${getSiteUrl()}/i/${slug}` : undefined,
   });
 
   return new Response(ics, {

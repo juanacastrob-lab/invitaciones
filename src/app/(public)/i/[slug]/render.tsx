@@ -4,6 +4,7 @@ import { getInvitation, localeFor, markOpened, type Invitation } from '@/lib/inv
 import { pickText } from '@/schemas/event-content';
 import { AuroraTemplate } from '@/templates/aurora';
 import type { Locale } from '@/lib/config';
+import { getSiteUrl } from '@/lib/env';
 
 /**
  * Lo compartido entre el link general y el personal.
@@ -37,7 +38,7 @@ export async function invitationMetadata(
 
   const title = pickText(c.og?.title, locale) ?? couple;
   const description = pickText(c.og?.description, locale) ?? '';
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const siteUrl = getSiteUrl();
 
   return {
     title,
