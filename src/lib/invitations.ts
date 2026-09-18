@@ -1,4 +1,5 @@
 import 'server-only';
+import { cache } from 'react';
 import { z } from 'zod';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { eventContent } from '@/schemas/event-content';
@@ -57,8 +58,13 @@ const invitationSchema = z.object({
 export type Invitation = z.infer<typeof invitationSchema>;
 export type InvitationGuest = z.infer<typeof guestSchema>;
 
-/** `null` = no existe, o es un borrador sin llave de revisión. */
-export async function getInvitation(
+/**
+ * `null` = no existe, o es un borrador sin llave de revisión.
+ *
+ * `cache()`: Next llama a generateMetadata y a la página por separado; sin
+ * esto, cada visita leía la invitación dos veces de Supabase.
+ */
+export const getInvitation = cache(async function getInvitation(
   slug: string,
   token?: string | null,
   previewKey?: string | null,
@@ -84,7 +90,7 @@ export async function getInvitation(
   }
 
   return parsed.data;
-}
+});
 
 /** Registra la primera apertura. Nunca debe tumbar la página si falla. */
 export async function markOpened(slug: string, token: string): Promise<void> {

@@ -111,5 +111,27 @@
     "legal": {
       "privacy": "Privacy notice"
     }
+  },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "For the team and for the couple",
+    "google": "Continue with Google",
+    "apple": "Continue with Apple",
+    "or": "or with your email",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@email.com",
+    "sendLink": "Send me a sign-in link",
+    "sending": "Sending…",
+    "sent": "Done. Check your email and tap the link to sign in.",
+    "error": "Couldn't sign in. Please try again.",
+    "signOut": "Sign out",
+    "hello": "Hi, {name}",
+    "roles": {
+      "admin": "Administrator",
+      "staff": "Team",
+      "client": "Couple"
+    },
+    "adminSoon": "Events, guests and the WhatsApp send queue will live here.",
+    "panelSoon": "Here you'll see who confirmed, how many passes, and your guests' messages."
   }
 }

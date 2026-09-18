@@ -111,5 +111,27 @@
     "legal": {
       "privacy": "Aviso de privacidad"
     }
+  },
+  "auth": {
+    "title": "Entrar",
+    "subtitle": "Para el equipo y para los novios",
+    "google": "Continuar con Google",
+    "apple": "Continuar con Apple",
+    "or": "o con tu correo",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tu@correo.com",
+    "sendLink": "Enviarme un link de acceso",
+    "sending": "Enviando…",
+    "sent": "Listo. Revisa tu correo y toca el link para entrar.",
+    "error": "No se pudo iniciar sesión. Intenta de nuevo.",
+    "signOut": "Cerrar sesión",
+    "hello": "Hola, {name}",
+    "roles": {
+      "admin": "Administrador",
+      "staff": "Equipo",
+      "client": "Novios"
+    },
+    "adminSoon": "Aquí van a vivir los eventos, los invitados y la cola de envío por WhatsApp.",
+    "panelSoon": "Aquí vas a ver quién confirmó, cuántos pases van y los mensajes de tus invitados."
   }
 }
