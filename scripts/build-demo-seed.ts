@@ -8,7 +8,7 @@
  */
 import { writeFileSync } from 'node:fs';
 import { eventContent } from '@/schemas/event-content';
-import { DEMO_SLUG, demoEventContent, demoGuests } from '@/demo/demo-event';
+import { DEMO_SLUG, DEMO_PREVIOUS_SLUG, demoEventContent, demoGuests } from '@/demo/demo-event';
 
 const parsed = eventContent.safeParse(demoEventContent);
 if (!parsed.success) {
@@ -90,3 +90,26 @@ order by g.passes desc, g.display_name;
 
 writeFileSync('supabase/migrations/002_demo_event.sql', sql);
 console.log(`002_demo_event.sql escrito (${sql.split('\n').length} líneas)`);
+
+// Para una base que ya tiene el demo cargado con el slug anterior: se renombra
+// y se refresca el contenido EN EL MISMO EVENTO, así los tokens de los
+// invitados (los links que ya se repartieron) siguen sirviendo.
+const rename = `-- =============================================================================
+-- 007_demo_rename.sql — Renombrar el evento demo y refrescar su contenido
+--
+-- GENERADO AUTOMÁTICAMENTE desde src/demo/demo-event.ts. Actualiza el evento
+-- que ya existe (los tokens de los invitados no cambian). Idempotente.
+-- =============================================================================
+
+update events
+   set slug    = ${sqlText(DEMO_SLUG)},
+       content = $demo$${json}$demo$::jsonb
+ where slug in (${sqlText(DEMO_PREVIOUS_SLUG)}, ${sqlText(DEMO_SLUG)});
+
+select '/i/' || e.slug || '/' || g.token as link, g.display_name as invitado, g.passes as pases
+from guests g join events e on e.id = g.event_id
+where e.slug = ${sqlText(DEMO_SLUG)}
+order by g.display_name = 'Invitado de muestra' desc, g.passes desc;
+`;
+writeFileSync('supabase/migrations/007_demo_rename.sql', rename);
+console.log(`007_demo_rename.sql escrito (${rename.split('\n').length} líneas)`);

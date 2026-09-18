@@ -1,8 +1,75 @@
 {
   "landing": {
-    "tagline": "Digital wedding invitations",
-    "description": "Web invitations with personalized guest passes and RSVP from any phone.",
-    "soon": "Coming soon"
+    "nav": {
+      "packages": "Packages",
+      "demo": "See demo",
+      "login": "Sign in",
+      "cta": "I want my invitation"
+    },
+    "hero": {
+      "title": "Invitations that tell your story",
+      "body": "Digital wedding invitations in Spanish and English, with a personal link for every guest and RSVP from any phone. We build it; you just approve.",
+      "cta": "I want my invitation",
+      "demo": "See the demo invitation"
+    },
+    "how": {
+      "title": "How it works",
+      "steps": [
+        {
+          "t": "Tell us about your wedding",
+          "d": "Fill out the form below with names, date, venue and what you'd like to include."
+        },
+        {
+          "t": "We design it",
+          "d": "We reach out on WhatsApp, build the invitation and send you the link to review."
+        },
+        {
+          "t": "Send it and get RSVPs",
+          "d": "Each guest gets their link with their passes and RSVPs from their phone. You see everything in your dashboard."
+        }
+      ]
+    },
+    "packages": {
+      "title": "Packages",
+      "subtitle": "Prices in {currency}. No subscriptions: one-time payment.",
+      "choose": "Choose",
+      "chosen": "Chosen",
+      "features": {
+        "invitacion_pdf": "PDF invitation ready for WhatsApp",
+        "diseno_desde_plantilla": "Template-based design",
+        "entrega_whatsapp": "Delivered on WhatsApp",
+        "invitacion_web": "Web invitation with its own link",
+        "rsvp": "RSVP",
+        "panel_novios": "Couple's dashboard",
+        "idiomas_es_en": "Spanish and English",
+        "itinerario_mapas": "Schedule with maps (Google, Waze, Apple)",
+        "calendario": "Add to calendar",
+        "mesa_regalos": "Gift registry and bank details",
+        "hospedaje": "Suggested lodging",
+        "faq": "FAQ",
+        "pases_personalizados": "Personal link per guest with their passes",
+        "cola_whatsapp": "WhatsApp send list",
+        "galeria": "Photo gallery",
+        "musica": "Background music",
+        "menu_rsvp": "Meal choice on RSVP",
+        "export_excel": "Export guests to Excel",
+        "envio_por_nosotros": "We send the invitations for you",
+        "recordatorios": "Reminder rounds",
+        "qr_checkin": "QR pass and check-in on the day",
+        "save_the_date": "Save the date"
+      }
+    },
+    "preview": {
+      "title": "What it looks like",
+      "body": "Cover, countdown, schedule with maps, registry, gallery and RSVP. All in one link that opens on any phone.",
+      "open": "Open the demo",
+      "coverAlt": "Demo invitation cover",
+      "rsvpAlt": "RSVP with name and passes"
+    },
+    "footer": {
+      "privacy": "Privacy notice",
+      "whatsapp": "Message us on WhatsApp"
+    }
   },
   "invitation": {
     "guestBanner": {
@@ -133,5 +200,50 @@
     },
     "adminSoon": "Events, guests and the WhatsApp send queue will live here.",
     "panelSoon": "Here you'll see who confirmed, how many passes, and your guests' messages."
+  },
+  "lead": {
+    "title": "Tell us about your wedding",
+    "subtitle": "This is all we need to start. We'll reach out on WhatsApp for the details.",
+    "partnerA": "One partner's name",
+    "partnerB": "The other's name",
+    "email": "Email",
+    "emailHelp": "We'll send your access there to see the invitation and your guests.",
+    "phone": "WhatsApp",
+    "country": "Country",
+    "countries": {
+      "MX": "Mexico",
+      "US": "United States",
+      "CA": "Canada"
+    },
+    "language": "Invitation language",
+    "languages": {
+      "es": "Spanish",
+      "en": "English",
+      "both": "Both"
+    },
+    "eventDate": "Wedding date",
+    "eventDateHelp": "If you don't have it yet, leave it empty.",
+    "city": "City or venue",
+    "guests": "Approximate guests",
+    "package": "Package you're interested in",
+    "packageNone": "Not sure yet",
+    "message": "Anything else we should know",
+    "messagePlaceholder": "Colors, style, whether you want photos, music, anything.",
+    "consent": "I accept the <link>privacy notice</link> and being contacted on WhatsApp and email.",
+    "submit": "Send",
+    "sending": "Sending…",
+    "done": {
+      "title": "All set, {name}!",
+      "body": "We have your details. In the next few hours we'll message you on WhatsApp to start designing your invitation.",
+      "email": "We also sent you an email with your access: there you'll be able to see the invitation and your guests.",
+      "whatsapp": "Message us on WhatsApp now"
+    },
+    "errors": {
+      "invalid": "Please check the highlighted fields.",
+      "phone_invalid": "That number doesn't look valid for the selected country.",
+      "consent_required": "We need your consent to continue.",
+      "too_many_attempts": "Too many submissions. Please wait a bit and try again.",
+      "unknown": "Something went wrong on our side. Try again or message us on WhatsApp."
+    }
   }
 }

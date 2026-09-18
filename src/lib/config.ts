@@ -2,7 +2,18 @@
  * Configuracion global de la app.
  * El nombre comercial NUNCA se escribe a mano en los componentes: sale de aqui.
  */
-export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? 'Invitaciones';
+export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? 'Hola Boda';
+export const APP_TAGLINE = {
+  es: 'Invitaciones que cuentan tu historia',
+  en: 'Invitations that tell your story',
+} as const;
+
+/** WhatsApp de ventas, en E.164. Se cambia por variable cuando haya línea de empresa. */
+export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '+525662974440';
+
+export function whatsappLink(text: string, number: string = WHATSAPP_NUMBER): string {
+  return `https://wa.me/${number.replace(/[^\d]/g, '')}?text=${encodeURIComponent(text)}`;
+}
 
 export const LOCALES = ['es', 'en'] as const;
 export type Locale = (typeof LOCALES)[number];

@@ -3,24 +3,27 @@ import type { EventContent } from '@/schemas/event-content';
 /**
  * Evento demo para los anuncios.
  *
- * Pareja, lugares y fotos son ficticios a propósito: así se puede enseñar y
- * compartir sin pedirle permiso a ningún cliente. Está completo en español e
+ * Los nombres son los de Juan y su esposa (solo nombres de pila, a propósito);
+ * lugares, fotos y datos bancarios son ficticios. Así se puede enseñar y
+ * compartir sin exponer a nadie. Está completo en español e
  * inglés para mostrar el switch de idioma funcionando.
  */
 
-export const DEMO_SLUG = 'ana-y-luis';
+export const DEMO_SLUG = 'juan-y-ana';
+/** El slug anterior, para renombrar el evento ya cargado sin perder tokens. */
+export const DEMO_PREVIOUS_SLUG = 'ana-y-luis';
 
 export const demoEventContent: EventContent = {
   version: 1,
 
-  couple: { partnerA: 'Ana Sofía', partnerB: 'Luis Alberto' },
+  couple: { partnerA: 'Juan Antonio', partnerB: 'Ana Marcela' },
 
   startsAt: '2027-03-13T17:00',
 
   og: {
     title: {
-      es: 'Ana Sofía & Luis Alberto · 13 de marzo de 2027',
-      en: 'Ana Sofía & Luis Alberto · March 13, 2027',
+      es: 'Juan Antonio & Ana Marcela · 13 de marzo de 2027',
+      en: 'Juan Antonio & Ana Marcela · March 13, 2027',
     },
     description: {
       es: 'Nos casamos en Tepoztlán y queremos que estés ahí. Confirma tu asistencia.',
@@ -51,8 +54,8 @@ export const demoEventContent: EventContent = {
     photo: {
       url: '/demo/portada.svg',
       alt: {
-        es: 'Ana Sofía y Luis Alberto tomados de la mano al atardecer',
-        en: 'Ana Sofía and Luis Alberto holding hands at sunset',
+        es: 'Juan Antonio y Ana Marcela tomados de la mano al atardecer',
+        en: 'Juan Antonio and Ana Marcela holding hands at sunset',
       },
     },
   },
@@ -158,7 +161,7 @@ export const demoEventContent: EventContent = {
     ],
     bank: {
       bank: 'BBVA México',
-      holder: 'Ana Sofía Vargas Trejo',
+      holder: 'Ana Marcela (cuenta de muestra)',
       clabe: '012345678901234567',
       note: {
         es: 'Si prefieren hacer una transferencia, esta es la cuenta.',

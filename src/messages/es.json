@@ -1,8 +1,75 @@
 {
   "landing": {
-    "tagline": "Invitaciones digitales para bodas",
-    "description": "Invitaciones web con pases personalizados por invitado y confirmación de asistencia desde el celular.",
-    "soon": "Muy pronto"
+    "nav": {
+      "packages": "Paquetes",
+      "demo": "Ver demo",
+      "login": "Entrar",
+      "cta": "Quiero mi invitación"
+    },
+    "hero": {
+      "title": "Invitaciones que cuentan tu historia",
+      "body": "Invitaciones de boda digitales, en español e inglés, con un link personal para cada invitado y confirmación de asistencia desde el celular. Nosotros la armamos; tú solo apruebas.",
+      "cta": "Quiero mi invitación",
+      "demo": "Ver la invitación demo"
+    },
+    "how": {
+      "title": "Cómo funciona",
+      "steps": [
+        {
+          "t": "Nos cuentas de su boda",
+          "d": "Llenas el formulario de abajo con nombres, fecha, lugar y lo que quieran incluir."
+        },
+        {
+          "t": "Nosotros la diseñamos",
+          "d": "Te contactamos por WhatsApp, armamos la invitación y te mandamos el link para que la revisen."
+        },
+        {
+          "t": "La mandan y confirman",
+          "d": "Cada invitado recibe su link con sus pases y confirma desde el celular. Ustedes ven todo en su panel."
+        }
+      ]
+    },
+    "packages": {
+      "title": "Paquetes",
+      "subtitle": "Precios en {currency}. Sin mensualidades: se paga una vez.",
+      "choose": "Elegir",
+      "chosen": "Elegido",
+      "features": {
+        "invitacion_pdf": "Invitación en PDF lista para WhatsApp",
+        "diseno_desde_plantilla": "Diseño desde plantilla",
+        "entrega_whatsapp": "Entrega por WhatsApp",
+        "invitacion_web": "Invitación web con link propio",
+        "rsvp": "Confirmación de asistencia",
+        "panel_novios": "Panel para los novios",
+        "idiomas_es_en": "Español e inglés",
+        "itinerario_mapas": "Itinerario con mapas (Google, Waze, Apple)",
+        "calendario": "Agregar al calendario",
+        "mesa_regalos": "Mesa de regalos y datos bancarios",
+        "hospedaje": "Hospedaje sugerido",
+        "faq": "Preguntas frecuentes",
+        "pases_personalizados": "Link personal por invitado con sus pases",
+        "cola_whatsapp": "Lista de envío por WhatsApp",
+        "galeria": "Galería de fotos",
+        "musica": "Música de fondo",
+        "menu_rsvp": "Elección de menú al confirmar",
+        "export_excel": "Exportar invitados a Excel",
+        "envio_por_nosotros": "Nosotros hacemos el envío",
+        "recordatorios": "Rondas de recordatorio",
+        "qr_checkin": "Pase con QR y check-in el día del evento",
+        "save_the_date": "Save the date"
+      }
+    },
+    "preview": {
+      "title": "Así se ve",
+      "body": "Portada, cuenta regresiva, itinerario con mapas, mesa de regalos, galería y confirmación. Todo en un link que abre en cualquier celular.",
+      "open": "Abrir la demo",
+      "coverAlt": "Portada de la invitación demo",
+      "rsvpAlt": "Confirmación de asistencia con nombre y pases"
+    },
+    "footer": {
+      "privacy": "Aviso de privacidad",
+      "whatsapp": "Escríbenos por WhatsApp"
+    }
   },
   "invitation": {
     "guestBanner": {
@@ -133,5 +200,50 @@
     },
     "adminSoon": "Aquí van a vivir los eventos, los invitados y la cola de envío por WhatsApp.",
     "panelSoon": "Aquí vas a ver quién confirmó, cuántos pases van y los mensajes de tus invitados."
+  },
+  "lead": {
+    "title": "Cuéntanos de su boda",
+    "subtitle": "Con esto empezamos. Te contactamos por WhatsApp para afinar detalles.",
+    "partnerA": "Nombre de uno",
+    "partnerB": "Nombre del otro",
+    "email": "Correo electrónico",
+    "emailHelp": "Te mandamos ahí tu acceso para ver la invitación y a tus invitados.",
+    "phone": "WhatsApp",
+    "country": "País",
+    "countries": {
+      "MX": "México",
+      "US": "Estados Unidos",
+      "CA": "Canadá"
+    },
+    "language": "Idioma de la invitación",
+    "languages": {
+      "es": "Español",
+      "en": "Inglés",
+      "both": "Los dos"
+    },
+    "eventDate": "Fecha de la boda",
+    "eventDateHelp": "Si aún no la tienen, déjala vacía.",
+    "city": "Ciudad o lugar",
+    "guests": "Invitados aproximados",
+    "package": "Paquete que les interesa",
+    "packageNone": "Todavía no sé",
+    "message": "Algo más que debamos saber",
+    "messagePlaceholder": "Colores, estilo, si quieren fotos, música, lo que se les ocurra.",
+    "consent": "Acepto el <link>aviso de privacidad</link> y que me contacten por WhatsApp y correo.",
+    "submit": "Enviar",
+    "sending": "Enviando…",
+    "done": {
+      "title": "¡Listo, {name}!",
+      "body": "Ya tenemos sus datos. En las próximas horas te escribimos por WhatsApp para empezar con el diseño de su invitación.",
+      "email": "También te mandamos un correo con tu acceso: ahí van a poder ver la invitación y a sus invitados.",
+      "whatsapp": "Escribirnos ahora por WhatsApp"
+    },
+    "errors": {
+      "invalid": "Revisa los campos marcados.",
+      "phone_invalid": "Ese número no parece válido para el país elegido.",
+      "consent_required": "Necesitamos tu consentimiento para continuar.",
+      "too_many_attempts": "Demasiados envíos. Espera un rato y vuelve a intentar.",
+      "unknown": "Algo falló de nuestro lado. Intenta de nuevo o escríbenos por WhatsApp."
+    }
   }
 }

@@ -19,8 +19,8 @@ export default async function LoginPage({
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-sm flex-col justify-center px-6 py-14">
-      <p className="text-[0.7rem] uppercase tracking-[0.3em] text-stone-400">{APP_NAME}</p>
-      <h1 className="mt-3 font-serif text-3xl text-stone-900">{t('title')}</h1>
+      <a href="/"><img src="/brand/logo.png" alt={APP_NAME} className="w-44 mix-blend-multiply" /></a>
+      <h1 className="mt-8 font-serif text-3xl text-stone-900">{t('title')}</h1>
       <p className="mt-1 text-sm text-stone-500">{t('subtitle')}</p>
       <div className="mt-8">
         <LoginForm providers={enabledAuthProviders()} next={safeNext} />
