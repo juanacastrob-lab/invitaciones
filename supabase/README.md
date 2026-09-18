@@ -18,6 +18,7 @@ normal y no rompe nada.
 |---|---|
 | `001_init.sql` | Tablas, tipos, índices y RLS de toda la Fase 1 |
 | `002_demo_event.sql` | Evento demo (es/en) con invitados de prueba. Generado, no editar a mano |
+| `003_guest_access.sql` | Funciones por las que entra un invitado sin cuenta, y el rate limit |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr
@@ -39,6 +40,11 @@ where user_id = (select id from auth.users where email = 'tu-correo@ejemplo.com'
 invitado sin cuenta no ve nada, que unos novios solo ven su evento, que la
 administrativa no puede borrar eventos y que nadie se puede autoascender a
 admin.
+
+`tests/003_guest_access_test.sql` comprueba el acceso por token: que un token
+invalido o de otro evento no filtra nada, que un borrador no se asoma sin su
+llave de revision, que los datos bancarios solo salen en el link personal, y
+que la respuesta nunca incluye la lista de invitados.
 
 Se corren contra un Postgres desechable (no contra Supabase), aplicando primero
 `tests/_supabase_shim.sql`, que imita lo mínimo de Supabase (`auth.users`,
