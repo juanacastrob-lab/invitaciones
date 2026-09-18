@@ -25,7 +25,11 @@ Los nombres estan en `.env.example`. Los valores se ponen en Netlify
 (Site configuration > Environment variables). `SUPABASE_SERVICE_ROLE_KEY`
 es privada: solo servidor, nunca en git.
 
-## Ramas
+## Ramas y donde ver cada cosa
 
-- `main` = produccion. Solo se hace merge cuando Juan lo pide.
-- `dev` = rama de trabajo, con branch deploy en Netlify para probar.
+- `main` = produccion: https://holaboda.mx. Solo se hace merge cuando Juan lo pide.
+- `dev` = rama de trabajo: https://dev--holaboda.netlify.app. Netlify la
+  reconstruye sola con cada push (branch deploy, no gasta deploys de produccion).
+
+Evento demo: `/i/ana-y-luis` (link general) y `/i/ana-y-luis/<token>` (personal).
+Agrega `?lang=en` para verlo en ingles.
