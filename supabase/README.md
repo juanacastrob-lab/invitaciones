@@ -30,6 +30,7 @@ normal y no rompe nada.
 | `012_event_types.sql` | Tipos de evento nuevos (graduacion, cumpleanos, otro). Va aparte por como funcionan los enums |
 | `013_tables.sql` | Mesas: tabla event_tables, guests.table_id, rpc_assign_table (novios pueden acomodar aun publicado) y vista table_stats. Tambien pone `security_invoker` en event_stats y table_stats para que las vistas respeten RLS |
 | `014_content_editor.sql` | Tipos de evento primera_comunion y confirmacion, y rpc_update_event_content para que novios y planner guarden el contenido desde el panel (solo en borrador o en revision) |
+| `015_storage.sql` | Bucket `event-media` (publico de lectura, 6 MB, webp/jpg/png) para las fotos que se suben desde el editor. Se puede repetir |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr

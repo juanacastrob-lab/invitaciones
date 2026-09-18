@@ -8,6 +8,7 @@ import { SECTION_IDS, type EventContent, type SectionId } from '@/schemas/event-
 import { fromDraft, moveSection, newId, toDraft, toggleSection, type ActKind, type Draft } from '@/lib/editor/draft';
 import { Button, LinkButton, Notice } from '@/components/ui';
 import { AddButton, Check, Item, LTInput, SectionCard, Text } from './fields';
+import { PhotoField } from './PhotoField';
 
 const ACT_KINDS: ActKind[] = ['civil', 'religiosa', 'recepcion', 'otro'];
 
@@ -74,7 +75,7 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
 
   const photoFields = (url: string, alt: { es: string; en: string }, setUrl: (d: Draft, v: string) => void, setAlt: (d: Draft, v: { es: string; en: string }) => void) => (
     <>
-      <Text label={t('photoUrl')} value={url} onChange={(v) => patch((d) => setUrl(d, v))} hint={t('photoHint')} placeholder="https://…" />
+      <PhotoField label={t('fields.photo')} value={url} onChange={(v) => patch((d) => setUrl(d, v))} eventId={eventId} hint={t('photoHint')} />
       {url ? lt(t('photoAlt'), alt, setAlt) : null}
     </>
   );
@@ -201,11 +202,10 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
             {lt(t('fields.sectionTitle'), draft.gallery.title, (d, v) => { d.gallery.title = v; })}
             {draft.gallery.photos.map((p, i) => (
               <Item key={i} title={`${t('fields.photo')} ${i + 1}`} removeLabel={t('remove')} onRemove={() => patch((d) => { d.gallery.photos.splice(i, 1); })}>
-                <Text label={t('photoUrl')} value={p.url} onChange={(v) => patch((d) => { d.gallery.photos[i].url = v; })} placeholder="https://…" />
+                <PhotoField label={t('fields.photo')} value={p.url} onChange={(v) => patch((d) => { d.gallery.photos[i].url = v; })} eventId={eventId} />
                 {lt(t('photoAlt'), p.alt, (d, v) => { d.gallery.photos[i].alt = v; })}
               </Item>
             ))}
-            <p className="text-xs text-stone-400">{t('photoHint')}</p>
             <AddButton label={t('fields.photo')} onClick={() => patch((d) => { d.gallery.photos.push({ url: '', alt: { es: '', en: '' } }); })} />
           </SectionCard>
         );
@@ -287,7 +287,7 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
         <p className="text-xs text-stone-400">{t('og.hint')}</p>
         {lt(t('og.ogTitle'), draft.og.title, (d, v) => { d.og.title = v; })}
         {lt(t('og.description'), draft.og.description, (d, v) => { d.og.description = v; })}
-        <Text label={t('og.image')} value={draft.og.image} onChange={(v) => patch((d) => { d.og.image = v; })} placeholder="https://…" />
+        <PhotoField label={t('og.image')} value={draft.og.image} onChange={(v) => patch((d) => { d.og.image = v; })} eventId={eventId} kind="og" hint={t('og.imageHint')} />
       </SectionCard>
 
       {bar}

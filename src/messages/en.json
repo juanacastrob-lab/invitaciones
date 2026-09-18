@@ -416,8 +416,7 @@
     "down": "Move down",
     "add": "Add",
     "remove": "Remove",
-    "photoUrl": "Photo (URL)",
-    "photoHint": "For now paste the photo link. If you don't have one, send it to us on WhatsApp and we'll upload it.",
+    "photoHint": "Resized automatically before upload. If it is already online, paste the link.",
     "photoAlt": "Photo description",
     "basics": {
       "title": "The essentials",
@@ -431,7 +430,8 @@
       "hint": "What people see when the link is shared: title, line and photo.",
       "ogTitle": "Title",
       "description": "Line",
-      "image": "Photo (URL, JPG or PNG)"
+      "image": "Photo",
+      "imageHint": "Uploaded as JPG; it is the one shown in the link preview."
     },
     "sections": {
       "cover": "Cover",
@@ -498,6 +498,13 @@
       "askSong": "Ask for a song request",
       "askMessage": "Allow a message for us",
       "color": "Color"
-    }
+    },
+    "upload": "Upload photo",
+    "uploading": "Uploading…",
+    "replace": "Change photo",
+    "pasteLink": "Paste link",
+    "removePhoto": "Remove",
+    "noPhoto": "No photo",
+    "uploadError": "The photo could not be uploaded. Try another one or paste a link."
   }
 }

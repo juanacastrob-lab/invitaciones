@@ -416,8 +416,7 @@
     "down": "Bajar",
     "add": "Agregar",
     "remove": "Quitar",
-    "photoUrl": "Foto (URL)",
-    "photoHint": "Por ahora pega el link de la foto. Si no lo tienes, mándanosla por WhatsApp y la subimos.",
+    "photoHint": "Se reduce sola antes de subir. Si la tienes en internet, pega el link.",
     "photoAlt": "Descripción de la foto",
     "basics": {
       "title": "Lo principal",
@@ -431,7 +430,8 @@
       "hint": "Lo que se ve cuando comparten el link: título, frase y foto.",
       "ogTitle": "Título",
       "description": "Frase",
-      "image": "Foto (URL, JPG o PNG)"
+      "image": "Foto",
+      "imageHint": "Se sube en JPG; es la que sale en el preview del link."
     },
     "sections": {
       "cover": "Portada",
@@ -498,6 +498,13 @@
       "askSong": "Pedir una canción",
       "askMessage": "Permitir un mensaje para nosotros",
       "color": "Color"
-    }
+    },
+    "upload": "Subir foto",
+    "uploading": "Subiendo…",
+    "replace": "Cambiar foto",
+    "pasteLink": "Pegar link",
+    "removePhoto": "Quitar",
+    "noPhoto": "Sin foto",
+    "uploadError": "No se pudo subir la foto. Intenta con otra o pega un link."
   }
 }
