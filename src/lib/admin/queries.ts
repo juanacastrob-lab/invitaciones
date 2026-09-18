@@ -9,6 +9,7 @@ export interface EventRow {
   status: EventStatus;
   type: EventType;
   package_code: string | null;
+  template: string;
   languages: string[];
   default_language: string;
   timezone: string;
@@ -54,7 +55,7 @@ export interface GuestRow {
 }
 
 const EVENT_COLS =
-  'id, slug, status, type, package_code, languages, default_language, timezone, country, rsvp_deadline, allow_public_rsvp, show_private_gifts, preview_key, og_image_url, content, created_at, updated_at';
+  'id, slug, status, type, package_code, template, languages, default_language, timezone, country, rsvp_deadline, allow_public_rsvp, show_private_gifts, preview_key, og_image_url, content, created_at, updated_at';
 
 export async function listEvents(): Promise<(EventRow & { stats: EventStats })[]> {
   const supabase = await supabaseServer();

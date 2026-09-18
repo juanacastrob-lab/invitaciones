@@ -6,11 +6,13 @@ import type { ActionResult } from '@/schemas/admin';
 import { Button, Field, Input, Select, Notice } from '@/components/ui';
 import { TIMEZONES } from '@/lib/admin/labels';
 import { EVENT_TYPES, EVENT_TYPE_LABEL, needsTwoNames, type EventType } from '@/lib/event-types';
+import { TEMPLATE_IDS, TEMPLATES } from '@/templates/registry';
 
 export interface EventBasicsValues {
   slug: string;
   type: EventType;
   packageCode: string;
+  template: string;
   partnerA: string;
   partnerB: string;
   startsAt: string;
@@ -37,6 +39,7 @@ export function EventBasicsForm({ eventId, initial, packages = [] }: { eventId?:
       slug: f.get('slug'),
       type,
       packageCode: f.get('packageCode') || '',
+      template: f.get('template') || 'aurora',
       partnerA: f.get('partnerA'),
       partnerB: f.get('partnerB'),
       startsAt: f.get('startsAt'),
@@ -73,6 +76,12 @@ export function EventBasicsForm({ eventId, initial, packages = [] }: { eventId?:
         <Field label={two ? 'Nombre 1' : 'Nombre de quien celebra'}><Input name="partnerA" defaultValue={initial.partnerA} required maxLength={80} /></Field>
         <Field label={two ? 'Nombre 2' : 'Segundo nombre (opcional)'}><Input name="partnerB" defaultValue={initial.partnerB} required={two} maxLength={80} /></Field>
       </div>
+
+      <Field label="Plantilla de diseño" hint="Mismo contenido, otro look. Se puede cambiar cuando sea; revisa la vista previa.">
+        <Select name="template" defaultValue={initial.template}>
+          {TEMPLATE_IDS.map((k) => <option key={k} value={k}>{TEMPLATES[k].name.es} · {TEMPLATES[k].description.es}</option>)}
+        </Select>
+      </Field>
 
       <Field label="Slug (la parte del link)" hint="Solo minúsculas, números y guiones. Ej: ana-y-luis → holaboda.mx/i/ana-y-luis">
         <Input name="slug" defaultValue={initial.slug} required pattern="[a-z0-9-]{3,60}" />

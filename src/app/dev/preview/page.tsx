@@ -17,11 +17,11 @@ export const dynamic = 'force-dynamic';
 export default async function DevPreview({
   searchParams,
 }: {
-  searchParams: Promise<{ lang?: string; token?: string; type?: string }>;
+  searchParams: Promise<{ lang?: string; token?: string; type?: string; template?: string }>;
 }) {
   if (process.env.NODE_ENV === 'production') notFound();
 
-  const { lang, token, type } = await searchParams;
+  const { lang, token, type, template } = await searchParams;
   const conToken = token === '1';
   // ?type=xv: la plantilla de un evento de una sola persona, para revisar el diseño.
   const content = isEventType(type) && type !== 'boda'
@@ -34,7 +34,7 @@ export default async function DevPreview({
     event: {
       slug: 'ana-y-luis',
       type: isEventType(type) ? type : 'boda',
-      template: 'aurora',
+      template: template ?? 'aurora',
       languages: ['es', 'en'],
       default_language: 'es',
       timezone: 'America/Mexico_City',

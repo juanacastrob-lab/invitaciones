@@ -5,6 +5,7 @@ import type { EventContent } from '@/schemas/event-content';
 import { pickText } from '@/schemas/event-content';
 import { formatDateShort } from '@/lib/dates';
 import { APP_NAME, type Locale } from '@/lib/config';
+import { resolveTemplate } from '@/templates/registry';
 
 export const OG_SIZE = { width: 1200, height: 630 };
 
@@ -43,8 +44,9 @@ async function loadImage(url: string | undefined): Promise<string | null> {
   }
 }
 
-export async function renderInvitationCard(content: EventContent, timezone: string, locale: Locale) {
+export async function renderInvitationCard(content: EventContent, timezone: string, locale: Locale, template?: string | null) {
   const [font, photo] = await Promise.all([serifFont(), loadImage(content.og?.image)]);
+  const th = resolveTemplate(template).colors;
   const date = formatDateShort(content.startsAt, timezone, locale);
   const place = content.itinerary?.acts[0]?.venue.name ?? pickText(content.cover?.tagline, locale) ?? '';
 
@@ -55,9 +57,9 @@ export async function renderInvitationCard(content: EventContent, timezone: stri
           width: '100%',
           height: '100%',
           display: 'flex',
-          background: '#faf8f5',
+          background: th.paper,
           fontFamily: 'Cormorant',
-          color: '#2e2c29',
+          color: th.ink,
         }}
       >
         {photo ? (
@@ -78,23 +80,23 @@ export async function renderInvitationCard(content: EventContent, timezone: stri
             textAlign: 'center',
           }}
         >
-          <div style={{ fontSize: 22, letterSpacing: 8, color: '#8a837a', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: 22, letterSpacing: 8, color: th.muted, textTransform: 'uppercase' }}>
             {pickText(content.cover?.headline, locale) ?? ''}
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 28, fontSize: 84, lineHeight: 1.05 }}>
             <span>{content.couple.partnerA}</span>
-            {content.couple.partnerB ? <span style={{ color: '#7d8471', fontSize: 56, margin: '4px 0' }}>&amp;</span> : null}
+            {content.couple.partnerB ? <span style={{ color: th.accent, fontSize: 56, margin: '4px 0' }}>&amp;</span> : null}
             {content.couple.partnerB ? <span>{content.couple.partnerB}</span> : null}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginTop: 34 }}>
-            <div style={{ width: 48, height: 1, background: '#e2dcd3' }} />
-            <div style={{ fontSize: 24, letterSpacing: 4, color: '#8a837a', textTransform: 'uppercase' }}>{date}</div>
-            <div style={{ width: 48, height: 1, background: '#e2dcd3' }} />
+            <div style={{ width: 48, height: 1, background: th.line }} />
+            <div style={{ fontSize: 24, letterSpacing: 4, color: th.muted, textTransform: 'uppercase' }}>{date}</div>
+            <div style={{ width: 48, height: 1, background: th.line }} />
           </div>
 
-          {place ? <div style={{ marginTop: 14, fontSize: 26, color: '#8a837a' }}>{place}</div> : null}
+          {place ? <div style={{ marginTop: 14, fontSize: 26, color: th.muted }}>{place}</div> : null}
 
           <div style={{ position: 'absolute', bottom: 28, right: 40, fontSize: 18, letterSpacing: 4, color: '#c9c2b8', textTransform: 'uppercase' }}>
             {APP_NAME}

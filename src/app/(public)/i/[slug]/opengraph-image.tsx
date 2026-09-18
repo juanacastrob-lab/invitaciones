@@ -13,5 +13,5 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const invitation = await getInvitation(slug);
   if (!invitation) return new Response('Not found', { status: 404 });
 
-  return renderInvitationCard(invitation.event.content, invitation.event.timezone, localeFor(invitation));
+  return renderInvitationCard(invitation.event.content, invitation.event.timezone, localeFor(invitation), invitation.event.template);
 }

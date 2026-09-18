@@ -43,7 +43,7 @@ interface Props {
 }
 
 const field =
-  'w-full rounded-sm border border-[var(--line)] bg-white/60 px-3 py-2.5 text-sm text-[var(--ink)] placeholder:text-[var(--muted)]/70 focus:border-[var(--accent)] focus:outline-none';
+  'w-full rounded-sm border border-[var(--line)] bg-[var(--accent-soft)]/70 px-3 py-2.5 text-sm text-[var(--ink)] placeholder:text-[var(--muted)]/70 focus:border-[var(--accent)] focus:outline-none';
 
 const label = 'mb-1.5 block text-[0.7rem] uppercase tracking-[0.2em] text-[var(--muted)]';
 

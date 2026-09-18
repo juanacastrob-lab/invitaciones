@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { LOCALES } from '@/lib/config';
 import { EVENT_STATUS, TIMEZONES } from '@/lib/admin/labels';
 import { EVENT_TYPES, needsTwoNames } from '@/lib/event-types';
+import { TEMPLATE_IDS } from '@/templates/registry';
 
 /** Campos básicos del evento, los que se llenan sin tocar el JSON. */
 export const eventBasics = z
@@ -13,6 +14,7 @@ export const eventBasics = z
       .regex(/^[a-z0-9-]{3,60}$/, 'Solo letras minúsculas, números y guiones (3 a 60).'),
     type: z.enum(EVENT_TYPES).default('boda'),
     packageCode: z.string().trim().max(40).optional().or(z.literal('')),
+    template: z.enum(TEMPLATE_IDS).default('aurora'),
     partnerA: z.string().trim().min(1).max(80),
     partnerB: z.string().trim().max(80).optional().or(z.literal('')),
     startsAt: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, 'Fecha y hora inválidas.'),

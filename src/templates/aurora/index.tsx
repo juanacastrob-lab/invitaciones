@@ -11,7 +11,7 @@ import { Countdown } from '@/components/invitation/Countdown';
 import { CopyButton } from '@/components/invitation/CopyButton';
 import { MusicPlayer } from '@/components/invitation/MusicPlayer';
 import { RsvpForm } from '@/components/invitation/RsvpForm';
-import { auroraCssVars } from './theme';
+import { resolveTemplate, templateCssVars } from '@/templates/registry';
 
 interface Props {
   invitation: Invitation;
@@ -91,15 +91,27 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
 
   const otherLocale = event.languages.find((l) => l !== locale);
   const coupleNames = eventNames(c.couple);
+  const theme = resolveTemplate(event.template);
+  const heading = theme.heading === 'sans' ? 'font-sans font-light tracking-tight' : 'font-serif';
+  const radius = theme.radius === 'xl' ? 'rounded-2xl' : 'rounded-sm';
+  const onPhoto = theme.cover === 'split' && Boolean(c.cover?.photo);
 
   const sections: Record<SectionId, React.ReactNode> = {
     // -------------------------------------------------------------- portada
     cover: (
       <section
         key="cover"
-        className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 text-center"
+        className={`relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 text-center ${theme.cover === 'frame' ? 'py-16' : ''}`}
       >
-        {c.cover?.photo ? (
+        {c.cover?.photo && theme.cover === 'frame' ? (
+          // Foto enmarcada sobre el fondo, no a pantalla completa.
+          <img
+            src={c.cover.photo.url}
+            alt={text(c.cover.photo.alt) ?? ''}
+            className={`mb-8 aspect-[4/5] w-full max-w-xs object-cover shadow-lg ${radius}`}
+            fetchPriority="high"
+          />
+        ) : c.cover?.photo ? (
           <>
             <img
               src={c.cover.photo.url}
@@ -107,7 +119,12 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
               className="absolute inset-0 h-full w-full object-cover"
               fetchPriority="high"
             />
-            <div className="absolute inset-0 bg-[var(--paper)]/55" />
+            {theme.cover === 'split' ? (
+              // Nombres en claro sobre la foto, con degradado abajo para que se lean.
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.75) 100%)' }} />
+            ) : (
+              <div className="absolute inset-0 bg-[var(--paper)]/55" />
+            )}
           </>
         ) : (
           <div
@@ -119,7 +136,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
           />
         )}
 
-        <div className="relative">
+        <div className={`relative ${onPhoto ? 'mt-auto pb-12 text-white [--muted:rgba(255,255,255,0.75)] [--line:rgba(255,255,255,0.35)]' : ''}`}>
           {text(c.cover?.headline) ? (
             <p className="text-[0.7rem] uppercase tracking-[0.35em] text-[var(--muted)]">
               {text(c.cover?.headline)}
@@ -127,7 +144,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
           ) : null}
 
           {/* Cada nombre en su renglón: "Juan Antonio" nunca se parte a la mitad. */}
-          <h1 className="mt-6 flex flex-col items-center font-serif text-[2.75rem] leading-[1.1] text-[var(--ink)] sm:text-6xl">
+          <h1 className={`mt-6 flex flex-col items-center ${heading} text-[2.75rem] leading-[1.1] sm:text-6xl ${onPhoto ? 'text-white' : 'text-[var(--ink)]'}`}>
             <span>{c.couple.partnerA}</span>
             {c.couple.partnerB ? (
               <>
@@ -188,7 +205,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
             src={c.story.photo.url}
             alt={text(c.story.photo.alt) ?? ''}
             loading="lazy"
-            className="mb-6 aspect-[4/5] w-full rounded-sm object-cover"
+            className={`mb-6 aspect-[4/5] w-full object-cover ${radius}`}
           />
         ) : null}
         <p className="text-center text-[0.95rem] leading-relaxed text-[var(--ink)]/80">
@@ -207,7 +224,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
                 {text(act.title) ?? t(`acts.${act.kind}`)}
               </p>
 
-              <p className="mt-3 font-serif text-2xl text-[var(--ink)]">
+              <p className={`mt-3 ${heading} text-2xl text-[var(--ink)]`}>
                 {formatTime(act.startsAt, tz, locale)}
               </p>
               <p className="text-xs text-[var(--muted)]">
@@ -259,7 +276,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
     // ---------------------------------------------------- código de vestimenta
     dressCode: c.dressCode ? (
       <Section key="dressCode" title={text(c.dressCode.title)}>
-        <p className="text-center font-serif text-3xl text-[var(--ink)]">
+        <p className={`text-center ${heading} text-3xl text-[var(--ink)]`}>
           {text(c.dressCode.code)}
         </p>
 
@@ -309,7 +326,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full rounded-sm border border-[var(--line)] px-4 py-3 text-center text-sm text-[var(--ink)] transition-colors hover:border-[var(--accent)]"
+              className={`w-full border border-[var(--line)] px-4 py-3 text-center text-sm text-[var(--ink)] transition-colors hover:border-[var(--accent)] ${radius}`}
             >
               {text(link.label)}
             </a>
@@ -318,7 +335,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
 
         {/* Solo llega hasta aquí en el link personal: la base lo quita del resto. */}
         {c.gifts.bank ? (
-          <div className="mt-6 rounded-sm bg-[var(--accent-soft)] p-5 text-sm">
+          <div className={`mt-6 bg-[var(--accent-soft)] p-5 text-sm ${radius}`}>
             {text(c.gifts.bank.note) ? (
               <p className="mb-4 text-center text-xs leading-relaxed text-[var(--muted)]">
                 {text(c.gifts.bank.note)}
@@ -363,7 +380,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
         <ul className="space-y-6">
           {c.lodging.options.map((hotel) => (
             <li key={hotel.name} className="text-center">
-              <p className="font-serif text-xl text-[var(--ink)]">{hotel.name}</p>
+              <p className={`${heading} text-xl text-[var(--ink)]`}>{hotel.name}</p>
               {text(hotel.note) ? (
                 <p className="mt-2 text-xs leading-relaxed text-[var(--muted)]">
                   {text(hotel.note)}
@@ -391,7 +408,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
               src={photo.url}
               alt={text(photo.alt) ?? ''}
               loading="lazy"
-              className="aspect-square w-full rounded-sm object-cover"
+              className={`aspect-square w-full object-cover ${radius}`}
             />
           ))}
         </div>
@@ -452,7 +469,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
             />
           </NextIntlClientProvider>
         ) : (
-          <div className="rounded-sm bg-[var(--accent-soft)] p-6 text-center">
+          <div className={`bg-[var(--accent-soft)] p-6 text-center ${radius}`}>
             <p className="text-sm font-medium text-[var(--ink)]">{t('generalNotice.title')}</p>
             <p className="mt-2 text-xs leading-relaxed text-[var(--muted)]">
               {t('generalNotice.body')}
@@ -471,7 +488,8 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
 
   return (
     <div
-      style={auroraCssVars}
+      style={templateCssVars(theme)}
+      data-template={theme.id}
       className="min-h-dvh bg-[var(--paper)] font-sans text-[var(--ink)] antialiased"
     >
       {/* Barra del invitado: quién es y cuántos pases trae. */}
@@ -509,7 +527,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
       <main>{c.sectionOrder.map((id) => sections[id])}</main>
 
       <footer className="px-6 pb-10 pt-4 text-center">
-        <p className="font-serif text-lg text-[var(--muted)]">{coupleNames}</p>
+        <p className={`${heading} text-lg text-[var(--muted)]`}>{coupleNames}</p>
       </footer>
     </div>
   );

@@ -38,7 +38,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
           <section className="rounded-sm border border-stone-200 bg-white p-5">
             <h2 className="mb-4 text-[0.7rem] uppercase tracking-[0.25em] text-stone-500">Datos básicos</h2>
             <EventBasicsForm eventId={id} initial={{
-              slug: event.slug, type: event.type, packageCode: event.package_code ?? '', partnerA: c.couple.partnerA, partnerB: c.couple.partnerB ?? '', startsAt: c.startsAt,
+              slug: event.slug, type: event.type, packageCode: event.package_code ?? '', template: event.template, partnerA: c.couple.partnerA, partnerB: c.couple.partnerB ?? '', startsAt: c.startsAt,
               timezone: event.timezone, country: event.country, languages: event.languages, defaultLanguage: event.default_language,
               rsvpDeadline: event.rsvp_deadline ? event.rsvp_deadline.slice(0, 10) : '', allowPublicRsvp: event.allow_public_rsvp, showPrivateGifts: event.show_private_gifts,
             }} packages={pricing.packages.filter((p) => p.active)} />
