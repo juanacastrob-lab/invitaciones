@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { eventNames } from '@/lib/event-types';
 import { getInvitation, localeFor } from '@/lib/invitations';
 import { pickText } from '@/schemas/event-content';
 import { buildIcs } from '@/lib/dates';
@@ -18,7 +19,7 @@ export async function GET(
   const first = c.itinerary?.acts[0];
 
   const ics = buildIcs({
-    title: `${c.couple.partnerA} & ${c.couple.partnerB}`,
+    title: eventNames(c.couple),
     description: pickText(c.og?.description, locale),
     location: first ? `${first.venue.name}, ${first.venue.address}` : undefined,
     startsAt: c.startsAt,

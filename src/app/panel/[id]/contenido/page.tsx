@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { eventNames } from '@/lib/event-types';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { requireRole } from '@/lib/auth';
@@ -29,7 +30,7 @@ export default async function PanelContentPage({ params, searchParams }: { param
     <div className="min-h-dvh bg-stone-50 text-stone-900">
       <SessionBar me={me} />
       <main className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
-        <a href={`/panel/${id}${lang ? `?lang=${lang}` : ''}`} className="text-xs uppercase tracking-[0.2em] text-stone-500 underline underline-offset-4">← {c.couple.partnerA} &amp; {c.couple.partnerB}</a>
+        <a href={`/panel/${id}${lang ? `?lang=${lang}` : ''}`} className="text-xs uppercase tracking-[0.2em] text-stone-500 underline underline-offset-4">← {eventNames(c.couple)}</a>
         <h1 className="mb-6 mt-2 font-serif text-3xl">{t('title')}</h1>
         {editable ? (
           <NextIntlClientProvider locale={locale} messages={{ editor: messages.editor }}>
@@ -37,7 +38,7 @@ export default async function PanelContentPage({ params, searchParams }: { param
           </NextIntlClientProvider>
         ) : (
           <p className="text-sm text-stone-600">
-            {tp('readOnly')} <a className="underline" href={whatsappLink(`Hola, somos ${c.couple.partnerA} y ${c.couple.partnerB}, queremos un cambio en nuestra invitación.`)} target="_blank" rel="noopener noreferrer">{WHATSAPP_NUMBER}</a>
+            {tp('readOnly')} <a className="underline" href={whatsappLink(`Hola, ${c.couple.partnerB ? 'somos' : 'soy'} ${eventNames(c.couple, ' y ')}, queremos un cambio en nuestra invitación.`)} target="_blank" rel="noopener noreferrer">{WHATSAPP_NUMBER}</a>
           </p>
         )}
       </main>

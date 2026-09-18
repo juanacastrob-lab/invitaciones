@@ -204,9 +204,10 @@ export const eventContent = z
   .object({
     version: z.literal(1),
 
+    /** Los nombres. En boda son dos; en XV, bautizo, graduación... suele ser uno. */
     couple: z.object({
       partnerA: z.string().min(1),
-      partnerB: z.string().min(1),
+      partnerB: z.string().min(1).optional(),
     }),
 
     /** El momento principal: el que manda en la cuenta regresiva y el .ics. */

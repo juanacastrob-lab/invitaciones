@@ -5,9 +5,11 @@ import { createEvent, updateEventBasics } from '@/actions/admin-events';
 import type { ActionResult } from '@/schemas/admin';
 import { Button, Field, Input, Select, Notice } from '@/components/ui';
 import { TIMEZONES } from '@/lib/admin/labels';
+import { EVENT_TYPES, EVENT_TYPE_LABEL, needsTwoNames, type EventType } from '@/lib/event-types';
 
 export interface EventBasicsValues {
   slug: string;
+  type: EventType;
   partnerA: string;
   partnerB: string;
   startsAt: string;
@@ -23,6 +25,8 @@ export interface EventBasicsValues {
 export function EventBasicsForm({ eventId, initial }: { eventId?: string; initial: EventBasicsValues }) {
   const [pending, start] = useTransition();
   const [result, setResult] = useState<ActionResult | null>(null);
+  const [type, setType] = useState<EventType>(initial.type);
+  const two = needsTwoNames(type);
 
   function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -30,6 +34,7 @@ export function EventBasicsForm({ eventId, initial }: { eventId?: string; initia
     const languages = f.getAll('languages').map(String);
     const values = {
       slug: f.get('slug'),
+      type,
       partnerA: f.get('partnerA'),
       partnerB: f.get('partnerB'),
       startsAt: f.get('startsAt'),
@@ -48,9 +53,15 @@ export function EventBasicsForm({ eventId, initial }: { eventId?: string; initia
 
   return (
     <form onSubmit={submit} className="space-y-5">
+      <Field label="Tipo de evento">
+        <Select value={type} onChange={(e) => setType(e.target.value as EventType)}>
+          {EVENT_TYPES.map((k) => <option key={k} value={k}>{EVENT_TYPE_LABEL[k].es}</option>)}
+        </Select>
+      </Field>
+
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Nombre 1"><Input name="partnerA" defaultValue={initial.partnerA} required maxLength={80} /></Field>
-        <Field label="Nombre 2"><Input name="partnerB" defaultValue={initial.partnerB} required maxLength={80} /></Field>
+        <Field label={two ? 'Nombre 1' : 'Nombre de quien celebra'}><Input name="partnerA" defaultValue={initial.partnerA} required maxLength={80} /></Field>
+        <Field label={two ? 'Nombre 2' : 'Segundo nombre (opcional)'}><Input name="partnerB" defaultValue={initial.partnerB} required={two} maxLength={80} /></Field>
       </div>
 
       <Field label="Slug (la parte del link)" hint="Solo minúsculas, números y guiones. Ej: ana-y-luis → holaboda.mx/i/ana-y-luis">

@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { eventNames } from '@/lib/event-types';
 import { headers } from 'next/headers';
 import { requireRole } from '@/lib/auth';
 import { getEvent, listMembers } from '@/lib/admin/queries';
@@ -29,7 +30,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
   const site = await origin();
 
   return (
-    <AdminShell me={me} title={`${c.couple.partnerA} & ${c.couple.partnerB}`} current="/admin/events" actions={<Badge tone={STATUS_TONE[event.status]}>{STATUS_LABEL[event.status]}</Badge>}>
+    <AdminShell me={me} title={eventNames(c.couple)} current="/admin/events" actions={<Badge tone={STATUS_TONE[event.status]}>{STATUS_LABEL[event.status]}</Badge>}>
       <EventTabs id={id} current="datos" />
 
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
@@ -37,7 +38,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
           <section className="rounded-sm border border-stone-200 bg-white p-5">
             <h2 className="mb-4 text-[0.7rem] uppercase tracking-[0.25em] text-stone-500">Datos básicos</h2>
             <EventBasicsForm eventId={id} initial={{
-              slug: event.slug, partnerA: c.couple.partnerA, partnerB: c.couple.partnerB, startsAt: c.startsAt,
+              slug: event.slug, type: event.type, partnerA: c.couple.partnerA, partnerB: c.couple.partnerB ?? '', startsAt: c.startsAt,
               timezone: event.timezone, country: event.country, languages: event.languages, defaultLanguage: event.default_language,
               rsvpDeadline: event.rsvp_deadline ? event.rsvp_deadline.slice(0, 10) : '', allowPublicRsvp: event.allow_public_rsvp, showPrivateGifts: event.show_private_gifts,
             }} />

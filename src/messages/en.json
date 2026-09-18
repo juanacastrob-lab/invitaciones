@@ -332,7 +332,9 @@
       "emailHelp": "We'll send your access and receipt there.",
       "phone": "WhatsApp",
       "country": "Country",
-      "eventDate": "Event date (optional)"
+      "eventDate": "Event date (optional)",
+      "name": "Guest of honor's name",
+      "secondName": "Second name (optional)"
     },
     "payment": {
       "title": "Payment",
@@ -373,6 +375,9 @@
       "planner_email_required": "Enter your wedding planner's email.",
       "too_many_attempts": "Too many attempts. Please wait a moment.",
       "unknown": "Something went wrong on our side. Try again or message us on WhatsApp."
+    },
+    "eventType": {
+      "title": "What are you celebrating?"
     }
   },
   "tables": {
@@ -421,7 +426,7 @@
     "basics": {
       "title": "The essentials",
       "partnerA": "Name 1",
-      "partnerB": "Name 2",
+      "partnerB": "Name 2 (optional unless wedding)",
       "startsAt": "Main date and time",
       "startsAtHint": "Drives the countdown and the calendar file."
     },

@@ -11,6 +11,7 @@ import { getActiveExtras } from '@/lib/store';
 import { orderInput, priceOrder, type OrderResult } from '@/schemas/order';
 import { normalizePhone } from '@/schemas/lead';
 import { templateContent, slugFromNames } from '@/lib/admin/template';
+import { isEventType } from '@/lib/event-types';
 
 async function clientKey(): Promise<string> {
   const h = await headers();
@@ -68,6 +69,7 @@ export async function createOrder(raw: unknown): Promise<OrderResult> {
   const { data: order, error } = await admin
     .from('orders')
     .insert({
+      event_type: input.eventType,
       country: input.country,
       currency: pkg.currency,
       package_code: pkg.code,
@@ -129,8 +131,7 @@ export async function provisionOrder(orderId: string): Promise<{ eventId: string
   const c = o.contact as { partner_a: string; partner_b: string | null; email: string; event_date: string | null };
   const startsAt = `${c.event_date ?? new Date(Date.now() + 180 * 86400_000).toISOString().slice(0, 10)}T17:00`;
   const slug = slugFromNames(c.partner_a, c.partner_b ?? undefined, randomBytes(2).toString('hex'));
-  const content = templateContent({ partnerA: c.partner_a, partnerB: c.partner_b ?? c.partner_a, startsAt });
-  if (!c.partner_b) content.couple = { partnerA: c.partner_a, partnerB: c.partner_a };
+  const content = templateContent({ partnerA: c.partner_a, partnerB: c.partner_b ?? undefined, startsAt, type: isEventType(o.event_type) ? o.event_type : 'boda' });
 
   const { data: ev, error } = await admin
     .from('events')

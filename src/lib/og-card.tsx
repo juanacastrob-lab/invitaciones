@@ -84,8 +84,8 @@ export async function renderInvitationCard(content: EventContent, timezone: stri
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 28, fontSize: 84, lineHeight: 1.05 }}>
             <span>{content.couple.partnerA}</span>
-            <span style={{ color: '#7d8471', fontSize: 56, margin: '4px 0' }}>&amp;</span>
-            <span>{content.couple.partnerB}</span>
+            {content.couple.partnerB ? <span style={{ color: '#7d8471', fontSize: 56, margin: '4px 0' }}>&amp;</span> : null}
+            {content.couple.partnerB ? <span>{content.couple.partnerB}</span> : null}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginTop: 34 }}>

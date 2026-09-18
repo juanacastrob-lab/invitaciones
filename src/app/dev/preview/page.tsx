@@ -3,6 +3,8 @@ import { AuroraTemplate } from '@/templates/aurora';
 import { demoEventContent } from '@/demo/demo-event';
 import { isLocale, DEFAULT_LOCALE } from '@/lib/config';
 import type { Invitation } from '@/lib/invitations';
+import { isEventType } from '@/lib/event-types';
+import { templateContent } from '@/lib/admin/template';
 
 /**
  * Vista previa de la plantilla, sin base de datos.
@@ -15,19 +17,23 @@ export const dynamic = 'force-dynamic';
 export default async function DevPreview({
   searchParams,
 }: {
-  searchParams: Promise<{ lang?: string; token?: string }>;
+  searchParams: Promise<{ lang?: string; token?: string; type?: string }>;
 }) {
   if (process.env.NODE_ENV === 'production') notFound();
 
-  const { lang, token } = await searchParams;
+  const { lang, token, type } = await searchParams;
   const conToken = token === '1';
+  // ?type=xv: la plantilla de un evento de una sola persona, para revisar el diseño.
+  const content = isEventType(type) && type !== 'boda'
+    ? templateContent({ partnerA: 'Sofía Valentina', startsAt: demoEventContent.startsAt, type })
+    : demoEventContent;
 
   const invitation: Invitation = {
     access: conToken ? 'token' : 'public',
     token_valid: conToken,
     event: {
       slug: 'ana-y-luis',
-      type: 'boda',
+      type: isEventType(type) ? type : 'boda',
       template: 'aurora',
       languages: ['es', 'en'],
       default_language: 'es',
@@ -37,12 +43,12 @@ export default async function DevPreview({
       allow_public_rsvp: false,
       og_image_url: null,
       content: conToken
-        ? demoEventContent
+        ? content
         : // Sin token, la base quita los datos bancarios antes de responder.
           {
-            ...demoEventContent,
-            gifts: demoEventContent.gifts
-              ? { ...demoEventContent.gifts, bank: undefined, envelopes: false }
+            ...content,
+            gifts: content.gifts
+              ? { ...content.gifts, bank: undefined, envelopes: false }
               : undefined,
           },
     },

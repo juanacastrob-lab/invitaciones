@@ -4,6 +4,7 @@ import { AdminShell } from '@/components/admin/AdminShell';
 import { Badge, LinkButton } from '@/components/ui';
 import { STATUS_LABEL, STATUS_TONE } from '@/lib/admin/labels';
 import type { EventContent } from '@/schemas/event-content';
+import { EVENT_TYPE_LABEL, eventNames } from '@/lib/event-types';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,8 +20,8 @@ export default async function EventsPage() {
           return (
             <li key={e.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
               <div>
-                <a href={`/admin/events/${e.id}`} className="font-medium hover:underline">{c.couple?.partnerA} &amp; {c.couple?.partnerB}</a>
-                <p className="text-xs text-stone-500">/i/{e.slug} · {c.startsAt?.slice(0, 10)} · {e.languages.join('/')}</p>
+                <a href={`/admin/events/${e.id}`} className="font-medium hover:underline">{c.couple ? eventNames(c.couple) : e.slug}</a>
+                <p className="text-xs text-stone-500">{EVENT_TYPE_LABEL[e.type]?.es ?? e.type} · /i/{e.slug} · {c.startsAt?.slice(0, 10)} · {e.languages.join('/')}</p>
               </div>
               <div className="flex items-center gap-4 text-xs text-stone-600">
                 <span>{e.stats.guests} inv. · {e.stats.passes} pases</span>

@@ -6,6 +6,7 @@ import { createOrder } from '@/actions/order';
 import type { OrderResult } from '@/schemas/order';
 import type { Locale } from '@/lib/config';
 import { WhatsAppIcon } from '@/components/landing/LeadForm';
+import { EVENT_TYPES, EVENT_TYPE_LABEL, needsTwoNames, type EventType } from '@/lib/event-types';
 
 export interface StorePackage { code: string; name: string; price: number; currency: string; features: string[] }
 export interface StoreExtra { code: string; name: string; description: string | null; price: number; included_in: string[] }
@@ -26,6 +27,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
   const fmt = (n: number, cur: string) => new Intl.NumberFormat(locale === 'es' ? 'es-MX' : 'en-US', { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(n);
 
   const [step, setStep] = useState<number>(preselected && packages.some((p) => p.code === preselected) ? 1 : 0);
+  const [eventType, setEventType] = useState<EventType>('boda');
   const [pkgCode, setPkgCode] = useState(preselected ?? packages[Math.min(2, packages.length - 1)]?.code ?? '');
   const [extraCodes, setExtraCodes] = useState<string[]>([]);
   const [mode, setMode] = useState<'team' | 'self' | 'planner'>('team');
@@ -47,7 +49,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
     e.preventDefault();
     start(async () => {
       const r = await createOrder({
-        packageCode: pkgCode, extraCodes, buildMode: mode, plannerEmail,
+        eventType, packageCode: pkgCode, extraCodes, buildMode: mode, plannerEmail,
         ...contact, paymentMethod: method, card: method === 'card_sim' ? card : undefined, locale, consent,
       });
       setResult(r);
@@ -97,6 +99,15 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
         {/* 1. paquete */}
         {step === 0 ? (
           <section>
+            <h2 className="mb-3 font-serif text-2xl">{t('eventType.title')}</h2>
+            <div className="mb-8 flex flex-wrap gap-2">
+              {EVENT_TYPES.map((k) => (
+                <button key={k} type="button" onClick={() => setEventType(k)} aria-pressed={eventType === k}
+                  className={`rounded-full border px-3 py-1.5 text-xs ${eventType === k ? 'border-stone-900 bg-stone-900 text-white' : 'border-stone-300 text-stone-700'}`}>
+                  {EVENT_TYPE_LABEL[k][locale]}
+                </button>
+              ))}
+            </div>
             <h2 className="mb-4 font-serif text-2xl">{t('package.title')}</h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {packages.map((p, i) => (
@@ -167,8 +178,8 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
           <section className="space-y-4">
             <h2 className="font-serif text-2xl">{t('contact.title')}</h2>
             <div className="grid grid-cols-2 gap-3">
-              <div><label className={label}>{t('contact.partnerA')}</label><input className={field} required value={contact.partnerA} onChange={(e) => setContact({ ...contact, partnerA: e.target.value })} /></div>
-              <div><label className={label}>{t('contact.partnerB')}</label><input className={field} value={contact.partnerB} onChange={(e) => setContact({ ...contact, partnerB: e.target.value })} /></div>
+              <div><label className={label}>{t(needsTwoNames(eventType) ? 'contact.partnerA' : 'contact.name')}</label><input className={field} required value={contact.partnerA} onChange={(e) => setContact({ ...contact, partnerA: e.target.value })} /></div>
+              <div><label className={label}>{t(needsTwoNames(eventType) ? 'contact.partnerB' : 'contact.secondName')}</label><input className={field} value={contact.partnerB} onChange={(e) => setContact({ ...contact, partnerB: e.target.value })} /></div>
             </div>
             <div><label className={label}>{t('contact.email')}</label><input type="email" className={field} required value={contact.email} onChange={(e) => setContact({ ...contact, email: e.target.value })} /><p className="mt-1 text-xs text-stone-500">{t('contact.emailHelp')}</p></div>
             <div className="grid grid-cols-[1fr_auto] gap-3">

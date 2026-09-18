@@ -1,4 +1,5 @@
 import { getMessages, getTranslations } from 'next-intl/server';
+import { eventNames } from '@/lib/event-types';
 import { NextIntlClientProvider } from 'next-intl';
 import type { Locale } from '@/lib/config';
 import type { Invitation } from '@/lib/invitations';
@@ -89,7 +90,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
   const text = (v: Parameters<typeof pickText>[0]) => pickText(v, locale);
 
   const otherLocale = event.languages.find((l) => l !== locale);
-  const coupleNames = `${c.couple.partnerA} & ${c.couple.partnerB}`;
+  const coupleNames = eventNames(c.couple);
 
   const sections: Record<SectionId, React.ReactNode> = {
     // -------------------------------------------------------------- portada
@@ -128,8 +129,12 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
           {/* Cada nombre en su renglón: "Juan Antonio" nunca se parte a la mitad. */}
           <h1 className="mt-6 flex flex-col items-center font-serif text-[2.75rem] leading-[1.1] text-[var(--ink)] sm:text-6xl">
             <span>{c.couple.partnerA}</span>
-            <span className="my-1 text-3xl text-[var(--accent)] sm:text-4xl" aria-hidden>&</span>
-            <span>{c.couple.partnerB}</span>
+            {c.couple.partnerB ? (
+              <>
+                <span className="my-1 text-3xl text-[var(--accent)] sm:text-4xl" aria-hidden>&</span>
+                <span>{c.couple.partnerB}</span>
+              </>
+            ) : null}
           </h1>
 
           <div className="mt-7 flex items-center justify-center gap-4">

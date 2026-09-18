@@ -25,6 +25,7 @@ export async function createEvent(raw: unknown): Promise<ActionResult<{ id: stri
     .from('events')
     .insert({
       slug: b.slug,
+      type: b.type,
       timezone: b.timezone,
       country: b.country,
       languages: b.languages,
@@ -32,7 +33,7 @@ export async function createEvent(raw: unknown): Promise<ActionResult<{ id: stri
       rsvp_deadline: b.rsvpDeadline ? `${b.rsvpDeadline}T23:59:59` : null,
       allow_public_rsvp: b.allowPublicRsvp,
       show_private_gifts: b.showPrivateGifts,
-      content: templateContent(b),
+      content: templateContent({ partnerA: b.partnerA, partnerB: b.partnerB || undefined, startsAt: b.startsAt, type: b.type }),
       created_by: me.userId,
     })
     .select('id')
@@ -57,12 +58,13 @@ export async function updateEventBasics(id: string, raw: unknown): Promise<Actio
   const { data: current } = await supabase.from('events').select('content').eq('id', id).single();
   if (!current) return { ok: false, error: 'Evento no encontrado.' };
 
-  const content = { ...(current.content as EventContent), couple: { partnerA: b.partnerA, partnerB: b.partnerB }, startsAt: b.startsAt };
+  const content = { ...(current.content as EventContent), couple: { partnerA: b.partnerA, partnerB: b.partnerB || undefined }, startsAt: b.startsAt };
 
   const { error } = await supabase
     .from('events')
     .update({
       slug: b.slug,
+      type: b.type,
       timezone: b.timezone,
       country: b.country,
       languages: b.languages,

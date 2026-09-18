@@ -1,11 +1,13 @@
 import 'server-only';
 import { supabaseServer } from '@/lib/supabase/server';
 import type { EventStatus } from '@/lib/admin/labels';
+import type { EventType } from '@/lib/event-types';
 
 export interface EventRow {
   id: string;
   slug: string;
   status: EventStatus;
+  type: EventType;
   languages: string[];
   default_language: string;
   timezone: string;
@@ -51,7 +53,7 @@ export interface GuestRow {
 }
 
 const EVENT_COLS =
-  'id, slug, status, languages, default_language, timezone, country, rsvp_deadline, allow_public_rsvp, show_private_gifts, preview_key, og_image_url, content, created_at, updated_at';
+  'id, slug, status, type, languages, default_language, timezone, country, rsvp_deadline, allow_public_rsvp, show_private_gifts, preview_key, og_image_url, content, created_at, updated_at';
 
 export async function listEvents(): Promise<(EventRow & { stats: EventStats })[]> {
   const supabase = await supabaseServer();

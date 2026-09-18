@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { eventNames } from '@/lib/event-types';
 import { getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { requireRole } from '@/lib/auth';
@@ -17,7 +18,7 @@ export default async function TablesPage({ params }: { params: Promise<{ id: str
   if (!event) notFound();
   const c = event.content as unknown as EventContent;
   return (
-    <AdminShell me={me} title={`${c.couple.partnerA} & ${c.couple.partnerB}`} current="/admin/events">
+    <AdminShell me={me} title={eventNames(c.couple)} current="/admin/events">
       <EventTabs id={id} current="mesas" />
       <NextIntlClientProvider locale="es" messages={{ tables: messages.tables }}>
         <TablesManager eventId={id} tables={tables} guests={guests} exportHref={`/admin/events/${id}/tables/export.csv`} />

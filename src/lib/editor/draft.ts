@@ -75,7 +75,7 @@ export function newId(prefix = 'x'): string {
 
 export function toDraft(c: EventContent): Draft {
   return {
-    couple: { partnerA: c.couple.partnerA, partnerB: c.couple.partnerB },
+    couple: { partnerA: c.couple.partnerA, partnerB: c.couple.partnerB ?? '' },
     startsAt: c.startsAt,
     og: { title: lt(c.og?.title), description: lt(c.og?.description), image: c.og?.image ?? '' },
     sectionOrder: [...c.sectionOrder],
@@ -240,7 +240,7 @@ const SECTION_SCHEMA = {
 export function fromDraft(d: Draft): unknown {
   const out: Record<string, unknown> = {
     version: 1,
-    couple: { partnerA: d.couple.partnerA.trim(), partnerB: d.couple.partnerB.trim() },
+    couple: { partnerA: d.couple.partnerA.trim(), partnerB: s(d.couple.partnerB) },
     startsAt: d.startsAt,
     og: { title: outLT(d.og.title), description: outLT(d.og.description), image: s(d.og.image) },
     sectionOrder: d.sectionOrder,

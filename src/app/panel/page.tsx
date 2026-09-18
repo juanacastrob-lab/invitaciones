@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import { eventNames } from '@/lib/event-types';
 import { requireRole } from '@/lib/auth';
 import { listMyEvents } from '@/lib/admin/queries';
 import { SessionBar } from '@/components/auth/SessionBar';
@@ -29,7 +30,7 @@ export default async function PanelHome({ searchParams }: { searchParams: Promis
               return (
                 <li key={e.id}>
                   <a href={`/panel/${e.id}${lang ? `?lang=${lang}` : ''}`} className="block p-4 hover:bg-stone-50">
-                    <p className="font-serif text-xl">{c.couple.partnerA} &amp; {c.couple.partnerB}</p>
+                    <p className="font-serif text-xl">{eventNames(c.couple)}</p>
                     <p className="text-xs text-stone-500">{c.startsAt.slice(0, 10)} · {e.stats.confirmed_people}/{e.stats.passes} {t('passes')}</p>
                   </a>
                 </li>

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { LOCALES } from '@/lib/config';
 import { EVENT_STATUS, TIMEZONES } from '@/lib/admin/labels';
+import { EVENT_TYPES, needsTwoNames } from '@/lib/event-types';
 
 /** Campos básicos del evento, los que se llenan sin tocar el JSON. */
 export const eventBasics = z
@@ -10,8 +11,9 @@ export const eventBasics = z
       .trim()
       .toLowerCase()
       .regex(/^[a-z0-9-]{3,60}$/, 'Solo letras minúsculas, números y guiones (3 a 60).'),
+    type: z.enum(EVENT_TYPES).default('boda'),
     partnerA: z.string().trim().min(1).max(80),
-    partnerB: z.string().trim().min(1).max(80),
+    partnerB: z.string().trim().max(80).optional().or(z.literal('')),
     startsAt: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, 'Fecha y hora inválidas.'),
     timezone: z.enum(TIMEZONES),
     country: z.enum(['MX', 'US', 'CA']),
@@ -24,6 +26,10 @@ export const eventBasics = z
   .refine((v) => v.languages.includes(v.defaultLanguage), {
     path: ['defaultLanguage'],
     message: 'El idioma principal tiene que estar entre los idiomas del evento.',
+  })
+  .refine((v) => !needsTwoNames(v.type) || Boolean(v.partnerB), {
+    path: ['partnerB'],
+    message: 'Una boda lleva los dos nombres.',
   });
 
 export type EventBasics = z.infer<typeof eventBasics>;

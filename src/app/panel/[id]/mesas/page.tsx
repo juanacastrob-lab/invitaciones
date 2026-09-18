@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { eventNames } from '@/lib/event-types';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { requireRole } from '@/lib/auth';
@@ -23,7 +24,7 @@ export default async function PanelTablesPage({ params, searchParams }: { params
     <div className="min-h-dvh bg-stone-50 text-stone-900">
       <SessionBar me={me} />
       <main className="mx-auto max-w-4xl px-6 py-8">
-        <a href={`/panel/${id}${lang ? `?lang=${lang}` : ''}`} className="text-xs uppercase tracking-[0.2em] text-stone-500 underline underline-offset-4">← {c.couple.partnerA} &amp; {c.couple.partnerB}</a>
+        <a href={`/panel/${id}${lang ? `?lang=${lang}` : ''}`} className="text-xs uppercase tracking-[0.2em] text-stone-500 underline underline-offset-4">← {eventNames(c.couple)}</a>
         <h1 className="mb-6 mt-2 font-serif text-3xl">{t('title')}</h1>
         <NextIntlClientProvider locale={locale} messages={{ tables: messages.tables }}>
           <TablesManager eventId={id} tables={tables} guests={guests} exportHref={`/admin/events/${id}/tables/export.csv`} />

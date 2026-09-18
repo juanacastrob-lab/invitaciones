@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { eventNames } from '@/lib/event-types';
 import { headers } from 'next/headers';
 import type { Metadata } from 'next';
 import { getInvitation, localeFor, markOpened, type Invitation } from '@/lib/invitations';
@@ -43,7 +44,7 @@ export async function invitationMetadata(
 
   const locale = localeFor(invitation, requestedLang);
   const c = invitation.event.content;
-  const couple = `${c.couple.partnerA} & ${c.couple.partnerB}`;
+  const couple = eventNames(c.couple);
 
   const title = pickText(c.og?.title, locale) ?? couple;
   const description = pickText(c.og?.description, locale) ?? '';

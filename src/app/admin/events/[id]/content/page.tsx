@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { eventNames } from '@/lib/event-types';
 import { getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { requireRole } from '@/lib/auth';
@@ -19,7 +20,7 @@ export default async function ContentPage({ params }: { params: Promise<{ id: st
   if (!event) notFound();
   const c = event.content as unknown as EventContent;
   return (
-    <AdminShell me={me} title={`${c.couple.partnerA} & ${c.couple.partnerB}`} current="/admin/events">
+    <AdminShell me={me} title={eventNames(c.couple)} current="/admin/events">
       <EventTabs id={id} current="contenido" />
       <div className="mx-auto max-w-2xl">
         <NextIntlClientProvider locale="es" messages={{ editor: messages.editor }}>

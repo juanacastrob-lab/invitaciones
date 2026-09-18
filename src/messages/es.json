@@ -332,7 +332,9 @@
       "emailHelp": "Ahí te mandamos tu acceso y el recibo.",
       "phone": "WhatsApp",
       "country": "País",
-      "eventDate": "Fecha del evento (opcional)"
+      "eventDate": "Fecha del evento (opcional)",
+      "name": "Nombre de quien celebra",
+      "secondName": "Segundo nombre (opcional)"
     },
     "payment": {
       "title": "Pago",
@@ -373,6 +375,9 @@
       "planner_email_required": "Escribe el correo de tu wedding planner.",
       "too_many_attempts": "Demasiados intentos. Espera un momento.",
       "unknown": "Algo falló de nuestro lado. Intenta de nuevo o escríbenos por WhatsApp."
+    },
+    "eventType": {
+      "title": "¿Qué celebran?"
     }
   },
   "tables": {
@@ -421,7 +426,7 @@
     "basics": {
       "title": "Lo principal",
       "partnerA": "Nombre 1",
-      "partnerB": "Nombre 2",
+      "partnerB": "Nombre 2 (opcional si no es boda)",
       "startsAt": "Fecha y hora principal",
       "startsAtHint": "Manda en la cuenta regresiva y en el calendario."
     },
