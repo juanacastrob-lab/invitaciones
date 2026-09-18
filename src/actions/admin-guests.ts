@@ -20,7 +20,7 @@ async function eventCountry(eventId: string): Promise<LeadCountry> {
 }
 
 export async function addGuest(eventId: string, raw: unknown): Promise<ActionResult> {
-  await requireRole('admin', 'staff');
+  await requireRole('admin', 'staff', 'client'); // los novios: solo mientras no esté publicado (RLS)
   const parsed = guestInput.safeParse(raw);
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
   const g = parsed.data;
@@ -46,7 +46,7 @@ export async function addGuest(eventId: string, raw: unknown): Promise<ActionRes
 }
 
 export async function updateGuest(eventId: string, guestId: string, raw: unknown): Promise<ActionResult> {
-  await requireRole('admin', 'staff');
+  await requireRole('admin', 'staff', 'client'); // los novios: solo mientras no esté publicado (RLS)
   const parsed = guestInput.safeParse(raw);
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
   const g = parsed.data;
@@ -78,7 +78,7 @@ export async function updateGuest(eventId: string, guestId: string, raw: unknown
 }
 
 export async function deleteGuest(eventId: string, guestId: string): Promise<ActionResult> {
-  await requireRole('admin', 'staff');
+  await requireRole('admin', 'staff', 'client'); // los novios: solo mientras no esté publicado (RLS)
   const supabase = await supabaseServer();
   const { error } = await supabase.from('guests').delete().eq('id', guestId).eq('event_id', eventId);
   if (error) return { ok: false, error: error.message };
@@ -142,7 +142,7 @@ function normalizeHeader(h: unknown): string {
  * vuelve a subir solo las que faltaron.
  */
 export async function importGuests(eventId: string, formData: FormData): Promise<ActionResult<{ inserted: number; errors: string[] }>> {
-  await requireRole('admin', 'staff');
+  await requireRole('admin', 'staff', 'client'); // los novios: solo mientras no esté publicado (RLS)
   const file = formData.get('file');
   if (!(file instanceof File) || file.size === 0) return { ok: false, error: 'Elige un archivo.' };
   if (file.size > 5 * 1024 * 1024) return { ok: false, error: 'El archivo pesa más de 5 MB.' };

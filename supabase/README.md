@@ -25,6 +25,7 @@ normal y no rompe nada.
 | `007_demo_rename.sql` | Renombra el demo a juan-y-ana y refresca su contenido sin cambiar tokens. Generado |
 | `008_leads.sql` | Prospectos que llegan desde la landing, con RLS |
 | `009_admin.sql` | Pais del evento, bitacora (log_activity) y la vista event_stats para el admin |
+| `010_event_members.sql` | Acceso de los novios a su evento por correo, con enlace automatico al crear cuenta |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr

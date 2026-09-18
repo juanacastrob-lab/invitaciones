@@ -106,3 +106,18 @@ export async function listMessages(eventId: string) {
     .limit(200);
   return (data ?? []) as unknown as { id: string; message: string; song: string | null; dietary: string | null; created_at: string; guests: { display_name: string } }[];
 }
+
+export async function listMembers(eventId: string): Promise<{ id: string; email: string; accepted_at: string | null }[]> {
+  const supabase = await supabaseServer();
+  const { data } = await supabase
+    .from('event_member_invites')
+    .select('id, email, accepted_at')
+    .eq('event_id', eventId)
+    .order('created_at');
+  return data ?? [];
+}
+
+/** Los eventos que la RLS deja ver a quien esté en sesión: para el panel de novios. */
+export async function listMyEvents() {
+  return listEvents();
+}

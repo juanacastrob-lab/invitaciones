@@ -1,13 +1,14 @@
 import { notFound } from 'next/navigation';
 import { headers } from 'next/headers';
 import { requireRole } from '@/lib/auth';
-import { getEvent } from '@/lib/admin/queries';
+import { getEvent, listMembers } from '@/lib/admin/queries';
 import { getSiteUrl } from '@/lib/env';
 import { AdminShell } from '@/components/admin/AdminShell';
 import { EventTabs } from '@/components/admin/EventTabs';
 import { EventBasicsForm } from '@/components/admin/EventBasicsForm';
 import { StatusButtons, ContentEditor, DuplicateForm, DeleteButton, CopyButton } from '@/components/admin/EventTools';
 import { Badge } from '@/components/ui';
+import { MembersPanel } from '@/components/admin/MembersPanel';
 import { STATUS_LABEL, STATUS_TONE } from '@/lib/admin/labels';
 import type { EventContent } from '@/schemas/event-content';
 
@@ -22,7 +23,7 @@ async function origin() {
 export default async function EventPage({ params }: { params: Promise<{ id: string }> }) {
   const me = await requireRole('admin', 'staff');
   const { id } = await params;
-  const event = await getEvent(id);
+  const [event, members] = await Promise.all([getEvent(id), listMembers(id)]);
   if (!event) notFound();
   const c = event.content as unknown as EventContent;
   const site = await origin();
@@ -83,6 +84,12 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
               <dt className="text-stone-500">Pendientes</dt><dd>{event.stats.pending}</dd>
               <dt className="text-stone-500">Abrieron sin confirmar</dt><dd>{event.stats.opened_pending}</dd>
             </dl>
+          </section>
+
+          <section className="rounded-sm border border-stone-200 bg-white p-5">
+            <h2 className="mb-1 text-[0.7rem] uppercase tracking-[0.25em] text-stone-500">Novios con acceso al panel</h2>
+            <p className="mb-3 text-xs text-stone-500">Entran en /panel con Google o con el link del correo y ven solo este evento.</p>
+            <MembersPanel eventId={id} members={members} />
           </section>
 
           <section className="rounded-sm border border-stone-200 bg-white p-5">

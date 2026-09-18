@@ -245,5 +245,41 @@
       "too_many_attempts": "Demasiados envíos. Espera un rato y vuelve a intentar.",
       "unknown": "Algo falló de nuestro lado. Intenta de nuevo o escríbenos por WhatsApp."
     }
+  },
+  "panel": {
+    "title": "Tu boda",
+    "noEvents": "Todavía no hay un evento ligado a tu cuenta. En cuanto tu invitación esté lista, aparece aquí.",
+    "openInvitation": "Ver invitación",
+    "kpi": {
+      "guests": "Invitados",
+      "passes": "Pases",
+      "confirmed": "Personas confirmadas",
+      "declined": "No asisten",
+      "pending": "Pendientes",
+      "opened": "Abrieron sin confirmar"
+    },
+    "guests": "Invitados",
+    "search": "Buscar",
+    "filters": {
+      "all": "Todos",
+      "confirmed": "Confirmaron",
+      "declined": "No asisten",
+      "pending": "Pendientes"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmó",
+      "declined": "No asiste"
+    },
+    "passes": "pases",
+    "export": "Exportar a Excel",
+    "messages": "Mensajes de tus invitados",
+    "noMessages": "Todavía no hay mensajes.",
+    "editList": "Tu lista de invitados",
+    "editListHint": "Puedes agregar y corregir invitados hasta que la invitación se publique. Después, pídenos los cambios.",
+    "readOnly": "La invitación ya está publicada: los cambios a la lista los hace el equipo. Escríbenos por WhatsApp.",
+    "status_": "Estado de la invitación",
+    "song": "Canción",
+    "dietary": "Alergias"
   }
 }

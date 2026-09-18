@@ -245,5 +245,41 @@
       "too_many_attempts": "Too many submissions. Please wait a bit and try again.",
       "unknown": "Something went wrong on our side. Try again or message us on WhatsApp."
     }
+  },
+  "panel": {
+    "title": "Your wedding",
+    "noEvents": "There's no event linked to your account yet. As soon as your invitation is ready, it will show up here.",
+    "openInvitation": "See invitation",
+    "kpi": {
+      "guests": "Guests",
+      "passes": "Passes",
+      "confirmed": "People confirmed",
+      "declined": "Not attending",
+      "pending": "Pending",
+      "opened": "Opened, no RSVP"
+    },
+    "guests": "Guests",
+    "search": "Search",
+    "filters": {
+      "all": "All",
+      "confirmed": "Confirmed",
+      "declined": "Not attending",
+      "pending": "Pending"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "declined": "Not attending"
+    },
+    "passes": "passes",
+    "export": "Export to Excel",
+    "messages": "Messages from your guests",
+    "noMessages": "No messages yet.",
+    "editList": "Your guest list",
+    "editListHint": "You can add and fix guests until the invitation is published. After that, ask us for changes.",
+    "readOnly": "The invitation is published: list changes are handled by the team. Message us on WhatsApp.",
+    "status_": "Invitation status",
+    "song": "Song",
+    "dietary": "Allergies"
   }
 }
