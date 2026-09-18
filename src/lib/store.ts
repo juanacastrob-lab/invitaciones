@@ -35,3 +35,13 @@ export const getActiveExtras = unstable_cache(
   ['extras-by-country'],
   { revalidate: 3600, tags: ['extras'] },
 );
+
+/** El planner detrás de un código de referido (para /comprar?ref=CODIGO). */
+export async function getPlannerByCode(code: string | undefined): Promise<{ id: string; name: string; email: string; commission_pct: number } | null> {
+  const clean = (code ?? '').trim().toUpperCase();
+  if (!/^[A-Z0-9]{4,12}$/.test(clean)) return null;
+  let admin;
+  try { admin = supabaseAdmin(); } catch { return null; }
+  const { data } = await admin.from('planners').select('id, name, email, commission_pct').eq('code', clean).eq('active', true).maybeSingle();
+  return data ? { ...data, commission_pct: Number(data.commission_pct) } : null;
+}

@@ -15,13 +15,15 @@ const field = 'w-full rounded-sm border border-stone-300 bg-white px-3 py-2.5 te
 const label = 'mb-1.5 block text-[0.7rem] uppercase tracking-[0.2em] text-stone-500';
 const STEPS = ['package', 'extras', 'mode', 'contact', 'payment'] as const;
 
-export function Checkout({ locale, packages, extras, featureLabels, preselected, bank }: {
+export function Checkout({ locale, packages, extras, featureLabels, preselected, bank, planner }: {
   locale: Locale;
   packages: StorePackage[];
   extras: StoreExtra[];
   featureLabels: Record<string, string>;
   preselected?: string;
   bank: { bank: string; holder: string; clabe: string };
+  /** Viene de /comprar?ref=CODIGO: el pedido se atribuye a este planner. */
+  planner?: { code: string; name: string; email: string } | null;
 }) {
   const t = useTranslations('store');
   const fmt = (n: number, cur: string) => new Intl.NumberFormat(locale === 'es' ? 'es-MX' : 'en-US', { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(n);
@@ -30,8 +32,8 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
   const [eventType, setEventType] = useState<EventType>('boda');
   const [pkgCode, setPkgCode] = useState(preselected ?? packages[Math.min(2, packages.length - 1)]?.code ?? '');
   const [extraCodes, setExtraCodes] = useState<string[]>([]);
-  const [mode, setMode] = useState<'team' | 'self' | 'planner'>('team');
-  const [plannerEmail, setPlannerEmail] = useState('');
+  const [mode, setMode] = useState<'team' | 'self' | 'planner'>(planner ? 'planner' : 'team');
+  const [plannerEmail, setPlannerEmail] = useState(planner?.email ?? '');
   const [contact, setContact] = useState({ partnerA: '', partnerB: '', email: '', phone: '', country: 'MX', eventDate: '' });
   const [method, setMethod] = useState<'card_sim' | 'transfer'>('card_sim');
   const [card, setCard] = useState({ number: '', exp: '', cvc: '', name: '' });
@@ -49,7 +51,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
     e.preventDefault();
     start(async () => {
       const r = await createOrder({
-        eventType, packageCode: pkgCode, extraCodes, buildMode: mode, plannerEmail,
+        eventType, plannerCode: planner?.code ?? '', packageCode: pkgCode, extraCodes, buildMode: mode, plannerEmail,
         ...contact, paymentMethod: method, card: method === 'card_sim' ? card : undefined, locale, consent,
       });
       setResult(r);
@@ -94,6 +96,8 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
           </li>
         ))}
       </ol>
+
+      {planner ? <p className="mb-6 rounded-sm bg-[#eef0ea] px-4 py-3 text-sm text-[#4f5a48]">{t('plannerBanner', { name: planner.name })}</p> : null}
 
       <form onSubmit={submit} noValidate>
         {/* 1. paquete */}
@@ -167,7 +171,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
             {mode === 'planner' ? (
               <div className="mt-4">
                 <label className={label} htmlFor="plannerEmail">{t('mode.plannerEmail')}</label>
-                <input id="plannerEmail" type="email" className={field} value={plannerEmail} onChange={(e) => setPlannerEmail(e.target.value)} />
+                <input id="plannerEmail" type="email" className={field} value={plannerEmail} onChange={(e) => setPlannerEmail(e.target.value)} readOnly={Boolean(planner)} />
               </div>
             ) : null}
           </section>

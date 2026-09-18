@@ -223,3 +223,27 @@ export async function listActivity(limit = 200): Promise<ActivityRow[]> {
     };
   });
 }
+
+// -----------------------------------------------------------------------------
+// Planners y comisiones
+// -----------------------------------------------------------------------------
+
+export interface PlannerRow { id: string; email: string; user_id: string | null; name: string; phone: string | null; code: string; commission_pct: number; active: boolean; notes: string | null; created_at: string }
+export interface CommissionOrder { id: string; number: number; status: string; total: number; currency: string; commission_amount: number; commission_paid_at: string | null; planner_id: string; contact: { partner_a: string; partner_b: string | null }; created_at: string }
+
+export async function listPlanners(): Promise<{ planners: PlannerRow[]; orders: CommissionOrder[] }> {
+  const supabase = await supabaseServer();
+  const [{ data: planners }, { data: orders }] = await Promise.all([
+    supabase.from('planners').select('id, email, user_id, name, phone, code, commission_pct, active, notes, created_at').order('name'),
+    supabase.from('orders').select('id, number, status, total, currency, commission_amount, commission_paid_at, planner_id, contact, created_at').not('planner_id', 'is', null).order('created_at', { ascending: false }).limit(500),
+  ]);
+  const num = <T extends { commission_pct?: unknown; total?: unknown; commission_amount?: unknown }>(r: T) => ({ ...r, ...(r.commission_pct !== undefined ? { commission_pct: Number(r.commission_pct) } : {}), ...(r.total !== undefined ? { total: Number(r.total), commission_amount: Number(r.commission_amount) } : {}) });
+  return { planners: (planners ?? []).map(num) as PlannerRow[], orders: (orders ?? []).map(num) as CommissionOrder[] };
+}
+
+/** La ficha del planner que está en sesión, si lo es. La RLS solo le deja ver la suya. */
+export async function myPlanner(userId: string): Promise<PlannerRow | null> {
+  const supabase = await supabaseServer();
+  const { data } = await supabase.from('planners').select('id, email, user_id, name, phone, code, commission_pct, active, notes, created_at').eq('user_id', userId).maybeSingle();
+  return data ? ({ ...data, commission_pct: Number(data.commission_pct) } as PlannerRow) : null;
+}

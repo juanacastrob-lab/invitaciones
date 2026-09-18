@@ -10,6 +10,7 @@ export const PAYMENT_METHODS = ['card_sim', 'transfer'] as const;
 export const orderInput = z
   .object({
     eventType: z.enum(EVENT_TYPES).default('boda'),
+    plannerCode: z.string().trim().toUpperCase().regex(/^[A-Z0-9]{4,12}$/).optional().or(z.literal('')),
     packageCode: z.string().trim().min(1).max(40),
     extraCodes: z.array(z.string().trim().min(1).max(40)).max(20).default([]),
     buildMode: z.enum(BUILD_MODES),

@@ -36,6 +36,7 @@ normal y no rompe nada.
 | `018_checkin.sql` | Pase con QR y check-in: events.checkin_enabled, guests.checked_in_at/count, rpc_checkin, rpc_get_invitation con la bandera y event_stats con llegadas |
 | `019_auto_reminders.sql` | Recordatorios automaticos: events.auto_reminders / reminder_days y guests.auto_reminder_milestone. Se puede repetir |
 | `020_save_the_date.sql` | Save the date publico (events.save_the_date_enabled, rpc_get_save_the_date) y plantillas de mensaje save_the_date / thank_you |
+| `021_planners.sql` | Wedding planners con comision: tabla planners, orders.planner_id / commission_amount / commission_paid_at, rpc_mark_commission_paid (solo admin) |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr

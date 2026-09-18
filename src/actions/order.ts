@@ -7,7 +7,7 @@ import { supabaseServer } from '@/lib/supabase/server';
 import { getSiteUrl } from '@/lib/env';
 import { whatsappLink } from '@/lib/config';
 import { getActivePackages } from '@/lib/packages';
-import { getActiveExtras } from '@/lib/store';
+import { getActiveExtras, getPlannerByCode } from '@/lib/store';
 import { orderInput, priceOrder, type OrderResult } from '@/schemas/order';
 import { normalizePhone } from '@/schemas/lead';
 import { templateContent, slugFromNames } from '@/lib/admin/template';
@@ -64,6 +64,12 @@ export async function createOrder(raw: unknown): Promise<OrderResult> {
     paid = true;
   }
 
+  // Referido de planner: comisión calculada aquí con el % de la base, nunca del navegador.
+  const planner = input.plannerCode ? await getPlannerByCode(input.plannerCode) : null;
+  const commission = planner ? Math.round(total * planner.commission_pct) / 100 : 0;
+  const buildMode = planner ? 'planner' : input.buildMode;
+  const plannerEmail = planner ? planner.email : input.buildMode === 'planner' ? input.plannerEmail || null : null;
+
   const contact = { partner_a: input.partnerA, partner_b: input.partnerB || null, email: input.email, phone, event_date: input.eventDate || null };
 
   const { data: order, error } = await admin
@@ -77,8 +83,10 @@ export async function createOrder(raw: unknown): Promise<OrderResult> {
       package_price: pkg.price,
       extras: lines,
       total,
-      build_mode: input.buildMode,
-      planner_email: input.buildMode === 'planner' ? input.plannerEmail || null : null,
+      build_mode: buildMode,
+      planner_email: plannerEmail,
+      planner_id: planner?.id ?? null,
+      commission_amount: commission,
       payment_method: input.paymentMethod,
       status: paid ? 'pagado' : 'pendiente',
       paid_at: paid ? new Date().toISOString() : null,

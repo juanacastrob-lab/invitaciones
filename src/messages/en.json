@@ -305,7 +305,20 @@
       "button": "Approve and publish",
       "confirm": "Approve and publish the invitation? After that, changes are made by the team."
     },
-    "checkin": "Day-of check-in"
+    "checkin": "Day-of check-in",
+    "commissions": {
+      "title": "Commissions",
+      "intro": "You earn {pct}% of every order that comes through your link. Paid once the client has paid.",
+      "link": "Your link",
+      "share": "Hi! Here is my link for your digital invitation: {link}",
+      "shareButton": "Share on WhatsApp",
+      "pending": "Owed to you",
+      "paid": "Paid",
+      "paidBadge": "paid",
+      "pendingBadge": "owed",
+      "none": "No orders through your link yet.",
+      "payout": "Commissions are paid by bank transfer. Questions:"
+    }
   },
   "store": {
     "title": "Build your invitation",
@@ -401,7 +414,8 @@
     },
     "eventType": {
       "title": "What are you celebrating?"
-    }
+    },
+    "plannerBanner": "{name} is helping you. This order is linked to your wedding planner."
   },
   "tables": {
     "title": "Tables",

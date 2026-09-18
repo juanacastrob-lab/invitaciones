@@ -305,7 +305,20 @@
       "button": "Aprobar y publicar",
       "confirm": "¿Aprobar y publicar la invitación? Después los cambios los hace el equipo."
     },
-    "checkin": "Check-in del día"
+    "checkin": "Check-in del día",
+    "commissions": {
+      "title": "Comisiones",
+      "intro": "Ganas {pct}% de cada pedido que entre con tu link. Se paga cuando el cliente ya pagó.",
+      "link": "Tu link",
+      "share": "Hola, te comparto mi link para tu invitación digital: {link}",
+      "shareButton": "Compartir por WhatsApp",
+      "pending": "Por pagar",
+      "paid": "Pagado",
+      "paidBadge": "pagada",
+      "pendingBadge": "por pagar",
+      "none": "Todavía no hay pedidos con tu link.",
+      "payout": "Las comisiones se pagan por transferencia. Cualquier duda:"
+    }
   },
   "store": {
     "title": "Arma tu invitación",
@@ -401,7 +414,8 @@
     },
     "eventType": {
       "title": "¿Qué celebran?"
-    }
+    },
+    "plannerBanner": "Te atiende {name}. Este pedido queda ligado a tu wedding planner."
   },
   "tables": {
     "title": "Mesas",
