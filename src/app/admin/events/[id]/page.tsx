@@ -6,7 +6,7 @@ import { getSiteUrl } from '@/lib/env';
 import { AdminShell } from '@/components/admin/AdminShell';
 import { EventTabs } from '@/components/admin/EventTabs';
 import { EventBasicsForm } from '@/components/admin/EventBasicsForm';
-import { StatusButtons, ContentEditor, DuplicateForm, DeleteButton, CopyButton } from '@/components/admin/EventTools';
+import { StatusButtons, DuplicateForm, DeleteButton, CopyButton } from '@/components/admin/EventTools';
 import { Badge } from '@/components/ui';
 import { MembersPanel } from '@/components/admin/MembersPanel';
 import { STATUS_LABEL, STATUS_TONE } from '@/lib/admin/labels';
@@ -45,8 +45,8 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
 
           <section className="rounded-sm border border-stone-200 bg-white p-5">
             <h2 className="mb-1 text-[0.7rem] uppercase tracking-[0.25em] text-stone-500">Contenido de la invitación</h2>
-            <p className="mb-4 text-xs text-stone-500">Textos en es/en, itinerario, regalos, hospedaje, galería, FAQ. Se valida al guardar: si algo falta o sobra, te dice exactamente dónde.</p>
-            <ContentEditor eventId={id} json={JSON.stringify(c, null, 2)} />
+            <p className="mb-3 text-xs text-stone-500">Textos, fotos, itinerario, regalos, hospedaje, galería y preguntas, por secciones y en los idiomas del evento.</p>
+            <a href={`/admin/events/${id}/content`} className="inline-flex items-center rounded-full bg-stone-900 px-4 py-2.5 text-xs uppercase tracking-[0.18em] text-white">Editar contenido</a>
           </section>
         </div>
 

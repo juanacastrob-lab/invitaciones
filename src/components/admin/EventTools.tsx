@@ -24,7 +24,7 @@ export function StatusButtons({ eventId, status }: { eventId: string; status: Ev
   );
 }
 
-export function ContentEditor({ eventId, json }: { eventId: string; json: string }) {
+export function JsonEditor({ eventId, json }: { eventId: string; json: string }) {
   const [pending, start] = useTransition();
   const [value, setValue] = useState(json);
   const [result, setResult] = useState<ActionResult | null>(null);

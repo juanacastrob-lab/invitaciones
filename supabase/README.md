@@ -29,6 +29,7 @@ normal y no rompe nada.
 | `011_store.sql` | Tienda: extras (precios PROVISIONALES), pedidos, pagos y marcar transferencias pagadas |
 | `012_event_types.sql` | Tipos de evento nuevos (graduacion, cumpleanos, otro). Va aparte por como funcionan los enums |
 | `013_tables.sql` | Mesas: tabla event_tables, guests.table_id, rpc_assign_table (novios pueden acomodar aun publicado) y vista table_stats. Tambien pone `security_invoker` en event_stats y table_stats para que las vistas respeten RLS |
+| `014_content_editor.sql` | Tipos de evento primera_comunion y confirmacion, y rpc_update_event_content para que novios y planner guarden el contenido desde el panel (solo en borrador o en revision) |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr
@@ -65,6 +66,10 @@ cambiar de opinion conserve el historial completo.
 novios puedan asignar mesa aunque el evento ya este publicado pero no editar
 otros datos del invitado, que no se pueda usar una mesa de otro evento, y que
 las vistas `event_stats` y `table_stats` solo muestren los eventos de cada quien.
+
+`tests/014_content_test.sql` (requiere 001..014) comprueba que los novios
+solo guarden contenido en borrador o en revision, que un ajeno no pueda, que el
+equipo siempre pueda y que quede en la bitacora.
 
 Se corren contra un Postgres desechable (no contra Supabase), aplicando primero
 `tests/_supabase_shim.sql`, que imita lo mínimo de Supabase (`auth.users`,
