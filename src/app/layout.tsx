@@ -1,8 +1,27 @@
 import type { Metadata } from 'next';
+import { Cormorant_Garamond, Jost } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 import { APP_NAME } from '@/lib/config';
 import './globals.css';
+
+/**
+ * Next descarga y sirve estas tipografías desde nuestro propio dominio al
+ * construir: cero peticiones a Google desde el celular del invitado, que en
+ * 4G se notan.
+ */
+const serif = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-display',
+  display: 'swap',
+});
+
+const sans = Jost({
+  subsets: ['latin'],
+  variable: '--font-body',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: APP_NAME,
@@ -20,7 +39,7 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={`${serif.variable} ${sans.variable}`}>
       <body className="min-h-dvh bg-stone-50 text-stone-900 antialiased">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>

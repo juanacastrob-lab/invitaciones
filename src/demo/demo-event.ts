@@ -45,11 +45,11 @@ export const demoEventContent: EventContent = {
   cover: {
     headline: { es: 'Nos casamos', en: 'We are getting married' },
     tagline: {
-      es: 'Sábado 13 de marzo de 2027 · Tepoztlán, Morelos',
-      en: 'Saturday, March 13, 2027 · Tepoztlán, Morelos',
+      es: 'Hacienda Santa Elena · Tepoztlán, Morelos',
+      en: 'Hacienda Santa Elena · Tepoztlán, Morelos',
     },
     photo: {
-      url: '/demo/portada.webp',
+      url: '/demo/portada.svg',
       alt: {
         es: 'Ana Sofía y Luis Alberto tomados de la mano al atardecer',
         en: 'Ana Sofía and Luis Alberto holding hands at sunset',
@@ -68,7 +68,7 @@ export const demoEventContent: EventContent = {
       en: 'We met on a rainy afternoon in a café in Mexico City, both waiting for the storm to pass. Twelve years later we are still waiting together: for buses, for grocery lines, for test results, for the new year. Now we are waiting for you.',
     },
     photo: {
-      url: '/demo/historia.webp',
+      url: '/demo/historia.svg',
       alt: { es: 'La pareja riendo', en: 'The couple laughing' },
     },
   },
@@ -195,10 +195,10 @@ export const demoEventContent: EventContent = {
   gallery: {
     title: { es: 'Nosotros', en: 'Us' },
     photos: [
-      { url: '/demo/galeria-1.webp', alt: { es: 'En la playa', en: 'At the beach' } },
-      { url: '/demo/galeria-2.webp', alt: { es: 'La propuesta', en: 'The proposal' } },
-      { url: '/demo/galeria-3.webp', alt: { es: 'Con la familia', en: 'With family' } },
-      { url: '/demo/galeria-4.webp', alt: { es: 'De viaje', en: 'Travelling' } },
+      { url: '/demo/galeria-1.svg', alt: { es: 'En la playa', en: 'At the beach' } },
+      { url: '/demo/galeria-2.svg', alt: { es: 'La propuesta', en: 'The proposal' } },
+      { url: '/demo/galeria-3.svg', alt: { es: 'Con la familia', en: 'With family' } },
+      { url: '/demo/galeria-4.svg', alt: { es: 'De viaje', en: 'Travelling' } },
     ],
   },
 
@@ -239,8 +239,8 @@ export const demoEventContent: EventContent = {
   rsvp: {
     title: { es: 'Confirma tu asistencia', en: 'RSVP' },
     note: {
-      es: 'Por favor confirma antes del 13 de febrero de 2027.',
-      en: 'Please respond before February 13, 2027.',
+      es: 'Nos ayudaría mucho saber si vienes.',
+      en: 'It would help us a lot to know if you are coming.',
     },
     askMenu: true,
     menuOptions: [

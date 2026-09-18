@@ -1,16 +1,18 @@
 import { getRequestConfig } from 'next-intl/server';
-import { DEFAULT_LOCALE } from '@/lib/config';
+import { DEFAULT_LOCALE, isLocale } from '@/lib/config';
 
 /**
- * El idioma NO va en la URL: el link de la invitacion se queda corto
+ * El idioma NO va en la URL: el link de la invitación se queda corto
  * (/i/slug/token) y el idioma se resuelve por invitado o por evento.
  *
- * Aqui solo se define el idioma base del sitio. Las paginas de invitacion
- * montan su propio NextIntlClientProvider con el idioma que toca, asi las
- * paginas de marketing siguen siendo estaticas (no gastan funciones ni
- * creditos de Netlify).
+ * Las páginas de invitación piden explícitamente el idioma que toca; las de
+ * marketing usan el base y siguen siendo estáticas.
  */
-export default getRequestConfig(async () => ({
-  locale: DEFAULT_LOCALE,
-  messages: (await import(`../messages/${DEFAULT_LOCALE}.json`)).default,
-}));
+export default getRequestConfig(async ({ locale }) => {
+  const resolved = isLocale(locale) ? locale : DEFAULT_LOCALE;
+
+  return {
+    locale: resolved,
+    messages: (await import(`../messages/${resolved}.json`)).default,
+  };
+});

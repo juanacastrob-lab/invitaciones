@@ -3,5 +3,75 @@
     "tagline": "Invitaciones digitales para bodas",
     "description": "Invitaciones web con pases personalizados por invitado y confirmación de asistencia desde el celular.",
     "soon": "Muy pronto"
+  },
+  "invitation": {
+    "guestBanner": {
+      "reserved": "Lugares apartados a tu nombre",
+      "passes": "{count, plural, one {# pase} other {# pases}}"
+    },
+    "generalNotice": {
+      "title": "Esta es la invitación general",
+      "body": "Si recibiste tu link personal por WhatsApp, ábrelo desde ahí para confirmar tu asistencia y ver cuántos pases tienes."
+    },
+    "countdown": {
+      "days": "días",
+      "hours": "horas",
+      "minutes": "min",
+      "seconds": "seg",
+      "today": "¡Hoy es el día!",
+      "past": "Gracias por acompañarnos"
+    },
+    "calendar": {
+      "add": "Agregar al calendario",
+      "google": "Google Calendar",
+      "ics": "Apple / Outlook"
+    },
+    "maps": {
+      "how": "Cómo llegar",
+      "google": "Google Maps",
+      "waze": "Waze",
+      "apple": "Apple Maps"
+    },
+    "acts": {
+      "civil": "Ceremonia civil",
+      "religiosa": "Ceremonia religiosa",
+      "recepcion": "Recepción",
+      "otro": "Evento"
+    },
+    "noKids": {
+      "title": "Solo adultos"
+    },
+    "gifts": {
+      "open": "Abrir",
+      "bank": "Banco",
+      "holder": "A nombre de",
+      "clabe": "CLABE",
+      "account": "Cuenta",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "envelopes": "También habrá sobres el día del evento"
+    },
+    "lodging": {
+      "site": "Ver hotel",
+      "call": "Llamar"
+    },
+    "music": {
+      "play": "Poner música",
+      "pause": "Pausar"
+    },
+    "rsvp": {
+      "deadline": "Confirma antes del {date}",
+      "closed": "El plazo para confirmar ya cerró. Si necesitas cambiar algo, escríbenos.",
+      "needsToken": "Para confirmar, abre el link personal que te enviamos por WhatsApp.",
+      "yourAnswer": "Tu respuesta",
+      "attending": "Ahí estaremos",
+      "notAttending": "No podremos ir",
+      "change": "Cambiar mi respuesta",
+      "peopleConfirmed": "{count, plural, one {# persona confirmada} other {# personas confirmadas}}"
+    },
+    "language": {
+      "switch": "English",
+      "current": "Español"
+    }
   }
 }

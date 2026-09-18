@@ -3,5 +3,75 @@
     "tagline": "Digital wedding invitations",
     "description": "Web invitations with personalized guest passes and RSVP from any phone.",
     "soon": "Coming soon"
+  },
+  "invitation": {
+    "guestBanner": {
+      "reserved": "Reserved in your name",
+      "passes": "{count, plural, one {# pass} other {# passes}}"
+    },
+    "generalNotice": {
+      "title": "This is the general invitation",
+      "body": "If you received your personal link on WhatsApp, open it from there to RSVP and see how many passes you have."
+    },
+    "countdown": {
+      "days": "days",
+      "hours": "hours",
+      "minutes": "min",
+      "seconds": "sec",
+      "today": "Today is the day!",
+      "past": "Thank you for celebrating with us"
+    },
+    "calendar": {
+      "add": "Add to calendar",
+      "google": "Google Calendar",
+      "ics": "Apple / Outlook"
+    },
+    "maps": {
+      "how": "Directions",
+      "google": "Google Maps",
+      "waze": "Waze",
+      "apple": "Apple Maps"
+    },
+    "acts": {
+      "civil": "Civil ceremony",
+      "religiosa": "Religious ceremony",
+      "recepcion": "Reception",
+      "otro": "Event"
+    },
+    "noKids": {
+      "title": "Adults only"
+    },
+    "gifts": {
+      "open": "Open",
+      "bank": "Bank",
+      "holder": "Account holder",
+      "clabe": "CLABE",
+      "account": "Account",
+      "copy": "Copy",
+      "copied": "Copied",
+      "envelopes": "There will also be envelopes on the day"
+    },
+    "lodging": {
+      "site": "Hotel website",
+      "call": "Call"
+    },
+    "music": {
+      "play": "Play music",
+      "pause": "Pause"
+    },
+    "rsvp": {
+      "deadline": "Please respond before {date}",
+      "closed": "The RSVP deadline has passed. If you need to change something, get in touch.",
+      "needsToken": "To RSVP, open the personal link we sent you on WhatsApp.",
+      "yourAnswer": "Your answer",
+      "attending": "We'll be there",
+      "notAttending": "We can't make it",
+      "change": "Change my answer",
+      "peopleConfirmed": "{count, plural, one {# person confirmed} other {# people confirmed}}"
+    },
+    "language": {
+      "switch": "Español",
+      "current": "English"
+    }
   }
 }
