@@ -28,7 +28,7 @@ normal y no rompe nada.
 | `010_event_members.sql` | Acceso de los novios a su evento por correo, con enlace automatico al crear cuenta |
 | `011_store.sql` | Tienda: extras (precios PROVISIONALES), pedidos, pagos y marcar transferencias pagadas |
 | `012_event_types.sql` | Tipos de evento nuevos (graduacion, cumpleanos, otro). Va aparte por como funcionan los enums |
-| `013_tables.sql` | Mesas: tabla event_tables, guests.table_id, rpc_assign_table (novios pueden acomodar aun publicado) y vista table_stats |
+| `013_tables.sql` | Mesas: tabla event_tables, guests.table_id, rpc_assign_table (novios pueden acomodar aun publicado) y vista table_stats. Tambien pone `security_invoker` en event_stats y table_stats para que las vistas respeten RLS |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr
@@ -60,6 +60,11 @@ que la respuesta nunca incluye la lista de invitados.
 personas que pases, que "no asisto" no cuele acompanantes, que el menu solo
 acepte platillos del evento, que pasada la fecha limite se cierre, y que
 cambiar de opinion conserve el historial completo.
+
+`tests/013_tables_test.sql` (requiere 001..013) comprueba las mesas: que los
+novios puedan asignar mesa aunque el evento ya este publicado pero no editar
+otros datos del invitado, que no se pueda usar una mesa de otro evento, y que
+las vistas `event_stats` y `table_stats` solo muestren los eventos de cada quien.
 
 Se corren contra un Postgres desechable (no contra Supabase), aplicando primero
 `tests/_supabase_shim.sql`, que imita lo mínimo de Supabase (`auth.users`,

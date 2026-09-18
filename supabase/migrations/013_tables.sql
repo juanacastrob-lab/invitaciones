@@ -84,7 +84,10 @@ update guests g
    and t.name = trim(g.table_no);
 
 -- Resumen por mesa para las vistas y la exportación.
-create or replace view table_stats as
+-- security_invoker: sin esto una vista corre con los permisos de su dueño
+-- (postgres, que se salta RLS) y cualquier usuario con cuenta vería los
+-- totales de TODOS los eventos.
+create or replace view table_stats with (security_invoker = true) as
 select
   t.id as table_id,
   t.event_id,
@@ -99,3 +102,6 @@ left join guests g on g.table_id = t.id
 group by t.id;
 
 grant select on table_stats to authenticated;
+
+-- Mismo arreglo para la vista de 009, que se creó sin security_invoker.
+alter view event_stats set (security_invoker = true);
