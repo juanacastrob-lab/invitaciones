@@ -1,7 +1,8 @@
-export function EventTabs({ id, current }: { id: string; current: 'datos' | 'invitados' | 'envio' }) {
+export function EventTabs({ id, current }: { id: string; current: 'datos' | 'invitados' | 'mesas' | 'envio' }) {
   const tabs = [
     { key: 'datos', href: `/admin/events/${id}`, label: 'Datos' },
     { key: 'invitados', href: `/admin/events/${id}/guests`, label: 'Invitados' },
+    { key: 'mesas', href: `/admin/events/${id}/tables`, label: 'Mesas' },
     { key: 'envio', href: `/admin/events/${id}/send`, label: 'Envío por WhatsApp' },
   ] as const;
   return (

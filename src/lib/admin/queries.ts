@@ -41,6 +41,7 @@ export interface GuestRow {
   token: string;
   group_tag: string | null;
   table_no: string | null;
+  table_id: string | null;
   status: 'pending' | 'confirmed' | 'declined';
   confirmed_count: number;
   sent_at: string | null;
@@ -82,7 +83,7 @@ export async function listGuests(eventId: string): Promise<GuestRow[]> {
   const supabase = await supabaseServer();
   const { data } = await supabase
     .from('guests')
-    .select('id, display_name, passes, phone, email, language, token, group_tag, table_no, status, confirmed_count, sent_at, opened_at, responded_at, reminder_count')
+    .select('id, display_name, passes, phone, email, language, token, group_tag, table_no, table_id, status, confirmed_count, sent_at, opened_at, responded_at, reminder_count')
     .eq('event_id', eventId)
     .order('display_name');
   return (data ?? []) as GuestRow[];
@@ -120,4 +121,25 @@ export async function listMembers(eventId: string): Promise<{ id: string; email:
 /** Los eventos que la RLS deja ver a quien esté en sesión: para el panel de novios. */
 export async function listMyEvents() {
   return listEvents();
+}
+
+export interface TableRow {
+  table_id: string;
+  name: string;
+  capacity: number | null;
+  sort_order: number;
+  guests: number;
+  passes: number;
+  confirmed_people: number;
+}
+
+export async function listTables(eventId: string): Promise<TableRow[]> {
+  const supabase = await supabaseServer();
+  const { data } = await supabase
+    .from('table_stats')
+    .select('table_id, name, capacity, sort_order, guests, passes, confirmed_people')
+    .eq('event_id', eventId)
+    .order('sort_order')
+    .order('name');
+  return (data ?? []) as TableRow[];
 }

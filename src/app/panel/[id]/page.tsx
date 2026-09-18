@@ -53,6 +53,7 @@ export default async function PanelEventPage({ params, searchParams }: { params:
             <a href={`/panel/${id}?lang=${other}`} className="self-center text-[0.65rem] uppercase tracking-[0.2em] text-stone-500 underline underline-offset-4">{other.toUpperCase()}</a>
             <LinkButton href={`/i/${event.slug}?preview=${event.preview_key}`} target="_blank">{t('openInvitation')}</LinkButton>
             <LinkButton href={`/admin/events/${id}/guests/export.csv`}>{t('export')}</LinkButton>
+            <LinkButton href={`/panel/${id}/mesas${lang ? `?lang=${lang}` : ''}`} variant="primary">{locale === 'es' ? 'Mesas' : 'Tables'}</LinkButton>
           </div>
         </div>
 

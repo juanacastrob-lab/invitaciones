@@ -193,6 +193,15 @@ export async function importGuests(eventId: string, formData: FormData): Promise
     });
   });
 
+  // Mesas que vienen en el archivo: se crean si no existen y se ligan.
+  const tableNames = [...new Set(toInsert.map((g) => g.table_no).filter((v): v is string => Boolean(v)))];
+  if (tableNames.length) {
+    await supabase.from('event_tables').upsert(tableNames.map((name) => ({ event_id: eventId, name })), { onConflict: 'event_id,name', ignoreDuplicates: true });
+    const { data: tables } = await supabase.from('event_tables').select('id, name').eq('event_id', eventId);
+    const byName = new Map((tables ?? []).map((t) => [t.name, t.id]));
+    for (const g of toInsert) if (g.table_no) g.table_id = byName.get(g.table_no as string) ?? null;
+  }
+
   let inserted = 0;
   if (toInsert.length) {
     const { error, count } = await supabase.from('guests').insert(toInsert, { count: 'exact' });

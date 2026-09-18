@@ -372,5 +372,31 @@
       "too_many_attempts": "Demasiados intentos. Espera un momento.",
       "unknown": "Algo falló de nuestro lado. Intenta de nuevo o escríbenos por WhatsApp."
     }
+  },
+  "tables": {
+    "title": "Mesas",
+    "add": "Agregar mesa",
+    "name": "Nombre",
+    "capacity": "Lugares",
+    "namePlaceholder": "Mesa 1",
+    "bulk": "Crear varias",
+    "bulkHelp": "Crea Mesa 1 a Mesa N de un jalón.",
+    "bulkCount": "¿Cuántas?",
+    "bulkCapacity": "Lugares por mesa",
+    "create": "Crear",
+    "save": "Guardar",
+    "delete": "Borrar",
+    "deleteConfirm": "¿Borrar la mesa? Sus invitados quedan sin mesa.",
+    "seats": "{passes} pases · {confirmed} confirmados",
+    "of": "de {capacity}",
+    "over": "¡Se pasa!",
+    "noTables": "Todavía no hay mesas. Crea la primera o varias de un jalón.",
+    "assign": "Acomodar invitados",
+    "unassigned": "Sin mesa",
+    "search": "Buscar invitado",
+    "noTable": "— sin mesa —",
+    "export": "Exportar por mesa",
+    "print": "Imprimir",
+    "summary": "{tables} mesas · {assigned} de {total} invitados acomodados"
   }
 }

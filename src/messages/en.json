@@ -372,5 +372,31 @@
       "too_many_attempts": "Too many attempts. Please wait a moment.",
       "unknown": "Something went wrong on our side. Try again or message us on WhatsApp."
     }
+  },
+  "tables": {
+    "title": "Tables",
+    "add": "Add table",
+    "name": "Name",
+    "capacity": "Seats",
+    "namePlaceholder": "Table 1",
+    "bulk": "Create several",
+    "bulkHelp": "Creates Table 1 through Table N at once.",
+    "bulkCount": "How many?",
+    "bulkCapacity": "Seats per table",
+    "create": "Create",
+    "save": "Save",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this table? Its guests will be unassigned.",
+    "seats": "{passes} passes · {confirmed} confirmed",
+    "of": "of {capacity}",
+    "over": "Over capacity!",
+    "noTables": "No tables yet. Create the first one, or several at once.",
+    "assign": "Seat your guests",
+    "unassigned": "Unassigned",
+    "search": "Search guest",
+    "noTable": "— no table —",
+    "export": "Export by table",
+    "print": "Print",
+    "summary": "{tables} tables · {assigned} of {total} guests seated"
   }
 }
