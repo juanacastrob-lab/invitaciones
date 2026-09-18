@@ -2,9 +2,10 @@
 
 import { useMemo, useState, useTransition } from 'react';
 import { markSent } from '@/actions/admin-guests';
+import { sendGuestEmails } from '@/actions/admin-email';
 import type { GuestRow } from '@/lib/admin/queries';
 import { buildGuestMessage, guestLink, guestWhatsappUrl } from '@/lib/admin/whatsapp';
-import { Button, Badge, Select, Textarea } from '@/components/ui';
+import { Button, Badge, Notice, Select, Textarea } from '@/components/ui';
 import type { Locale } from '@/lib/config';
 
 type Filter = 'unsent' | 'pending' | 'opened' | 'confirmed' | 'all';
@@ -22,15 +23,18 @@ const FILTERS: { key: Filter; label: string }[] = [
  * el link personal ya escritos; al regresar, marca "enviado". Nada se manda
  * solo: el envío automático es Fase 3 (WhatsApp Cloud API).
  */
-export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, guests, templates }: {
+export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, guests, templates, emailEnabled = false, published = true }: {
   eventId: string; slug: string; siteUrl: string; couple: string; startsAt: string; timezone: string;
   guests: GuestRow[];
   templates: { key: string; language: string; body: string }[];
+  emailEnabled?: boolean;
+  published?: boolean;
 }) {
   const [filter, setFilter] = useState<Filter>('unsent');
   const [templateKey, setTemplateKey] = useState('invite');
   const [overrides, setOverrides] = useState<Record<string, string>>({});
   const [pending, start] = useTransition();
+  const [mailing, setMailing] = useState<{ done: number; total: number; sent: number; failed: { name: string; error: string }[] } | null>(null);
 
   const keys = useMemo(() => [...new Set(templates.map((t) => t.key))], [templates]);
   const bodyFor = (lang: string) =>
@@ -47,6 +51,24 @@ export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, 
   });
 
   const isReminder = templateKey !== 'invite';
+  const withEmail = visible.filter((g) => g.email);
+
+  /** Manda en tandas de 10: cada llamada al servidor dura pocos segundos. */
+  async function mailList(targets: GuestRow[]) {
+    if (!targets.length) return;
+    if (!window.confirm(`¿Mandar "${templateKey === 'invite' ? 'Invitación' : 'Recordatorio'}" por correo a ${targets.length} invitado(s)?`)) return;
+    const state = { done: 0, total: targets.length, sent: 0, failed: [] as { name: string; error: string }[] };
+    setMailing({ ...state });
+    for (let i = 0; i < targets.length; i += 10) {
+      const chunk = targets.slice(i, i + 10);
+      const r = await sendGuestEmails({ eventId, guestIds: chunk.map((g) => g.id), templateKey, bodies: { es: bodyFor('es'), en: bodyFor('en') }, siteUrl });
+      if (r.ok && r.data) { state.sent += r.data.sent; state.failed.push(...r.data.failed); }
+      else { state.failed.push(...chunk.map((g) => ({ name: g.display_name, error: r.ok ? 'sin respuesta' : r.error }))); }
+      state.done += chunk.length;
+      setMailing({ ...state });
+      if (!r.ok) break;
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -78,6 +100,25 @@ export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, 
         <span className="self-center text-xs text-stone-500">{visible.length}</span>
       </div>
 
+      <div className="flex flex-wrap items-center gap-3 rounded-sm border border-stone-200 bg-white p-3 text-xs text-stone-600">
+        {emailEnabled ? (
+          <>
+            <Button variant="secondary" disabled={!withEmail.length || !published || Boolean(mailing && mailing.done < mailing.total)} onClick={() => mailList(withEmail)}>
+              Mandar por correo a esta lista ({withEmail.length})
+            </Button>
+            <span>Solo a quienes tienen correo. Usa el mismo texto de arriba y marca enviado / recordado.</span>
+          </>
+        ) : (
+          <span>Para mandar por correo, configura <code>RESEND_API_KEY</code> y <code>EMAIL_FROM</code> en Netlify (ver README).</span>
+        )}
+      </div>
+      {mailing ? (
+        <Notice kind={mailing.failed.length && mailing.done === mailing.total ? 'error' : 'ok'}>
+          {mailing.done < mailing.total ? `Enviando… ${mailing.done} de ${mailing.total}` : `Listo: ${mailing.sent} enviados${mailing.failed.length ? `, ${mailing.failed.length} fallaron` : ''}.`}
+          {mailing.failed.length ? <span className="block text-xs">{mailing.failed.map((f) => `${f.name}: ${f.error}`).join(' · ')}</span> : null}
+        </Notice>
+      ) : null}
+
       <ul className="divide-y divide-stone-200 rounded-sm border border-stone-200 bg-white">
         {visible.map((g) => {
           const locale: Locale = g.language === 'en' ? 'en' : 'es';
@@ -99,6 +140,7 @@ export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, 
                 ) : (
                   <Button variant="secondary" onClick={() => navigator.clipboard.writeText(message)}>Copiar mensaje</Button>
                 )}
+                {emailEnabled && g.email ? <Button variant="secondary" disabled={!published} onClick={() => mailList([g])}>Correo</Button> : null}
                 <Button variant="secondary" disabled={pending} onClick={() => start(async () => { await markSent(eventId, g.id, isReminder); })}>
                   {isReminder ? 'Marcar recordado' : 'Marcar enviado'}
                 </Button>

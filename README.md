@@ -25,6 +25,12 @@ Los nombres estan en `.env.example`. Los valores se ponen en Netlify
 (Site configuration > Environment variables). `SUPABASE_SERVICE_ROLE_KEY`
 es privada: solo servidor, nunca en git.
 
+Correo a invitados (opcional): `RESEND_API_KEY` (se crea en resend.com) y
+`EMAIL_FROM` (un remitente de un dominio verificado en Resend, p. ej.
+`Hola Boda <hola@holaboda.mx>`; Resend pide agregar unos registros DNS del
+dominio, que van en Netlify DNS). Sin esas dos variables, el boton de correo
+en la cola de envio aparece apagado y todo lo demas sigue igual.
+
 ## Ramas y donde ver cada cosa
 
 - `main` = produccion: https://holaboda.mx. Solo se hace merge cuando Juan lo pide.
