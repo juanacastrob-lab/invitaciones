@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import type { Locale } from '@/lib/config';
 import type { LT } from '@/lib/editor/draft';
 import { Button, inputClass } from '@/components/ui';
@@ -51,7 +51,7 @@ export function Check({ label, checked, onChange }: { label: string; checked: bo
 }
 
 export function SectionCard({
-  id, title, enabled, onToggle, onMove, canUp, canDown, labels, children, error,
+  id, title, enabled, onToggle, onMove, canUp, canDown, labels, children, error, defaultOpen = false, summary,
 }: {
   id: string;
   title: string;
@@ -60,28 +60,50 @@ export function SectionCard({
   onMove?: (dir: -1 | 1) => void;
   canUp?: boolean;
   canDown?: boolean;
-  labels: { show: string; up: string; down: string };
+  labels: { show: string; up: string; down: string; edit: string; close: string };
   children: ReactNode;
   error?: string;
+  /** Abierta desde el principio (lo principal). El resto se abre al tocarla. */
+  defaultOpen?: boolean;
+  /** Una línea con lo que ya tiene la sección, para no tener que abrirla. */
+  summary?: string;
 }) {
+  const [open, setOpen] = useState(defaultOpen);
+  // Si el guardado falla en esta sección, se abre sola para que se vea el campo.
+  useEffect(() => { if (error) setOpen(true); }, [error]);
+  const showBody = enabled && open;
+
   return (
-    <section id={`sec-${id}`} className={`rounded-sm border bg-white ${error ? 'border-red-300' : 'border-stone-200'} ${enabled ? '' : 'opacity-70'}`}>
-      <header className="flex items-center gap-3 border-b border-stone-100 px-4 py-3">
+    <section id={`sec-${id}`} className={`rounded-sm border bg-white ${error ? 'border-red-300' : 'border-stone-200'} ${enabled ? '' : 'opacity-60'}`}>
+      <header className="flex items-center gap-3 px-4 py-3">
         {onToggle ? (
           <label className="flex items-center gap-2" title={labels.show}>
-            <input type="checkbox" checked={enabled} onChange={(e) => onToggle(e.target.checked)} className="h-4 w-4 accent-stone-900" />
+            <input type="checkbox" checked={enabled} onChange={(e) => { onToggle(e.target.checked); if (e.target.checked) setOpen(true); }} className="h-4 w-4 accent-stone-900" />
           </label>
         ) : null}
-        <h2 className="flex-1 text-[0.7rem] uppercase tracking-[0.25em] text-stone-700">{title}</h2>
+        <button
+          type="button"
+          onClick={() => { if (enabled) setOpen((o) => !o); }}
+          aria-expanded={showBody}
+          className="min-w-0 flex-1 text-left"
+        >
+          <span className="block text-[0.7rem] uppercase tracking-[0.25em] text-stone-700">{title}</span>
+          {!showBody && summary ? <span className="mt-0.5 block truncate text-xs text-stone-400">{summary}</span> : null}
+        </button>
         {onMove && enabled ? (
           <div className="flex gap-1">
             <button type="button" aria-label={labels.up} disabled={!canUp} onClick={() => onMove(-1)} className="h-7 w-7 rounded-full border border-stone-200 text-stone-600 disabled:opacity-30">↑</button>
             <button type="button" aria-label={labels.down} disabled={!canDown} onClick={() => onMove(1)} className="h-7 w-7 rounded-full border border-stone-200 text-stone-600 disabled:opacity-30">↓</button>
           </div>
         ) : null}
+        {enabled ? (
+          <button type="button" onClick={() => setOpen((o) => !o)} className="shrink-0 rounded-full border border-stone-300 px-3 py-1 text-[0.65rem] uppercase tracking-[0.15em] text-stone-700">
+            {showBody ? labels.close : labels.edit}
+          </button>
+        ) : null}
       </header>
       {error ? <p className="bg-red-50 px-4 py-2 text-sm text-red-800">{error}</p> : null}
-      {enabled ? <div className="space-y-4 p-4">{children}</div> : null}
+      {showBody ? <div className="space-y-4 border-t border-stone-100 p-4">{children}</div> : null}
     </section>
   );
 }

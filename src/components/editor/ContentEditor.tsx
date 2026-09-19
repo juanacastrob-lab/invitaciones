@@ -24,7 +24,7 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
   const [result, setResult] = useState<{ ok: true } | { ok: false; error: string; field?: string } | null>(null);
 
   const langs = languages.filter((l): l is Locale => l === 'es' || l === 'en');
-  const labels = { show: t('show'), up: t('up'), down: t('down') };
+  const labels = { show: t('show'), up: t('up'), down: t('down'), edit: t('edit'), close: t('close') };
 
   /** Cambia el borrador sin mutar el anterior. structuredClone es barato aquí. */
   const patch = (fn: (d: Draft) => void) => {
@@ -60,6 +60,30 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
   const enabled = draft.sectionOrder;
   const disabled = SECTION_IDS.filter((id) => !enabled.includes(id));
 
+  /** Lo que ya tiene cada sección, en una línea, para saber qué falta sin abrirla. */
+  const main = langs[0] ?? 'es';
+  const summaryOf = (id: SectionId): string | undefined => {
+    const d = draft;
+    const n = (k: number, one: string, many: string) => `${k} ${k === 1 ? one : many}`;
+    switch (id) {
+      case 'cover': return [d.cover.photoUrl ? t('summary.photo') : t('summary.noPhoto'), d.cover.headline[main]].filter(Boolean).join(' · ');
+      case 'quote': return d.quote.text[main] || undefined;
+      case 'parents': return d.parents.groups.length ? n(d.parents.groups.length, t('summary.group'), t('summary.groups')) : undefined;
+      case 'countdown': return d.countdown.label[main] || undefined;
+      case 'story': return d.story.body[main]?.slice(0, 80) || undefined;
+      case 'itinerary': return d.itinerary.acts.map((a) => a.title[main] || t(`fields.kinds.${a.kind}`)).join(' · ') || undefined;
+      case 'dressCode': return d.dressCode.code[main] || undefined;
+      case 'noKids': return d.noKids.note[main]?.slice(0, 80) || undefined;
+      case 'gifts': return [d.gifts.links.length ? n(d.gifts.links.length, t('summary.link'), t('summary.links')) : null, d.gifts.bank.clabe || d.gifts.bank.account ? t('summary.bank') : null].filter(Boolean).join(' · ') || undefined;
+      case 'lodging': return d.lodging.options.map((o) => o.name).filter(Boolean).join(' · ') || undefined;
+      case 'transport': return d.transport.options.map((o) => o.name).filter(Boolean).join(' · ') || undefined;
+      case 'gallery': return d.gallery.photos.filter((p) => p.url).length ? n(d.gallery.photos.filter((p) => p.url).length, t('summary.photoOne'), t('summary.photos')) : undefined;
+      case 'music': return d.music.title || d.music.url || undefined;
+      case 'faq': return d.faq.items.length ? n(d.faq.items.length, t('summary.question'), t('summary.questions')) : undefined;
+      case 'rsvp': return [d.rsvp.askMenu ? t('fields.askMenu') : null, d.rsvp.askChildren ? t('fields.askChildren') : null, d.rsvp.questions.length ? n(d.rsvp.questions.length, t('summary.question'), t('summary.questions')) : null].filter(Boolean).join(' · ') || undefined;
+    }
+  };
+
   const cardProps = (id: SectionId) => ({
     id,
     title: t(`sections.${id}`),
@@ -70,6 +94,7 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
     canDown: enabled.indexOf(id) >= 0 && enabled.indexOf(id) < enabled.length - 1,
     labels,
     error: errorFor(id),
+    summary: summaryOf(id),
   });
 
   const lt = (label: string, value: { es: string; en: string }, set: (d: Draft, v: { es: string; en: string }) => void, extra?: { multiline?: boolean; hint?: string }) => (
@@ -340,7 +365,11 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
 
   return (
     <div className="space-y-4">
-      <p className="text-xs text-stone-500">{t('intro')}</p>
+      <ol className="list-decimal space-y-1 pl-5 text-xs leading-relaxed text-stone-600">
+        <li>{t('steps.1')}</li>
+        <li>{t('steps.2')}</li>
+        <li>{t('steps.3')}</li>
+      </ol>
       {bar}
       {result ? (
         <Notice kind={result.ok ? 'ok' : 'error'}>
@@ -348,7 +377,7 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
         </Notice>
       ) : null}
 
-      <SectionCard id="couple" title={t('basics.title')} enabled labels={labels} error={errorFor('couple') ?? errorFor('startsAt')}>
+      <SectionCard id="couple" title={t('basics.title')} enabled defaultOpen labels={labels} error={errorFor('couple') ?? errorFor('startsAt')}>
         <div className="grid gap-3 sm:grid-cols-2">
           <Text label={t('basics.partnerA')} value={draft.couple.partnerA} onChange={(v) => patch((d) => { d.couple.partnerA = v; })} />
           <Text label={t('basics.partnerB')} value={draft.couple.partnerB} onChange={(v) => patch((d) => { d.couple.partnerB = v; })} />
@@ -359,26 +388,26 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
       {enabled.map(renderSection)}
       {disabled.map(renderSection)}
 
-      <SectionCard id="og" title={t('og.title')} enabled labels={labels} error={errorFor('og')}>
+      <SectionCard id="og" title={t('og.title')} enabled labels={labels} error={errorFor('og')} summary={draft.og.image ? t('summary.photo') : t('og.hint')}>
         <p className="text-xs text-stone-400">{t('og.hint')}</p>
         {lt(t('og.ogTitle'), draft.og.title, (d, v) => { d.og.title = v; })}
         {lt(t('og.description'), draft.og.description, (d, v) => { d.og.description = v; })}
         <PhotoField label={t('og.image')} value={draft.og.image} onChange={(v) => patch((d) => { d.og.image = v; })} eventId={eventId} kind="og" hint={t('og.imageHint')} />
       </SectionCard>
 
-      <SectionCard id="saveTheDate" title={t('saveTheDate.title')} enabled labels={labels} error={errorFor('saveTheDate')}>
+      <SectionCard id="saveTheDate" title={t('saveTheDate.title')} enabled labels={labels} error={errorFor('saveTheDate')} summary={t('saveTheDate.hint')}>
         <p className="text-xs text-stone-400">{t('saveTheDate.hint')}</p>
         {lt(t('fields.note'), draft.saveTheDate.note, (d, v) => { d.saveTheDate.note = v; }, { multiline: true })}
       </SectionCard>
 
-      <SectionCard id="album" title={t('album.title')} enabled labels={labels} error={errorFor('album')}>
+      <SectionCard id="album" title={t('album.title')} enabled labels={labels} error={errorFor('album')} summary={draft.album.enabled ? t('album.enabled') : t('album.hint')}>
         <p className="text-xs text-stone-400">{t('album.hint')}</p>
         <Check label={t('album.enabled')} checked={draft.album.enabled} onChange={(v) => patch((d) => { d.album.enabled = v; })} />
         {lt(t('fields.sectionTitle'), draft.album.title, (d, v) => { d.album.title = v; })}
         {lt(t('fields.note'), draft.album.note, (d, v) => { d.album.note = v; })}
       </SectionCard>
 
-      <SectionCard id="thankYou" title={t('thankYou.title')} enabled labels={labels} error={errorFor('thankYou')}>
+      <SectionCard id="thankYou" title={t('thankYou.title')} enabled labels={labels} error={errorFor('thankYou')} summary={draft.thankYou.body[main]?.slice(0, 80) || t('thankYou.hint')}>
         <p className="text-xs text-stone-400">{t('thankYou.hint')}</p>
         {lt(t('fields.sectionTitle'), draft.thankYou.title, (d, v) => { d.thankYou.title = v; })}
         {lt(t('fields.body'), draft.thankYou.body, (d, v) => { d.thankYou.body = v; }, { multiline: true })}

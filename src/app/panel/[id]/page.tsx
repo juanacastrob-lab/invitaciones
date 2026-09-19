@@ -72,6 +72,13 @@ export default async function PanelEventPage({ params, searchParams }: { params:
           </div>
         ) : null}
 
+        {event.status !== 'en_revision' ? (
+          <div className="mt-6 rounded-sm border border-stone-200 bg-white p-4">
+            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-stone-500">{t('next.title')}</p>
+            <p className="mt-1 text-sm leading-relaxed text-stone-700">{t(`next.${event.status}`)}</p>
+          </div>
+        ) : null}
+
         <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {kpis.map(([label, value]) => (
             <div key={label} className="rounded-sm border border-stone-200 bg-white p-4">
