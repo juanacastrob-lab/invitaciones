@@ -1,7 +1,722 @@
 {
   "landing": {
-    "tagline": "Invitaciones digitales para bodas",
-    "description": "Invitaciones web con pases personalizados por invitado y confirmación de asistencia desde el celular.",
-    "soon": "Muy pronto"
+    "nav": {
+      "packages": "Paquetes",
+      "demo": "Ver demo",
+      "login": "Entrar",
+      "cta": "Quiero mi invitación"
+    },
+    "hero": {
+      "title": "Invitaciones que cuentan tu historia",
+      "body": "Invitaciones digitales para bodas, XV años, bautizos y más, en español e inglés, con un link personal para cada invitado y confirmación de asistencia desde el celular. Nosotros la armamos; tú solo apruebas.",
+      "cta": "Quiero mi invitación",
+      "demo": "Ver la invitación demo"
+    },
+    "how": {
+      "title": "Cómo funciona",
+      "steps": [
+        {
+          "t": "Nos cuentas de su boda",
+          "d": "Llenas el formulario de abajo con nombres, fecha, lugar y lo que quieran incluir."
+        },
+        {
+          "t": "Nosotros la diseñamos",
+          "d": "Te contactamos por WhatsApp, armamos la invitación y te mandamos el link para que la revisen."
+        },
+        {
+          "t": "La mandan y confirman",
+          "d": "Cada invitado recibe su link con sus pases y confirma desde el celular. Ustedes ven todo en su panel."
+        }
+      ]
+    },
+    "packages": {
+      "title": "Paquetes",
+      "subtitle": "Precios en {currency}. Sin mensualidades: se paga una vez.",
+      "choose": "Elegir",
+      "chosen": "Elegido",
+      "features": {
+        "invitacion_pdf": "Invitación en PDF lista para WhatsApp",
+        "diseno_desde_plantilla": "Diseño desde plantilla",
+        "entrega_whatsapp": "Entrega por WhatsApp",
+        "invitacion_web": "Invitación web con link propio",
+        "rsvp": "Confirmación de asistencia",
+        "panel_novios": "Panel para los novios",
+        "idiomas_es_en": "Español e inglés",
+        "itinerario_mapas": "Itinerario con mapas (Google, Waze, Apple)",
+        "calendario": "Agregar al calendario",
+        "mesa_regalos": "Mesa de regalos y datos bancarios",
+        "hospedaje": "Hospedaje sugerido",
+        "faq": "Preguntas frecuentes",
+        "pases_personalizados": "Link personal por invitado con sus pases",
+        "cola_whatsapp": "Lista de envío por WhatsApp",
+        "galeria": "Galería de fotos",
+        "musica": "Música de fondo",
+        "menu_rsvp": "Elección de menú al confirmar",
+        "export_excel": "Exportar invitados a Excel",
+        "envio_por_nosotros": "Nosotros hacemos el envío",
+        "recordatorios": "Rondas de recordatorio",
+        "qr_checkin": "Pase con QR y check-in el día del evento",
+        "save_the_date": "Save the date"
+      }
+    },
+    "preview": {
+      "title": "Así se ve",
+      "body": "Portada, cuenta regresiva, itinerario con mapas, mesa de regalos, galería y confirmación. Todo en un link que abre en cualquier celular.",
+      "open": "Abrir la demo",
+      "coverAlt": "Portada de la invitación demo",
+      "rsvpAlt": "Confirmación de asistencia con nombre y pases"
+    },
+    "footer": {
+      "privacy": "Aviso de privacidad",
+      "whatsapp": "Escríbenos por WhatsApp"
+    },
+    "types": {
+      "title": "No solo bodas",
+      "body": "La misma invitación, con textos y diseño para cada celebración. Elige la tuya:"
+    },
+    "templates": {
+      "title": "Cinco diseños",
+      "body": "Mismo contenido, otro look. Se cambia cuando quieras, incluso después de mandarla.",
+      "open": "Toca uno para verlo con la invitación demo."
+    }
+  },
+  "invitation": {
+    "guestBanner": {
+      "reserved": "Lugares apartados a tu nombre",
+      "passes": "{count, plural, one {# pase} other {# pases}}"
+    },
+    "generalNotice": {
+      "title": "Esta es la invitación general",
+      "body": "Si recibiste tu link personal por WhatsApp, ábrelo desde ahí para confirmar tu asistencia y ver cuántos pases tienes."
+    },
+    "countdown": {
+      "days": "días",
+      "hours": "horas",
+      "minutes": "min",
+      "seconds": "seg",
+      "today": "¡Hoy es el día!",
+      "past": "Gracias por acompañarnos"
+    },
+    "calendar": {
+      "add": "Agregar al calendario",
+      "google": "Google Calendar",
+      "ics": "Apple / Outlook"
+    },
+    "maps": {
+      "how": "Cómo llegar",
+      "google": "Google Maps",
+      "waze": "Waze",
+      "apple": "Apple Maps"
+    },
+    "acts": {
+      "civil": "Ceremonia civil",
+      "religiosa": "Ceremonia religiosa",
+      "recepcion": "Recepción",
+      "otro": "Evento"
+    },
+    "noKids": {
+      "title": "Solo adultos"
+    },
+    "gifts": {
+      "open": "Abrir",
+      "bank": "Banco",
+      "holder": "A nombre de",
+      "clabe": "CLABE",
+      "account": "Cuenta",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "envelopes": "También habrá sobres el día del evento",
+      "cash": {
+        "title": "Lluvia de sobres",
+        "copyAll": "Copiar datos",
+        "pay": "Regalar en línea"
+      }
+    },
+    "lodging": {
+      "site": "Ver hotel",
+      "call": "Llamar"
+    },
+    "music": {
+      "play": "Poner música",
+      "pause": "Pausar"
+    },
+    "rsvp": {
+      "deadline": "Confirma antes del {date}",
+      "closed": "El plazo para confirmar ya cerró. Si necesitas cambiar algo, escríbenos.",
+      "needsToken": "Para confirmar, abre el link personal que te enviamos por WhatsApp.",
+      "yourAnswer": "Tu respuesta",
+      "attending": "Ahí estaremos",
+      "notAttending": "No podremos ir",
+      "change": "Cambiar mi respuesta",
+      "peopleConfirmed": "{count, plural, one {# persona confirmada} other {# personas confirmadas}}",
+      "question": "¿Nos acompañas?",
+      "yes": "Sí, ahí estaremos",
+      "no": "No podremos ir",
+      "howMany": "¿Cuántos van a venir?",
+      "ofPasses": "de {passes}",
+      "names": "¿Quiénes vienen?",
+      "namePlaceholder": "Nombre",
+      "menu": "Platillo",
+      "menuFor": "Platillo para {name}",
+      "choose": "Elige",
+      "dietary": "Alergias o restricciones alimentarias",
+      "dietaryPlaceholder": "Ej. sin gluten, vegetariano, alergia a nueces",
+      "song": "Una canción que no puede faltar",
+      "songPlaceholder": "Ej. Como la flor · Selena",
+      "message": "Un mensaje para los novios",
+      "messagePlaceholder": "Opcional",
+      "consent": "Acepto que mis datos se usen solo para organizar este evento, según el <link>aviso de privacidad</link>.",
+      "submit": "Confirmar",
+      "sending": "Guardando…",
+      "thanksYes": "¡Gracias! Te esperamos.",
+      "thanksNo": "Gracias por avisarnos. Te vamos a extrañar.",
+      "saved": "Respuesta guardada",
+      "errors": {
+        "too_many_attempts": "Demasiados intentos. Espera un rato y vuelve a intentar.",
+        "not_found": "Esta invitación ya no está disponible.",
+        "invalid_token": "Este link no es válido. Pide a quien te invitó que te lo reenvíe.",
+        "closed": "El plazo para confirmar ya cerró. Si necesitas cambiar algo, escríbenos.",
+        "invalid_payload": "Faltó algo en el formulario. Revísalo e intenta de nuevo.",
+        "invalid_count": "Dinos cuántas personas vienen.",
+        "too_many_passes": "Tu invitación es para {passes} personas como máximo.",
+        "too_many_names": "Hay más nombres que personas confirmadas.",
+        "menu_invalid": "Elige un platillo de la lista.",
+        "consent_required": "Necesitamos tu consentimiento para guardar la respuesta.",
+        "unknown": "Algo falló de nuestro lado. Intenta de nuevo en un momento."
+      },
+      "children": "¿Cuántos niños?"
+    },
+    "language": {
+      "switch": "English",
+      "current": "Español"
+    },
+    "legal": {
+      "privacy": "Aviso de privacidad"
+    },
+    "pass": {
+      "title": "Tu pase",
+      "body": "Muéstralo en la entrada el día del evento. También puedes tomarle captura de pantalla.",
+      "people": "{count, plural, one {# persona} other {# personas}}"
+    },
+    "saveTheDate": {
+      "title": "Save the date",
+      "soon": "La invitación completa llega pronto.",
+      "calendar": "Aparta la fecha"
+    },
+    "thankYou": {
+      "default": "Gracias por acompañarnos",
+      "hello": "{name}, gracias por estar con nosotros.",
+      "back": "Ver la invitación"
+    },
+    "parents": {
+      "title": "Padres y padrinos"
+    },
+    "envelope": {
+      "open": "Toca para abrir"
+    },
+    "transport": {
+      "title": "Transporte"
+    },
+    "album": {
+      "title": "Fotos del evento",
+      "open": "Ver y subir fotos"
+    }
+  },
+  "auth": {
+    "title": "Entrar",
+    "subtitle": "Para el equipo y para los novios",
+    "google": "Continuar con Google",
+    "apple": "Continuar con Apple",
+    "or": "o con tu correo",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tu@correo.com",
+    "sendLink": "Enviarme un link de acceso",
+    "sending": "Enviando…",
+    "sent": "Listo. Revisa tu correo y toca el link para entrar.",
+    "error": "No se pudo iniciar sesión. Intenta de nuevo.",
+    "signOut": "Cerrar sesión",
+    "hello": "Hola, {name}",
+    "roles": {
+      "admin": "Administrador",
+      "staff": "Equipo",
+      "client": "Novios"
+    },
+    "adminSoon": "Aquí van a vivir los eventos, los invitados y la cola de envío por WhatsApp.",
+    "panelSoon": "Aquí vas a ver quién confirmó, cuántos pases van y los mensajes de tus invitados."
+  },
+  "lead": {
+    "title": "Cuéntanos de su boda",
+    "subtitle": "Con esto empezamos. Te contactamos por WhatsApp para afinar detalles.",
+    "partnerA": "Nombre de uno",
+    "partnerB": "Nombre del otro",
+    "email": "Correo electrónico",
+    "emailHelp": "Te mandamos ahí tu acceso para ver la invitación y a tus invitados.",
+    "phone": "WhatsApp",
+    "country": "País",
+    "countries": {
+      "MX": "México",
+      "US": "Estados Unidos",
+      "CA": "Canadá"
+    },
+    "language": "Idioma de la invitación",
+    "languages": {
+      "es": "Español",
+      "en": "Inglés",
+      "both": "Los dos"
+    },
+    "eventDate": "Fecha de la boda",
+    "eventDateHelp": "Si aún no la tienen, déjala vacía.",
+    "city": "Ciudad o lugar",
+    "guests": "Invitados aproximados",
+    "package": "Paquete que les interesa",
+    "packageNone": "Todavía no sé",
+    "message": "Algo más que debamos saber",
+    "messagePlaceholder": "Colores, estilo, si quieren fotos, música, lo que se les ocurra.",
+    "consent": "Acepto el <link>aviso de privacidad</link> y que me contacten por WhatsApp y correo.",
+    "submit": "Enviar",
+    "sending": "Enviando…",
+    "done": {
+      "title": "¡Listo, {name}!",
+      "body": "Ya tenemos sus datos. En las próximas horas te escribimos por WhatsApp para empezar con el diseño de su invitación.",
+      "email": "También te mandamos un correo con tu acceso: ahí van a poder ver la invitación y a sus invitados.",
+      "whatsapp": "Escribirnos ahora por WhatsApp"
+    },
+    "errors": {
+      "invalid": "Revisa los campos marcados.",
+      "phone_invalid": "Ese número no parece válido para el país elegido.",
+      "consent_required": "Necesitamos tu consentimiento para continuar.",
+      "too_many_attempts": "Demasiados envíos. Espera un rato y vuelve a intentar.",
+      "unknown": "Algo falló de nuestro lado. Intenta de nuevo o escríbenos por WhatsApp."
+    }
+  },
+  "panel": {
+    "title": "Tu boda",
+    "noEvents": "Todavía no hay un evento ligado a tu cuenta. En cuanto tu invitación esté lista, aparece aquí.",
+    "openInvitation": "Ver invitación",
+    "kpi": {
+      "guests": "Invitados",
+      "passes": "Pases",
+      "confirmed": "Personas confirmadas",
+      "declined": "No asisten",
+      "pending": "Pendientes",
+      "opened": "Abrieron sin confirmar"
+    },
+    "guests": "Invitados",
+    "search": "Buscar",
+    "filters": {
+      "all": "Todos",
+      "confirmed": "Confirmaron",
+      "declined": "No asisten",
+      "pending": "Pendientes",
+      "opened": "Abrieron sin confirmar"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmó",
+      "declined": "No asiste"
+    },
+    "passes": "pases",
+    "export": "Exportar a Excel",
+    "messages": "Mensajes de tus invitados",
+    "noMessages": "Todavía no hay mensajes.",
+    "editList": "Tu lista de invitados",
+    "editListHint": "Puedes agregar y corregir invitados hasta que la invitación se publique. Después, pídenos los cambios.",
+    "readOnly": "La invitación ya está publicada: los cambios a la lista los hace el equipo. Escríbenos por WhatsApp.",
+    "status_": "Estado de la invitación",
+    "song": "Canción",
+    "dietary": "Alergias",
+    "editContent": "Editar invitación",
+    "editContentHint": "Textos, fotos, itinerario y regalos. Puedes editar hasta que se publique.",
+    "downloadPdf": "Descargar PDF",
+    "approve": {
+      "title": "Tu invitación está lista para revisar",
+      "body": "Ábrela, revisa textos, fechas y lugares. Si algo no cuadra, edítala o escríbenos. Cuando esté perfecta, apruébala y queda publicada: desde ese momento tus invitados ya pueden abrirla.",
+      "button": "Aprobar y publicar",
+      "confirm": "¿Aprobar y publicar la invitación? Después los cambios los hace el equipo."
+    },
+    "checkin": "Check-in del día",
+    "commissions": {
+      "title": "Comisiones",
+      "intro": "Ganas {pct}% de cada pedido que entre con tu link. Se paga cuando el cliente ya pagó.",
+      "link": "Tu link",
+      "share": "Hola, te comparto mi link para tu invitación digital: {link}",
+      "shareButton": "Compartir por WhatsApp",
+      "pending": "Por pagar",
+      "paid": "Pagado",
+      "paidBadge": "pagada",
+      "pendingBadge": "por pagar",
+      "none": "Todavía no hay pedidos con tu link.",
+      "payout": "Las comisiones se pagan por transferencia. Cualquier duda:"
+    },
+    "eventStatus": {
+      "borrador": "Borrador",
+      "en_revision": "En revisión",
+      "publicado": "Publicada",
+      "finalizado": "Finalizada",
+      "archivado": "Archivada"
+    },
+    "openedMark": "abrió",
+    "nudge": "Hola {name}, somos {couple}. Vimos que abriste la invitación pero no has confirmado. ¿Nos ayudas? {link}",
+    "nudgeButton": "Recordar",
+    "album": "Fotos"
+  },
+  "store": {
+    "title": "Arma tu invitación",
+    "steps": {
+      "package": "Paquete",
+      "extras": "Extras",
+      "mode": "Quién la arma",
+      "contact": "Tus datos",
+      "payment": "Pago"
+    },
+    "next": "Continuar",
+    "back": "Atrás",
+    "package": {
+      "title": "Elige tu paquete",
+      "includes": "Incluye",
+      "chosen": "Elegido",
+      "choose": "Elegir",
+      "popular": "El más pedido"
+    },
+    "extras": {
+      "title": "¿Quieres agregar algo?",
+      "subtitle": "Todo es opcional. Lo que tu paquete ya incluye no aparece aquí.",
+      "included": "Incluido en tu paquete",
+      "none": "Tu paquete ya lo incluye todo."
+    },
+    "mode": {
+      "title": "¿Quién arma la invitación?",
+      "team": {
+        "t": "Ustedes nos cuentan, nosotros la hacemos",
+        "d": "Nos mandan textos y fotos por WhatsApp; nosotros la armamos y ustedes solo aprueban. Es lo más común."
+      },
+      "self": {
+        "t": "Nosotros mismos",
+        "d": "Les damos acceso al editor: llenan los espacios, suben fotos y publican cuando quieran. Siempre pueden pedirnos ayuda."
+      },
+      "planner": {
+        "t": "Mi wedding planner",
+        "d": "Le damos acceso a su planner para que administre la invitación y la lista de invitados."
+      },
+      "plannerEmail": "Correo de tu wedding planner"
+    },
+    "contact": {
+      "title": "Tus datos",
+      "partnerA": "Nombre de uno",
+      "partnerB": "Nombre del otro (opcional)",
+      "email": "Correo",
+      "emailHelp": "Ahí te mandamos tu acceso y el recibo.",
+      "phone": "WhatsApp",
+      "country": "País",
+      "eventDate": "Fecha del evento (opcional)",
+      "name": "Nombre de quien celebra",
+      "secondName": "Segundo nombre (opcional)"
+    },
+    "payment": {
+      "title": "Pago",
+      "summary": "Resumen",
+      "package": "Paquete",
+      "total": "Total",
+      "card": "Tarjeta",
+      "cardHelp": "Pasarela de prueba: no se hace ningún cargo real. Usa cualquier número de 16 dígitos.",
+      "cardNumber": "Número de tarjeta",
+      "cardName": "Nombre en la tarjeta",
+      "cardExp": "Vence (MM/AA)",
+      "cardCvc": "CVC",
+      "transfer": "Transferencia o depósito",
+      "transferHelp": "Te mostramos los datos bancarios al confirmar. Tu pedido queda apartado y lo activamos en cuanto veamos el pago.",
+      "consent": "Acepto el <link>aviso de privacidad</link> y que me contacten por WhatsApp y correo.",
+      "pay": "Pagar {total}",
+      "reserve": "Apartar mi pedido",
+      "sending": "Procesando…"
+    },
+    "done": {
+      "paid": "¡Listo! Pedido #{number} pagado.",
+      "pending": "Pedido #{number} apartado.",
+      "paidBody": "Ya tienes tu invitación apartada. En las próximas horas te escribimos por WhatsApp para empezar.",
+      "pendingBody": "Haz la transferencia con estos datos y mándanos el comprobante por WhatsApp. En cuanto lo veamos, activamos tu pedido.",
+      "bank": "Banco",
+      "holder": "A nombre de",
+      "clabe": "CLABE",
+      "concept": "Concepto",
+      "email": "Te mandamos un correo con tu acceso: desde ahí vas a poder ver tu invitación y tus invitados.",
+      "whatsapp": "Escribirnos por WhatsApp"
+    },
+    "errors": {
+      "invalid": "Revisa los campos marcados.",
+      "phone_invalid": "Ese número no parece válido para el país elegido.",
+      "consent_required": "Necesitamos tu consentimiento para continuar.",
+      "package_unavailable": "Ese paquete ya no está disponible.",
+      "card_declined": "La tarjeta fue rechazada (simulado: prueba con otro número).",
+      "planner_email_required": "Escribe el correo de tu wedding planner.",
+      "too_many_attempts": "Demasiados intentos. Espera un momento.",
+      "unknown": "Algo falló de nuestro lado. Intenta de nuevo o escríbenos por WhatsApp."
+    },
+    "eventType": {
+      "title": "¿Qué celebran?"
+    },
+    "plannerBanner": "Te atiende {name}. Este pedido queda ligado a tu wedding planner."
+  },
+  "tables": {
+    "title": "Mesas",
+    "add": "Agregar mesa",
+    "name": "Nombre",
+    "capacity": "Lugares",
+    "namePlaceholder": "Mesa 1",
+    "bulk": "Crear varias",
+    "bulkHelp": "Crea Mesa 1 a Mesa N de un jalón.",
+    "bulkCount": "¿Cuántas?",
+    "bulkCapacity": "Lugares por mesa",
+    "create": "Crear",
+    "save": "Guardar",
+    "delete": "Borrar",
+    "deleteConfirm": "¿Borrar la mesa? Sus invitados quedan sin mesa.",
+    "seats": "{passes} pases · {confirmed} confirmados",
+    "of": "de {capacity}",
+    "over": "¡Se pasa!",
+    "noTables": "Todavía no hay mesas. Crea la primera o varias de un jalón.",
+    "assign": "Acomodar invitados",
+    "unassigned": "Sin mesa",
+    "search": "Buscar invitado",
+    "noTable": "— sin mesa —",
+    "export": "Exportar por mesa",
+    "print": "Imprimir",
+    "summary": "{tables} mesas · {assigned} de {total} invitados acomodados",
+    "edit": "Editar"
+  },
+  "editor": {
+    "title": "Contenido de la invitación",
+    "intro": "Cada bloque es una sección de la invitación. Apaga las que no quieras, cambia el orden con las flechas y llena los textos en los idiomas del evento.",
+    "save": "Guardar cambios",
+    "saving": "Guardando…",
+    "saved": "Guardado. Abre la vista previa para verlo.",
+    "preview": "Vista previa",
+    "unsaved": "Tienes cambios sin guardar.",
+    "errorAt": "Revisa {section}: {message}",
+    "show": "Mostrar",
+    "up": "Subir",
+    "down": "Bajar",
+    "add": "Agregar",
+    "remove": "Quitar",
+    "photoHint": "Se reduce sola antes de subir. Si la tienes en internet, pega el link.",
+    "photoAlt": "Descripción de la foto",
+    "basics": {
+      "title": "Lo principal",
+      "partnerA": "Nombre 1",
+      "partnerB": "Nombre 2 (opcional si no es boda)",
+      "startsAt": "Fecha y hora principal",
+      "startsAtHint": "Manda en la cuenta regresiva y en el calendario."
+    },
+    "og": {
+      "title": "Tarjeta de WhatsApp",
+      "hint": "Lo que se ve cuando comparten el link: título, frase y foto.",
+      "ogTitle": "Título",
+      "description": "Frase",
+      "image": "Foto",
+      "imageHint": "Se sube en JPG; es la que sale en el preview del link."
+    },
+    "sections": {
+      "cover": "Portada",
+      "countdown": "Cuenta regresiva",
+      "story": "Nuestra historia",
+      "itinerary": "Itinerario",
+      "dressCode": "Código de vestimenta",
+      "noKids": "Sin niños",
+      "gifts": "Mesa de regalos",
+      "lodging": "Hospedaje",
+      "gallery": "Galería",
+      "music": "Música",
+      "faq": "Preguntas frecuentes",
+      "rsvp": "Confirmación",
+      "quote": "Frase o versículo",
+      "parents": "Padres y padrinos"
+    },
+    "fields": {
+      "sectionTitle": "Título de la sección",
+      "headline": "Frase principal",
+      "tagline": "Frase secundaria",
+      "label": "Texto",
+      "body": "Texto",
+      "note": "Nota",
+      "notes": "Detalles",
+      "code": "Código",
+      "codeHint": "Ej. Formal, Cocktail, Jardín.",
+      "palette": "Colores sugeridos (hex)",
+      "act": "Acto",
+      "kind": "Tipo",
+      "kinds": {
+        "civil": "Civil",
+        "religiosa": "Religiosa",
+        "recepcion": "Recepción",
+        "otro": "Otro"
+      },
+      "startsAt": "Fecha y hora",
+      "venueName": "Lugar",
+      "address": "Dirección",
+      "lat": "Latitud",
+      "lng": "Longitud",
+      "coordsHint": "Opcional. Con coordenadas los botones de mapas llegan exacto.",
+      "link": "Link",
+      "linkLabel": "Nombre",
+      "url": "URL",
+      "bank": "Datos bancarios",
+      "bankHint": "Solo se muestran en el link personal de cada invitado, nunca en el general.",
+      "bankName": "Banco",
+      "holder": "Titular",
+      "clabe": "CLABE",
+      "account": "Cuenta / tarjeta",
+      "envelopes": "Aceptamos sobres el día del evento",
+      "option": "Opción",
+      "name": "Nombre",
+      "phone": "Teléfono",
+      "photo": "Foto",
+      "musicUrl": "Archivo de audio (URL)",
+      "musicHint": "Se descarga solo cuando el invitado toca play.",
+      "songTitle": "Canción",
+      "artist": "Artista",
+      "question": "Pregunta",
+      "answer": "Respuesta",
+      "askMenu": "Preguntar platillo",
+      "menuOption": "Platillo",
+      "askDietary": "Preguntar alergias o restricciones",
+      "askSong": "Pedir una canción",
+      "askMessage": "Permitir un mensaje para nosotros",
+      "color": "Color",
+      "quoteText": "Frase",
+      "quoteHint": "Un versículo, un poema, una dedicatoria.",
+      "author": "Autor o cita",
+      "group": "Grupo",
+      "groupTitle": "Título del grupo (ej. Padres de la novia)",
+      "names": "Nombres",
+      "namesPlaceholder": "Un nombre por línea",
+      "video": "Video de fondo (URL .mp4)",
+      "videoHint": "Corto (10–20 s), sin audio, máximo 5 MB. La foto se usa mientras carga. Súbelo a Storage o pega un link directo.",
+      "envelope": "Sobre que se abre al tocar (arranca la música si hay)",
+      "monogram": "Monograma con las iniciales",
+      "cash": "Lluvia de sobres",
+      "cashHint": "Para quien prefiere regalar en efectivo: se muestra con los datos bancarios de arriba y un botón que los copia. Opcional: un link de pago (Mercado Pago, PayPal, Stripe).",
+      "paymentUrl": "Link de pago (opcional)",
+      "transportPlaceholder": "Camión desde el hotel",
+      "time": "Hora",
+      "askChildren": "Preguntar cuántos niños vienen",
+      "questions": "Preguntas propias",
+      "questionsHint": "Hasta 6. Ej: ¿Usas el transporte?, ¿Alguna canción que no falte?",
+      "qText": "Texto libre",
+      "qYesNo": "Sí / No",
+      "qChoice": "Elegir una opción",
+      "qOptions": "Opciones",
+      "qOptionsPlaceholder": "Una por línea. Español|English, ej: Camión|Bus"
+    },
+    "upload": "Subir foto",
+    "uploading": "Subiendo…",
+    "replace": "Cambiar foto",
+    "pasteLink": "Pegar link",
+    "removePhoto": "Quitar",
+    "noPhoto": "Sin foto",
+    "uploadError": "No se pudo subir la foto. Intenta con otra o pega un link.",
+    "saveTheDate": {
+      "title": "Save the date",
+      "hint": "Una página ligera con la fecha, para mandar meses antes. El equipo la activa en Datos del evento; el link es /i/tu-slug/save-the-date."
+    },
+    "thankYou": {
+      "title": "Agradecimiento",
+      "hint": "Después del evento. Cada invitado lo ve en su link personal, con su nombre. Sin texto, no existe."
+    },
+    "album": {
+      "title": "Álbum de invitados",
+      "hint": "Los invitados suben fotos desde su celular el día del evento (link general o QR en las mesas). Los novios pueden borrar. Solo funciona con el evento publicado.",
+      "enabled": "Álbum encendido"
+    }
+  },
+  "guests": {
+    "addTitle": "Agregar invitado",
+    "importTitle": "Importar desde Excel o CSV",
+    "importHelp": "Columnas: Nombre, Pases, Teléfono, Correo, Idioma, Grupo, Mesa — en cualquier orden, en español o inglés. Solo Nombre es obligatorio.",
+    "importTemplate": "Descargar plantilla",
+    "import": "Importar",
+    "importing": "Importando…",
+    "imported": "{count, plural, one {# invitado cargado} other {# invitados cargados}}.",
+    "importErrors": "{count, plural, one {# fila con error:} other {# filas con error:}}",
+    "search": "Buscar por nombre, grupo o teléfono",
+    "count": "{visible} de {total}",
+    "cancel": "Cancelar",
+    "passes": "{count, plural, one {# pase} other {# pases}}",
+    "status": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmó",
+      "declined": "No asiste"
+    },
+    "tableNo": "mesa {table}",
+    "sent": "enviado",
+    "notSent": "sin enviar",
+    "opened": "abrió",
+    "reminders": "{count, plural, one {# recordatorio} other {# recordatorios}}",
+    "copyLink": "Copiar link",
+    "edit": "Editar",
+    "newLink": "Nuevo link",
+    "newLinkConfirm": "¿Generar link nuevo? El anterior deja de funcionar.",
+    "delete": "Borrar",
+    "deleteConfirm": "¿Borrar a {name}?",
+    "empty": "Sin invitados todavía.",
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "Familia López",
+      "passes": "Pases",
+      "phone": "WhatsApp",
+      "email": "Correo",
+      "language": "Idioma",
+      "group": "Grupo",
+      "groupPlaceholder": "Familia",
+      "table": "Mesa",
+      "save": "Guardar",
+      "add": "Agregar"
+    }
+  },
+  "checkin": {
+    "title": "Check-in",
+    "arrivedLabel": "Llegaron",
+    "expected": "Esperados",
+    "groups": "Grupos",
+    "pointCamera": "Apunta la cámara al QR del pase del invitado.",
+    "openCamera": "Abrir cámara",
+    "close": "Cerrar",
+    "camError": "No se pudo abrir la cámara ({message}). Busca al invitado por nombre.",
+    "arrived": "{name}: llegaron {count}",
+    "undone": "{name}: llegada deshecha",
+    "already": "{name} ya había llegado. Ahora: {count}.",
+    "errNotFound": "Ese QR no es de este evento.",
+    "errDenied": "Sin acceso a este evento.",
+    "errUnknown": "No se pudo marcar.",
+    "errOtherQr": "Ese QR no es de esta invitación.",
+    "confirmed": "Confirmó {count}",
+    "declined": "No viene",
+    "pending": "Sin confirmar",
+    "passes": "{count, plural, one {# pase} other {# pases}}",
+    "table": "Mesa {table}",
+    "arrivedShort": "llegaron {count}",
+    "search": "Buscar por nombre, mesa o grupo",
+    "undo": "Deshacer",
+    "markArrived": "Llegó",
+    "noMatch": "Nadie con ese nombre.",
+    "autoRefresh": "Se actualiza solo cada 15 segundos. Funciona con varios celulares a la vez."
+  },
+  "album": {
+    "title": "Fotos del evento",
+    "note": "Sube las fotos que tomes y mira las de los demás.",
+    "open": "Ver y subir fotos",
+    "yourName": "Tu nombre (opcional)",
+    "upload": "Subir fotos",
+    "uploading": "Subiendo {done} de {total}…",
+    "hint": "Se reducen solas. Hasta 10 a la vez.",
+    "empty": "Todavía no hay fotos. ¡Sé el primero!",
+    "error": "No se pudo subir esa foto.",
+    "tooMany": "Muchas fotos seguidas. Espera un momento.",
+    "back": "Volver a la invitación",
+    "panelHint": "Comparte el link o imprime el QR para las mesas. La presentación es para la pantalla del salón.",
+    "panelOff": "El álbum está apagado: enciéndelo en Contenido → Álbum de invitados.",
+    "qr": "QR para imprimir",
+    "slideshow": "Presentación",
+    "delete": "Borrar",
+    "deleteConfirm": "¿Borrar esta foto?"
   }
 }

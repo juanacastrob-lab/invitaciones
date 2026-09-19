@@ -4,3 +4,7 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# Funciones programadas (recordatorios). Conviven con el runtime de Next.
+[functions]
+  directory = "netlify/functions"

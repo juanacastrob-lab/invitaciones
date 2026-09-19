@@ -1,7 +1,722 @@
 {
   "landing": {
-    "tagline": "Digital wedding invitations",
-    "description": "Web invitations with personalized guest passes and RSVP from any phone.",
-    "soon": "Coming soon"
+    "nav": {
+      "packages": "Packages",
+      "demo": "See demo",
+      "login": "Sign in",
+      "cta": "I want my invitation"
+    },
+    "hero": {
+      "title": "Invitations that tell your story",
+      "body": "Digital invitations for weddings, quinceañeras, baptisms and more, in Spanish and English, with a personal link for every guest and RSVP from their phone. We build it; you just approve.",
+      "cta": "I want my invitation",
+      "demo": "See the demo invitation"
+    },
+    "how": {
+      "title": "How it works",
+      "steps": [
+        {
+          "t": "Tell us about your wedding",
+          "d": "Fill out the form below with names, date, venue and what you'd like to include."
+        },
+        {
+          "t": "We design it",
+          "d": "We reach out on WhatsApp, build the invitation and send you the link to review."
+        },
+        {
+          "t": "Send it and get RSVPs",
+          "d": "Each guest gets their link with their passes and RSVPs from their phone. You see everything in your dashboard."
+        }
+      ]
+    },
+    "packages": {
+      "title": "Packages",
+      "subtitle": "Prices in {currency}. No subscriptions: one-time payment.",
+      "choose": "Choose",
+      "chosen": "Chosen",
+      "features": {
+        "invitacion_pdf": "PDF invitation ready for WhatsApp",
+        "diseno_desde_plantilla": "Template-based design",
+        "entrega_whatsapp": "Delivered on WhatsApp",
+        "invitacion_web": "Web invitation with its own link",
+        "rsvp": "RSVP",
+        "panel_novios": "Couple's dashboard",
+        "idiomas_es_en": "Spanish and English",
+        "itinerario_mapas": "Schedule with maps (Google, Waze, Apple)",
+        "calendario": "Add to calendar",
+        "mesa_regalos": "Gift registry and bank details",
+        "hospedaje": "Suggested lodging",
+        "faq": "FAQ",
+        "pases_personalizados": "Personal link per guest with their passes",
+        "cola_whatsapp": "WhatsApp send list",
+        "galeria": "Photo gallery",
+        "musica": "Background music",
+        "menu_rsvp": "Meal choice on RSVP",
+        "export_excel": "Export guests to Excel",
+        "envio_por_nosotros": "We send the invitations for you",
+        "recordatorios": "Reminder rounds",
+        "qr_checkin": "QR pass and check-in on the day",
+        "save_the_date": "Save the date"
+      }
+    },
+    "preview": {
+      "title": "What it looks like",
+      "body": "Cover, countdown, schedule with maps, registry, gallery and RSVP. All in one link that opens on any phone.",
+      "open": "Open the demo",
+      "coverAlt": "Demo invitation cover",
+      "rsvpAlt": "RSVP with name and passes"
+    },
+    "footer": {
+      "privacy": "Privacy notice",
+      "whatsapp": "Message us on WhatsApp"
+    },
+    "types": {
+      "title": "Not just weddings",
+      "body": "The same invitation, with texts and a design for every celebration. Pick yours:"
+    },
+    "templates": {
+      "title": "Five designs",
+      "body": "Same content, different look. Change it whenever you want, even after sending.",
+      "open": "Tap one to see it on the demo invitation."
+    }
+  },
+  "invitation": {
+    "guestBanner": {
+      "reserved": "Reserved in your name",
+      "passes": "{count, plural, one {# pass} other {# passes}}"
+    },
+    "generalNotice": {
+      "title": "This is the general invitation",
+      "body": "If you received your personal link on WhatsApp, open it from there to RSVP and see how many passes you have."
+    },
+    "countdown": {
+      "days": "days",
+      "hours": "hours",
+      "minutes": "min",
+      "seconds": "sec",
+      "today": "Today is the day!",
+      "past": "Thank you for celebrating with us"
+    },
+    "calendar": {
+      "add": "Add to calendar",
+      "google": "Google Calendar",
+      "ics": "Apple / Outlook"
+    },
+    "maps": {
+      "how": "Directions",
+      "google": "Google Maps",
+      "waze": "Waze",
+      "apple": "Apple Maps"
+    },
+    "acts": {
+      "civil": "Civil ceremony",
+      "religiosa": "Religious ceremony",
+      "recepcion": "Reception",
+      "otro": "Event"
+    },
+    "noKids": {
+      "title": "Adults only"
+    },
+    "gifts": {
+      "open": "Open",
+      "bank": "Bank",
+      "holder": "Account holder",
+      "clabe": "CLABE",
+      "account": "Account",
+      "copy": "Copy",
+      "copied": "Copied",
+      "envelopes": "There will also be envelopes on the day",
+      "cash": {
+        "title": "Cash gift",
+        "copyAll": "Copy details",
+        "pay": "Give online"
+      }
+    },
+    "lodging": {
+      "site": "Hotel website",
+      "call": "Call"
+    },
+    "music": {
+      "play": "Play music",
+      "pause": "Pause"
+    },
+    "rsvp": {
+      "deadline": "Please respond before {date}",
+      "closed": "The RSVP deadline has passed. If you need to change something, get in touch.",
+      "needsToken": "To RSVP, open the personal link we sent you on WhatsApp.",
+      "yourAnswer": "Your answer",
+      "attending": "We'll be there",
+      "notAttending": "We can't make it",
+      "change": "Change my answer",
+      "peopleConfirmed": "{count, plural, one {# person confirmed} other {# people confirmed}}",
+      "question": "Will you join us?",
+      "yes": "Yes, we'll be there",
+      "no": "We can't make it",
+      "howMany": "How many are coming?",
+      "ofPasses": "of {passes}",
+      "names": "Who's coming?",
+      "namePlaceholder": "Name",
+      "menu": "Meal",
+      "menuFor": "Meal for {name}",
+      "choose": "Choose",
+      "dietary": "Allergies or dietary restrictions",
+      "dietaryPlaceholder": "E.g. gluten-free, vegetarian, nut allergy",
+      "song": "A song that can't be missing",
+      "songPlaceholder": "E.g. Como la flor · Selena",
+      "message": "A message for the couple",
+      "messagePlaceholder": "Optional",
+      "consent": "I agree that my details are used only to organize this event, as described in the <link>privacy notice</link>.",
+      "submit": "Confirm",
+      "sending": "Saving…",
+      "thanksYes": "Thank you! See you there.",
+      "thanksNo": "Thanks for letting us know. We'll miss you.",
+      "saved": "Answer saved",
+      "errors": {
+        "too_many_attempts": "Too many attempts. Please wait a bit and try again.",
+        "not_found": "This invitation is no longer available.",
+        "invalid_token": "This link isn't valid. Ask whoever invited you to resend it.",
+        "closed": "The RSVP deadline has passed. If you need to change something, get in touch.",
+        "invalid_payload": "Something's missing in the form. Please check and try again.",
+        "invalid_count": "Tell us how many people are coming.",
+        "too_many_passes": "Your invitation is for up to {passes} people.",
+        "too_many_names": "There are more names than confirmed people.",
+        "menu_invalid": "Please choose a meal from the list.",
+        "consent_required": "We need your consent to save your answer.",
+        "unknown": "Something went wrong on our side. Please try again in a moment."
+      },
+      "children": "How many children?"
+    },
+    "language": {
+      "switch": "Español",
+      "current": "English"
+    },
+    "legal": {
+      "privacy": "Privacy notice"
+    },
+    "pass": {
+      "title": "Your pass",
+      "body": "Show it at the entrance on the day. A screenshot works too.",
+      "people": "{count, plural, one {# person} other {# people}}"
+    },
+    "saveTheDate": {
+      "title": "Save the date",
+      "soon": "The full invitation is coming soon.",
+      "calendar": "Save the date"
+    },
+    "thankYou": {
+      "default": "Thank you for being with us",
+      "hello": "{name}, thank you for being with us.",
+      "back": "See the invitation"
+    },
+    "parents": {
+      "title": "Parents and sponsors"
+    },
+    "envelope": {
+      "open": "Tap to open"
+    },
+    "transport": {
+      "title": "Transportation"
+    },
+    "album": {
+      "title": "Event photos",
+      "open": "See and upload photos"
+    }
+  },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "For the team and for the couple",
+    "google": "Continue with Google",
+    "apple": "Continue with Apple",
+    "or": "or with your email",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@email.com",
+    "sendLink": "Send me a sign-in link",
+    "sending": "Sending…",
+    "sent": "Done. Check your email and tap the link to sign in.",
+    "error": "Couldn't sign in. Please try again.",
+    "signOut": "Sign out",
+    "hello": "Hi, {name}",
+    "roles": {
+      "admin": "Administrator",
+      "staff": "Team",
+      "client": "Couple"
+    },
+    "adminSoon": "Events, guests and the WhatsApp send queue will live here.",
+    "panelSoon": "Here you'll see who confirmed, how many passes, and your guests' messages."
+  },
+  "lead": {
+    "title": "Tell us about your wedding",
+    "subtitle": "This is all we need to start. We'll reach out on WhatsApp for the details.",
+    "partnerA": "One partner's name",
+    "partnerB": "The other's name",
+    "email": "Email",
+    "emailHelp": "We'll send your access there to see the invitation and your guests.",
+    "phone": "WhatsApp",
+    "country": "Country",
+    "countries": {
+      "MX": "Mexico",
+      "US": "United States",
+      "CA": "Canada"
+    },
+    "language": "Invitation language",
+    "languages": {
+      "es": "Spanish",
+      "en": "English",
+      "both": "Both"
+    },
+    "eventDate": "Wedding date",
+    "eventDateHelp": "If you don't have it yet, leave it empty.",
+    "city": "City or venue",
+    "guests": "Approximate guests",
+    "package": "Package you're interested in",
+    "packageNone": "Not sure yet",
+    "message": "Anything else we should know",
+    "messagePlaceholder": "Colors, style, whether you want photos, music, anything.",
+    "consent": "I accept the <link>privacy notice</link> and being contacted on WhatsApp and email.",
+    "submit": "Send",
+    "sending": "Sending…",
+    "done": {
+      "title": "All set, {name}!",
+      "body": "We have your details. In the next few hours we'll message you on WhatsApp to start designing your invitation.",
+      "email": "We also sent you an email with your access: there you'll be able to see the invitation and your guests.",
+      "whatsapp": "Message us on WhatsApp now"
+    },
+    "errors": {
+      "invalid": "Please check the highlighted fields.",
+      "phone_invalid": "That number doesn't look valid for the selected country.",
+      "consent_required": "We need your consent to continue.",
+      "too_many_attempts": "Too many submissions. Please wait a bit and try again.",
+      "unknown": "Something went wrong on our side. Try again or message us on WhatsApp."
+    }
+  },
+  "panel": {
+    "title": "Your wedding",
+    "noEvents": "There's no event linked to your account yet. As soon as your invitation is ready, it will show up here.",
+    "openInvitation": "See invitation",
+    "kpi": {
+      "guests": "Guests",
+      "passes": "Passes",
+      "confirmed": "People confirmed",
+      "declined": "Not attending",
+      "pending": "Pending",
+      "opened": "Opened, no RSVP"
+    },
+    "guests": "Guests",
+    "search": "Search",
+    "filters": {
+      "all": "All",
+      "confirmed": "Confirmed",
+      "declined": "Not attending",
+      "pending": "Pending",
+      "opened": "Opened, no reply"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "declined": "Not attending"
+    },
+    "passes": "passes",
+    "export": "Export to Excel",
+    "messages": "Messages from your guests",
+    "noMessages": "No messages yet.",
+    "editList": "Your guest list",
+    "editListHint": "You can add and fix guests until the invitation is published. After that, ask us for changes.",
+    "readOnly": "The invitation is published: list changes are handled by the team. Message us on WhatsApp.",
+    "status_": "Invitation status",
+    "song": "Song",
+    "dietary": "Allergies",
+    "editContent": "Edit invitation",
+    "editContentHint": "Texts, photos, schedule and gifts. You can edit until it is published.",
+    "downloadPdf": "Download PDF",
+    "approve": {
+      "title": "Your invitation is ready for review",
+      "body": "Open it and check texts, dates and venues. If something is off, edit it or message us. When it is perfect, approve it and it goes live: from then on your guests can open it.",
+      "button": "Approve and publish",
+      "confirm": "Approve and publish the invitation? After that, changes are made by the team."
+    },
+    "checkin": "Day-of check-in",
+    "commissions": {
+      "title": "Commissions",
+      "intro": "You earn {pct}% of every order that comes through your link. Paid once the client has paid.",
+      "link": "Your link",
+      "share": "Hi! Here is my link for your digital invitation: {link}",
+      "shareButton": "Share on WhatsApp",
+      "pending": "Owed to you",
+      "paid": "Paid",
+      "paidBadge": "paid",
+      "pendingBadge": "owed",
+      "none": "No orders through your link yet.",
+      "payout": "Commissions are paid by bank transfer. Questions:"
+    },
+    "eventStatus": {
+      "borrador": "Draft",
+      "en_revision": "In review",
+      "publicado": "Published",
+      "finalizado": "Finished",
+      "archivado": "Archived"
+    },
+    "openedMark": "opened",
+    "nudge": "Hi {name}, this is {couple}. We saw you opened the invitation but haven't replied yet. Could you? {link}",
+    "nudgeButton": "Nudge",
+    "album": "Photos"
+  },
+  "store": {
+    "title": "Build your invitation",
+    "steps": {
+      "package": "Package",
+      "extras": "Extras",
+      "mode": "Who builds it",
+      "contact": "Your details",
+      "payment": "Payment"
+    },
+    "next": "Continue",
+    "back": "Back",
+    "package": {
+      "title": "Choose your package",
+      "includes": "Includes",
+      "chosen": "Chosen",
+      "choose": "Choose",
+      "popular": "Most popular"
+    },
+    "extras": {
+      "title": "Want to add anything?",
+      "subtitle": "All optional. Whatever your package already includes isn't listed here.",
+      "included": "Included in your package",
+      "none": "Your package already includes everything."
+    },
+    "mode": {
+      "title": "Who builds the invitation?",
+      "team": {
+        "t": "You tell us, we build it",
+        "d": "Send us texts and photos on WhatsApp; we build it and you just approve. The most common choice."
+      },
+      "self": {
+        "t": "We'll do it ourselves",
+        "d": "You get access to the editor: fill in the blanks, upload photos and publish whenever you want. You can always ask us for help."
+      },
+      "planner": {
+        "t": "My wedding planner",
+        "d": "We give your planner access to manage the invitation and the guest list."
+      },
+      "plannerEmail": "Your wedding planner's email"
+    },
+    "contact": {
+      "title": "Your details",
+      "partnerA": "One name",
+      "partnerB": "The other name (optional)",
+      "email": "Email",
+      "emailHelp": "We'll send your access and receipt there.",
+      "phone": "WhatsApp",
+      "country": "Country",
+      "eventDate": "Event date (optional)",
+      "name": "Guest of honor's name",
+      "secondName": "Second name (optional)"
+    },
+    "payment": {
+      "title": "Payment",
+      "summary": "Summary",
+      "package": "Package",
+      "total": "Total",
+      "card": "Card",
+      "cardHelp": "Test gateway: no real charge is made. Use any 16-digit number.",
+      "cardNumber": "Card number",
+      "cardName": "Name on card",
+      "cardExp": "Expires (MM/YY)",
+      "cardCvc": "CVC",
+      "transfer": "Bank transfer",
+      "transferHelp": "We'll show you the bank details on confirmation. Your order is reserved and activated as soon as we see the payment.",
+      "consent": "I accept the <link>privacy notice</link> and being contacted on WhatsApp and email.",
+      "pay": "Pay {total}",
+      "reserve": "Reserve my order",
+      "sending": "Processing…"
+    },
+    "done": {
+      "paid": "Done! Order #{number} paid.",
+      "pending": "Order #{number} reserved.",
+      "paidBody": "Your invitation is reserved. We'll message you on WhatsApp in the next few hours to get started.",
+      "pendingBody": "Make the transfer with these details and send us the receipt on WhatsApp. We'll activate your order as soon as we see it.",
+      "bank": "Bank",
+      "holder": "Account holder",
+      "clabe": "CLABE",
+      "concept": "Reference",
+      "email": "We sent you an email with your access: from there you'll see your invitation and your guests.",
+      "whatsapp": "Message us on WhatsApp"
+    },
+    "errors": {
+      "invalid": "Please check the highlighted fields.",
+      "phone_invalid": "That number doesn't look valid for the selected country.",
+      "consent_required": "We need your consent to continue.",
+      "package_unavailable": "That package is no longer available.",
+      "card_declined": "Card declined (simulated: try another number).",
+      "planner_email_required": "Enter your wedding planner's email.",
+      "too_many_attempts": "Too many attempts. Please wait a moment.",
+      "unknown": "Something went wrong on our side. Try again or message us on WhatsApp."
+    },
+    "eventType": {
+      "title": "What are you celebrating?"
+    },
+    "plannerBanner": "{name} is helping you. This order is linked to your wedding planner."
+  },
+  "tables": {
+    "title": "Tables",
+    "add": "Add table",
+    "name": "Name",
+    "capacity": "Seats",
+    "namePlaceholder": "Table 1",
+    "bulk": "Create several",
+    "bulkHelp": "Creates Table 1 through Table N at once.",
+    "bulkCount": "How many?",
+    "bulkCapacity": "Seats per table",
+    "create": "Create",
+    "save": "Save",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this table? Its guests will be unassigned.",
+    "seats": "{passes} passes · {confirmed} confirmed",
+    "of": "of {capacity}",
+    "over": "Over capacity!",
+    "noTables": "No tables yet. Create the first one, or several at once.",
+    "assign": "Seat your guests",
+    "unassigned": "Unassigned",
+    "search": "Search guest",
+    "noTable": "— no table —",
+    "export": "Export by table",
+    "print": "Print",
+    "summary": "{tables} tables · {assigned} of {total} guests seated",
+    "edit": "Edit"
+  },
+  "editor": {
+    "title": "Invitation content",
+    "intro": "Each block is a section of the invitation. Turn off the ones you don't want, reorder with the arrows and fill in the texts in the event's languages.",
+    "save": "Save changes",
+    "saving": "Saving…",
+    "saved": "Saved. Open the preview to see it.",
+    "preview": "Preview",
+    "unsaved": "You have unsaved changes.",
+    "errorAt": "Check {section}: {message}",
+    "show": "Show",
+    "up": "Move up",
+    "down": "Move down",
+    "add": "Add",
+    "remove": "Remove",
+    "photoHint": "Resized automatically before upload. If it is already online, paste the link.",
+    "photoAlt": "Photo description",
+    "basics": {
+      "title": "The essentials",
+      "partnerA": "Name 1",
+      "partnerB": "Name 2 (optional unless wedding)",
+      "startsAt": "Main date and time",
+      "startsAtHint": "Drives the countdown and the calendar file."
+    },
+    "og": {
+      "title": "WhatsApp card",
+      "hint": "What people see when the link is shared: title, line and photo.",
+      "ogTitle": "Title",
+      "description": "Line",
+      "image": "Photo",
+      "imageHint": "Uploaded as JPG; it is the one shown in the link preview."
+    },
+    "sections": {
+      "cover": "Cover",
+      "countdown": "Countdown",
+      "story": "Our story",
+      "itinerary": "Schedule",
+      "dressCode": "Dress code",
+      "noKids": "No kids",
+      "gifts": "Gift registry",
+      "lodging": "Lodging",
+      "gallery": "Gallery",
+      "music": "Music",
+      "faq": "FAQ",
+      "rsvp": "RSVP",
+      "quote": "Quote or verse",
+      "parents": "Parents and sponsors"
+    },
+    "fields": {
+      "sectionTitle": "Section title",
+      "headline": "Headline",
+      "tagline": "Tagline",
+      "label": "Text",
+      "body": "Text",
+      "note": "Note",
+      "notes": "Details",
+      "code": "Code",
+      "codeHint": "E.g. Formal, Cocktail, Garden.",
+      "palette": "Suggested colors (hex)",
+      "act": "Event",
+      "kind": "Type",
+      "kinds": {
+        "civil": "Civil",
+        "religiosa": "Religious",
+        "recepcion": "Reception",
+        "otro": "Other"
+      },
+      "startsAt": "Date and time",
+      "venueName": "Venue",
+      "address": "Address",
+      "lat": "Latitude",
+      "lng": "Longitude",
+      "coordsHint": "Optional. With coordinates the map buttons land exactly.",
+      "link": "Link",
+      "linkLabel": "Name",
+      "url": "URL",
+      "bank": "Bank details",
+      "bankHint": "Shown only on each guest's personal link, never on the general one.",
+      "bankName": "Bank",
+      "holder": "Account holder",
+      "clabe": "CLABE / routing",
+      "account": "Account / card",
+      "envelopes": "We accept envelopes on the day",
+      "option": "Option",
+      "name": "Name",
+      "phone": "Phone",
+      "photo": "Photo",
+      "musicUrl": "Audio file (URL)",
+      "musicHint": "Only downloads when a guest presses play.",
+      "songTitle": "Song",
+      "artist": "Artist",
+      "question": "Question",
+      "answer": "Answer",
+      "askMenu": "Ask for a meal choice",
+      "menuOption": "Dish",
+      "askDietary": "Ask about allergies or restrictions",
+      "askSong": "Ask for a song request",
+      "askMessage": "Allow a message for us",
+      "color": "Color",
+      "quoteText": "Quote",
+      "quoteHint": "A verse, a poem, a dedication.",
+      "author": "Author or reference",
+      "group": "Group",
+      "groupTitle": "Group title (e.g. Parents of the bride)",
+      "names": "Names",
+      "namesPlaceholder": "One name per line",
+      "video": "Background video (.mp4 URL)",
+      "videoHint": "Short (10–20 s), no audio, up to 5 MB. The photo shows while it loads. Upload to Storage or paste a direct link.",
+      "envelope": "Envelope that opens on tap (starts the music if any)",
+      "monogram": "Monogram with the initials",
+      "cash": "Cash gift",
+      "cashHint": "For guests who prefer to give cash: shown with the bank details above and a button that copies them. Optional: a payment link (PayPal, Stripe, Venmo).",
+      "paymentUrl": "Payment link (optional)",
+      "transportPlaceholder": "Shuttle from the hotel",
+      "time": "Time",
+      "askChildren": "Ask how many children are coming",
+      "questions": "Custom questions",
+      "questionsHint": "Up to 6. E.g. Will you use the shuttle?, Any song we can't miss?",
+      "qText": "Free text",
+      "qYesNo": "Yes / No",
+      "qChoice": "Pick one option",
+      "qOptions": "Options",
+      "qOptionsPlaceholder": "One per line. Español|English, e.g. Camión|Bus"
+    },
+    "upload": "Upload photo",
+    "uploading": "Uploading…",
+    "replace": "Change photo",
+    "pasteLink": "Paste link",
+    "removePhoto": "Remove",
+    "noPhoto": "No photo",
+    "uploadError": "The photo could not be uploaded. Try another one or paste a link.",
+    "saveTheDate": {
+      "title": "Save the date",
+      "hint": "A light page with the date, to send months ahead. The team turns it on in the event settings; the link is /i/your-slug/save-the-date."
+    },
+    "thankYou": {
+      "title": "Thank-you note",
+      "hint": "After the event. Each guest sees it on their personal link, with their name. No text, no page."
+    },
+    "album": {
+      "title": "Guest album",
+      "hint": "Guests upload photos from their phones on the day (general link or a QR on the tables). The couple can delete. Works only once the event is published.",
+      "enabled": "Album on"
+    }
+  },
+  "guests": {
+    "addTitle": "Add guest",
+    "importTitle": "Import from Excel or CSV",
+    "importHelp": "Columns: Name, Passes, Phone, Email, Language, Group, Table — in any order, in Spanish or English. Only Name is required.",
+    "importTemplate": "Download template",
+    "import": "Import",
+    "importing": "Importing…",
+    "imported": "{count, plural, one {# guest loaded} other {# guests loaded}}.",
+    "importErrors": "{count, plural, one {# row with errors:} other {# rows with errors:}}",
+    "search": "Search by name, group or phone",
+    "count": "{visible} of {total}",
+    "cancel": "Cancel",
+    "passes": "{count, plural, one {# pass} other {# passes}}",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "declined": "Not coming"
+    },
+    "tableNo": "table {table}",
+    "sent": "sent",
+    "notSent": "not sent",
+    "opened": "opened",
+    "reminders": "{count, plural, one {# reminder} other {# reminders}}",
+    "copyLink": "Copy link",
+    "edit": "Edit",
+    "newLink": "New link",
+    "newLinkConfirm": "Generate a new link? The old one stops working.",
+    "delete": "Delete",
+    "deleteConfirm": "Delete {name}?",
+    "empty": "No guests yet.",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "The López family",
+      "passes": "Passes",
+      "phone": "WhatsApp",
+      "email": "Email",
+      "language": "Language",
+      "group": "Group",
+      "groupPlaceholder": "Family",
+      "table": "Table",
+      "save": "Save",
+      "add": "Add"
+    }
+  },
+  "checkin": {
+    "title": "Check-in",
+    "arrivedLabel": "Arrived",
+    "expected": "Expected",
+    "groups": "Groups",
+    "pointCamera": "Point the camera at the QR on the guest's pass.",
+    "openCamera": "Open camera",
+    "close": "Close",
+    "camError": "Could not open the camera ({message}). Search the guest by name.",
+    "arrived": "{name}: {count} arrived",
+    "undone": "{name}: arrival undone",
+    "already": "{name} had already arrived. Now: {count}.",
+    "errNotFound": "That QR is not from this event.",
+    "errDenied": "No access to this event.",
+    "errUnknown": "Could not mark.",
+    "errOtherQr": "That QR is not from this invitation.",
+    "confirmed": "Confirmed {count}",
+    "declined": "Not coming",
+    "pending": "Not confirmed",
+    "passes": "{count, plural, one {# pass} other {# passes}}",
+    "table": "Table {table}",
+    "arrivedShort": "{count} arrived",
+    "search": "Search by name, table or group",
+    "undo": "Undo",
+    "markArrived": "Arrived",
+    "noMatch": "No one with that name.",
+    "autoRefresh": "Refreshes every 15 seconds. Works on several phones at once."
+  },
+  "album": {
+    "title": "Event photos",
+    "note": "Upload the photos you take and see everyone else's.",
+    "open": "See and upload photos",
+    "yourName": "Your name (optional)",
+    "upload": "Upload photos",
+    "uploading": "Uploading {done} of {total}…",
+    "hint": "Resized automatically. Up to 10 at a time.",
+    "empty": "No photos yet. Be the first!",
+    "error": "That photo could not be uploaded.",
+    "tooMany": "Too many photos in a row. Wait a moment.",
+    "back": "Back to the invitation",
+    "panelHint": "Share the link or print the QR for the tables. The slideshow is for the venue screen.",
+    "panelOff": "The album is off: turn it on in Content → Guest album.",
+    "qr": "Printable QR",
+    "slideshow": "Slideshow",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this photo?"
   }
 }
