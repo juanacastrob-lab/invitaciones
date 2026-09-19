@@ -100,6 +100,17 @@ export async function createOrder(raw: unknown): Promise<OrderResult> {
     return { ok: false, error: 'unknown' };
   }
 
+  // CRM: si ya era prospecto (mismo teléfono o correo), el pedido lo avanza solo.
+  try {
+    const { data: lead } = await admin.from('leads').select('id, stage').or(`phone.eq.${phone},email.eq.${input.email.toLowerCase()}`).not('stage', 'in', '(entregado,perdido)').order('created_at', { ascending: false }).limit(1).maybeSingle();
+    if (lead) {
+      await admin.from('leads').update({ stage: paid ? 'en_produccion' : 'anticipo', order_id: order.id, value: total, currency: pkg.currency, package_code: pkg.code, last_contact_at: new Date().toISOString() }).eq('id', lead.id);
+      await admin.from('lead_activities').insert({ lead_id: lead.id, kind: 'pedido', body: `Pedido #${order.number} · ${pkg.name} · ${paid ? 'pagado' : 'pendiente de pago'}` });
+    }
+  } catch (e) {
+    console.warn('[order] no se ligó al prospecto:', (e as Error).message);
+  }
+
   if (paid) {
     await admin.from('payments').insert({ order_id: order.id, amount: total, currency: pkg.currency, method: 'card_sim', reference: 'SIMULADO' });
     await provisionOrder(order.id);
