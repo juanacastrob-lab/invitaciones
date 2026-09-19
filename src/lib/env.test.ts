@@ -19,3 +19,13 @@ test('vacía o basura no truena, se omite', () => {
   assert.equal(normalizeSiteUrl(undefined), undefined);
   assert.equal(normalizeSiteUrl('esto no es una url ni de chiste'), undefined);
 });
+
+test('en producción los links siempre son del dominio real', async () => {
+  const { resolveSiteUrl } = await import('./env');
+  assert.equal(resolveSiteUrl({ configured: 'https://holaboda.netlify.app', context: 'production' }), 'https://holaboda.mx');
+  assert.equal(resolveSiteUrl({ configured: undefined, context: 'production' }), 'https://holaboda.mx');
+  assert.equal(resolveSiteUrl({ configured: 'https://holaboda.mx', context: 'production' }), 'https://holaboda.mx');
+  assert.equal(resolveSiteUrl({ configured: 'https://dev--holaboda.netlify.app', context: 'branch-deploy' }), 'https://dev--holaboda.netlify.app');
+  assert.equal(resolveSiteUrl({ configured: undefined, context: 'branch-deploy', deployUrl: 'https://dev--holaboda.netlify.app' }), 'https://dev--holaboda.netlify.app');
+  assert.equal(resolveSiteUrl({}), undefined);
+});
