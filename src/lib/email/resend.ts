@@ -13,14 +13,14 @@ export function emailConfig(): { apiKey: string; from: string } | null {
   return apiKey && from ? { apiKey, from } : null;
 }
 
-export async function sendEmail(input: { to: string; subject: string; html: string; text: string; replyTo?: string }): Promise<{ ok: true; id: string } | { ok: false; error: string }> {
+export async function sendEmail(input: { to: string; subject: string; html: string; text: string; replyTo?: string; attachments?: { filename: string; content: Buffer }[] }): Promise<{ ok: true; id: string } | { ok: false; error: string }> {
   const cfg = emailConfig();
   if (!cfg) return { ok: false, error: 'Correo no configurado (RESEND_API_KEY / EMAIL_FROM).' };
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${cfg.apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: cfg.from, to: [input.to], subject: input.subject, html: input.html, text: input.text, reply_to: input.replyTo }),
+      body: JSON.stringify({ from: cfg.from, to: [input.to], subject: input.subject, html: input.html, text: input.text, reply_to: input.replyTo, attachments: input.attachments?.map((a) => ({ filename: a.filename, content: a.content.toString('base64') })) }),
     });
     const data = (await res.json().catch(() => ({}))) as { id?: string; message?: string; name?: string };
     if (!res.ok) return { ok: false, error: data.message ?? `Resend respondió ${res.status}` };

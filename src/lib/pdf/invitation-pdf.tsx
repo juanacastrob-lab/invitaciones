@@ -39,6 +39,11 @@ const s = StyleSheet.create({
   page: { backgroundColor: '#faf8f5', padding: 24, fontFamily: 'Helvetica', color: INK, fontSize: 10.5, lineHeight: 1.45 },
   frame: { flex: 1, borderWidth: 0.75, borderColor: LINE, padding: 20 },
   photo: { width: '100%', height: 100, objectFit: 'cover', marginBottom: 10 },
+  photos: { flexDirection: 'row', gap: 8, marginBottom: 10 },
+  photoHalf: { flex: 1, height: 110, objectFit: 'cover' },
+  parents: { flexDirection: 'row', gap: 16, marginTop: 4, marginBottom: 4, justifyContent: 'center' },
+  parentsCol: { flex: 1, alignItems: 'center' },
+  parentName: { fontFamily: SERIF, fontSize: 12.5, textAlign: 'center' },
   headline: { fontSize: 9, letterSpacing: 3, textTransform: 'uppercase', color: MUTED, textAlign: 'center' },
   names: { fontFamily: SERIF, fontSize: 28, textAlign: 'center', marginTop: 3, lineHeight: 1.05 },
   amp: { fontFamily: SERIF, fontSize: 22, color: ACCENT, textAlign: 'center', lineHeight: 1 },
@@ -78,13 +83,15 @@ function InvitationDoc({ content: c, timezone, locale, url, qr, rsvpDeadline }: 
   const t = L[locale];
   const text = (v: Parameters<typeof pickText>[0]) => pickText(v, locale);
   const on = (id: EventContent['sectionOrder'][number]) => c.sectionOrder.includes(id);
-  const photo = pdfImage(c.og?.image) ?? pdfImage(c.cover?.photo?.url);
+  const gallery = (c.gallery?.photos ?? []).map((p) => pdfImage(p.url)).filter((u): u is string => Boolean(u)).slice(0, 2);
+  const photo = gallery.length ? null : (pdfImage(c.og?.image) ?? pdfImage(c.cover?.photo?.url));
   const deadline = rsvpDeadline ? formatDate(rsvpDeadline.slice(0, 16), timezone, locale) : null;
 
   return (
     <Document title={eventNames(c.couple)} author={APP_NAME} language={locale}>
       <Page size="A4" style={s.page}>
         <View style={s.frame}>
+          {gallery.length ? <View style={s.photos}>{gallery.map((u, i) => <Image key={i} src={u} style={s.photoHalf} />)}</View> : null}
           {photo ? <Image src={photo} style={s.photo} /> : null}
           {text(c.cover?.headline) ? <Text style={s.headline}>{text(c.cover?.headline)}</Text> : null}
           <Text style={s.names}>{c.couple.partnerA}</Text>
@@ -101,6 +108,17 @@ function InvitationDoc({ content: c, timezone, locale, url, qr, rsvpDeadline }: 
           </View>
           {text(c.cover?.tagline) ? <Text style={s.tagline}>{text(c.cover?.tagline)}</Text> : null}
 
+          {on('parents') && c.parents ? (
+            <View style={s.parents}>
+              {c.parents.groups.map((g, i) => (
+                <View key={i} style={s.parentsCol}>
+                  <Text style={s.title}>{text(g.title)}</Text>
+                  {g.names.map((n) => <Text key={n} style={s.parentName}>{n}</Text>)}
+                </View>
+              ))}
+            </View>
+          ) : null}
+
           {on('itinerary') && c.itinerary ? (
             <View style={s.section}>
               <Text style={s.title}>{text(c.itinerary.title) ?? t.itinerary}</Text>
@@ -109,6 +127,7 @@ function InvitationDoc({ content: c, timezone, locale, url, qr, rsvpDeadline }: 
                   <Text style={s.actTitle}>{text(a.title)} · {formatTime(a.startsAt, timezone, locale)}</Text>
                   <Text style={s.body}>{a.venue.name}</Text>
                   <Text style={s.small}>{a.venue.address}</Text>
+                  {a.venue.mapsUrl ? <Text style={s.small}>{a.venue.mapsUrl}</Text> : null}
                   {text(a.note) ? <Text style={s.small}>{text(a.note)}</Text> : null}
                 </View>
               ))}

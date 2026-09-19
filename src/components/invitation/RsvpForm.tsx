@@ -81,6 +81,14 @@ export function RsvpForm({ slug, token, guest, config, locale, closed, privacyHr
   const [error, setError] = useState<{ code: RsvpErrorCode; passes?: number } | null>(null);
 
   const passesOptions = Array.from({ length: guest.passes }, (_, i) => i + 1);
+  const [extrasOpen, setExtrasOpen] = useState(false);
+  const hasExtras = Boolean((attending && (count > 1 || config.askMenu || config.askChildren || config.askDietary || config.askSong || config.questions?.length)) || config.askMessage);
+  const menuSelect = (i: number) => (
+    <select className={`${field} mt-1.5`} value={menu[String(i)] ?? ''} onChange={(e) => setMenu((m) => ({ ...m, [String(i)]: e.target.value }))} aria-label={t('menuFor', { name: nameAt(i) || `${i + 1}` })}>
+      <option value="">{t('choose')} · {t('menu')}</option>
+      {config.menuOptions.map((opt) => <option key={opt.id} value={opt.id}>{opt.label}</option>)}
+    </select>
+  );
 
   function nameAt(i: number) {
     return names[i] ?? '';
@@ -235,134 +243,107 @@ export function RsvpForm({ slug, token, guest, config, locale, closed, privacyHr
         </div>
       </fieldset>
 
-      {attending ? (
-        <>
-          <div className="mt-6">
-            <label className={label} htmlFor="rsvp-count">
-              {t('howMany')} <span className="normal-case tracking-normal">· {t('ofPasses', { passes: guest.passes })}</span>
-            </label>
-            <div className="flex gap-2">
-              {passesOptions.map((n) => (
-                <button
-                  key={n}
-                  type="button"
-                  onClick={() => setCount(n)}
-                  aria-pressed={count === n}
-                  className={`h-11 flex-1 rounded-sm border font-serif text-lg transition-colors ${
-                    count === n
-                      ? 'border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--ink)]'
-                      : 'border-[var(--line)] text-[var(--muted)]'
-                  }`}
-                >
-                  {n}
-                </button>
-              ))}
-            </div>
+      {attending && guest.passes > 1 ? (
+        <div className="mt-6">
+          <label className={label} htmlFor="rsvp-count">
+            {t('howMany')} <span className="normal-case tracking-normal">· {t('ofPasses', { passes: guest.passes })}</span>
+          </label>
+          <div className="flex gap-2">
+            {passesOptions.map((n) => (
+              <button
+                key={n}
+                type="button"
+                onClick={() => setCount(n)}
+                aria-pressed={count === n}
+                className={`h-11 flex-1 rounded-sm border font-serif text-lg transition-colors ${
+                  count === n
+                    ? 'border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--ink)]'
+                    : 'border-[var(--line)] text-[var(--muted)]'
+                }`}
+              >
+                {n}
+              </button>
+            ))}
           </div>
-
-          <div className="mt-6">
-            <p className={label}>{t('names')}</p>
-            <div className="space-y-3">
-              {Array.from({ length: count }, (_, i) => (
-                <div key={i}>
-                  <input
-                    className={field}
-                    placeholder={`${t('namePlaceholder')} ${i + 1}`}
-                    value={nameAt(i)}
-                    onChange={(e) => setNameAt(i, e.target.value)}
-                    autoComplete="off"
-                    maxLength={80}
-                  />
-                  {config.askMenu ? (
-                    <select
-                      className={`${field} mt-1.5`}
-                      value={menu[String(i)] ?? ''}
-                      onChange={(e) => setMenu((m) => ({ ...m, [String(i)]: e.target.value }))}
-                      aria-label={t('menuFor', { name: nameAt(i) || `${i + 1}` })}
-                    >
-                      <option value="">{t('choose')} · {t('menu')}</option>
-                      {config.menuOptions.map((opt) => (
-                        <option key={opt.id} value={opt.id}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          </div>
-
-        {attending && config.askChildren ? (
-          <div>
-            <label className={label} htmlFor="children">{t('children')}</label>
-            <select id="children" className={field} value={children} onChange={(e) => setChildren(Number(e.target.value))}>
-              {Array.from({ length: count + 1 }, (_, n) => <option key={n} value={n}>{n}</option>)}
-            </select>
-          </div>
-        ) : null}
-
-        {attending ? (config.questions ?? []).map((q) => (
-          <div key={q.id}>
-            <label className={label} htmlFor={`q-${q.id}`}>{q.label}</label>
-            {q.type === 'text' ? (
-              <input id={`q-${q.id}`} className={field} maxLength={300} value={answers[q.id] ?? ''} onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })} />
-            ) : (
-              <select id={`q-${q.id}`} className={field} value={answers[q.id] ?? ''} onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}>
-                <option value="">—</option>
-                {(q.type === 'yesno' ? [t('yes'), t('no')] : q.options).map((o) => <option key={o} value={o}>{o}</option>)}
-              </select>
-            )}
-          </div>
-        )) : null}
-
-          {config.askDietary ? (
-            <div className="mt-6">
-              <label className={label} htmlFor="rsvp-dietary">{t('dietary')}</label>
-              <input
-                id="rsvp-dietary"
-                className={field}
-                placeholder={t('dietaryPlaceholder')}
-                value={dietary}
-                onChange={(e) => setDietary(e.target.value)}
-                maxLength={500}
-              />
-            </div>
-          ) : null}
-
-          {config.askSong ? (
-            <div className="mt-6">
-              <label className={label} htmlFor="rsvp-song">{t('song')}</label>
-              <input
-                id="rsvp-song"
-                className={field}
-                placeholder={t('songPlaceholder')}
-                value={song}
-                onChange={(e) => setSong(e.target.value)}
-                maxLength={200}
-              />
-            </div>
-          ) : null}
-        </>
+        </div>
       ) : null}
 
-      {attending !== null && config.askMessage ? (
-        <div className="mt-6">
-          <label className={label} htmlFor="rsvp-message">{t('message')}</label>
-          <textarea
-            id="rsvp-message"
-            className={`${field} min-h-24 resize-y`}
-            placeholder={t('messagePlaceholder')}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            maxLength={1000}
-          />
-        </div>
+      {/* Todo lo demás es opcional y va plegado: confirmar son dos toques. */}
+      {attending !== null && hasExtras ? (
+        <details className="mt-6 rounded-sm border border-[var(--line)]" open={extrasOpen} onToggle={(e) => setExtrasOpen((e.target as HTMLDetailsElement).open)}>
+          <summary className="cursor-pointer list-none px-4 py-3 text-[0.7rem] uppercase tracking-[0.2em] text-[var(--muted)]">
+            + {t('optional')}
+          </summary>
+          <div className="space-y-5 px-4 pb-4">
+            {attending && count > 1 ? (
+              <div>
+                <p className={label}>{t('names')} <span className="normal-case tracking-normal">· {t('optionalShort')}</span></p>
+                <div className="space-y-3">
+                  {Array.from({ length: count }, (_, i) => (
+                    <div key={i}>
+                      <input className={field} placeholder={`${t('namePlaceholder')} ${i + 1}`} value={nameAt(i)} onChange={(e) => setNameAt(i, e.target.value)} autoComplete="off" maxLength={80} />
+                      {config.askMenu ? menuSelect(i) : null}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : attending && config.askMenu ? (
+              <div>
+                <p className={label}>{t('menu')} <span className="normal-case tracking-normal">· {t('optionalShort')}</span></p>
+                {menuSelect(0)}
+              </div>
+            ) : null}
+
+            {attending && config.askChildren ? (
+              <div>
+                <label className={label} htmlFor="children">{t('children')}</label>
+                <select id="children" className={field} value={children} onChange={(e) => setChildren(Number(e.target.value))}>
+                  {Array.from({ length: count + 1 }, (_, n) => <option key={n} value={n}>{n}</option>)}
+                </select>
+              </div>
+            ) : null}
+
+            {attending ? (config.questions ?? []).map((q) => (
+              <div key={q.id}>
+                <label className={label} htmlFor={`q-${q.id}`}>{q.label}</label>
+                {q.type === 'text' ? (
+                  <input id={`q-${q.id}`} className={field} maxLength={300} value={answers[q.id] ?? ''} onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })} />
+                ) : (
+                  <select id={`q-${q.id}`} className={field} value={answers[q.id] ?? ''} onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}>
+                    <option value="">—</option>
+                    {(q.type === 'yesno' ? [t('yes'), t('no')] : q.options).map((o) => <option key={o} value={o}>{o}</option>)}
+                  </select>
+                )}
+              </div>
+            )) : null}
+
+            {attending && config.askDietary ? (
+              <div>
+                <label className={label} htmlFor="rsvp-dietary">{t('dietary')}</label>
+                <input id="rsvp-dietary" className={field} placeholder={t('dietaryPlaceholder')} value={dietary} onChange={(e) => setDietary(e.target.value)} maxLength={500} />
+              </div>
+            ) : null}
+
+            {attending && config.askSong ? (
+              <div>
+                <label className={label} htmlFor="rsvp-song">{t('song')}</label>
+                <input id="rsvp-song" className={field} placeholder={t('songPlaceholder')} value={song} onChange={(e) => setSong(e.target.value)} maxLength={200} />
+              </div>
+            ) : null}
+
+            {config.askMessage ? (
+              <div>
+                <label className={label} htmlFor="rsvp-message">{t('message')}</label>
+                <textarea id="rsvp-message" className={`${field} min-h-20 resize-y`} placeholder={t('messagePlaceholder')} value={message} onChange={(e) => setMessage(e.target.value)} maxLength={1000} />
+              </div>
+            ) : null}
+          </div>
+        </details>
       ) : null}
 
       {attending !== null ? (
         <>
-          <label className="mt-6 flex items-start gap-3 text-xs leading-relaxed text-[var(--muted)]">
+          <label className="mt-6 flex items-start gap-3 rounded-sm bg-[var(--accent-soft)]/60 p-3 text-xs leading-relaxed text-[var(--ink)]">
             <input
               type="checkbox"
               checked={consent}

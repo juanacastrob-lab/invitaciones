@@ -11,6 +11,7 @@ import { sendSms, smsConfig } from '@/lib/sms/twilio';
 import { eventNames } from '@/lib/event-types';
 import { APP_NAME, CONTACT_EMAIL, type Locale } from '@/lib/config';
 import type { EventContent } from '@/schemas/event-content';
+import { deliverExpressOrders, purgeExpiredDrafts } from '@/lib/express-delivery';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,11 +29,15 @@ export async function POST(req: Request) {
   const canEmail = Boolean(emailConfig());
   const canWhatsapp = Boolean(whatsappConfig());
   const canSms = Boolean(smsConfig());
-  if (!canEmail && !canWhatsapp && !canSms) return NextResponse.json({ skipped: 'no_channel_configured' });
-  const site = getSiteUrl();
-  if (!site) return NextResponse.json({ skipped: 'site_url_missing' });
-
   const admin = supabaseAdmin();
+
+  // ---- 0. Express que ya cumplieron su espera, y borradores caducados.
+  const express = await deliverExpressOrders(admin);
+  const purged = await purgeExpiredDrafts(admin);
+
+  if (!canEmail && !canWhatsapp && !canSms) return NextResponse.json({ skipped: 'no_channel_configured', express, purged });
+  const site = getSiteUrl();
+  if (!site) return NextResponse.json({ skipped: 'site_url_missing', express, purged });
   const now = new Date();
   const { data: events } = await admin
     .from('events')
@@ -124,5 +129,5 @@ export async function POST(req: Request) {
   for (const id of touched) {
     await admin.from('activity_log').insert({ actor: null, entity: 'event', entity_id: id, action: 'auto_reminder', data: { sent } });
   }
-  return NextResponse.json({ sent, failed, more: sent + failed >= BATCH });
+  return NextResponse.json({ sent, failed, express, purged, more: sent + failed >= BATCH });
 }

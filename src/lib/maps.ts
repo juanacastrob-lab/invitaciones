@@ -15,7 +15,8 @@ export interface MapTarget {
 
 const query = (v: MapTarget) => `${v.name}, ${v.address}`;
 
-export function googleMapsUrl(v: MapTarget): string {
+export function googleMapsUrl(v: MapTarget & { mapsUrl?: string }): string {
+  if (v.mapsUrl) return v.mapsUrl;
   const params = new URLSearchParams({ api: '1' });
   if (v.lat !== undefined && v.lng !== undefined) {
     params.set('query', `${v.lat},${v.lng}`);

@@ -17,3 +17,14 @@ test('un id desconocido cae en aurora', () => {
   assert.equal(resolveTemplate('noche').id, 'noche');
   assert.equal((templateCssVars(TEMPLATES.noche) as Record<string, string>)['--paper'], '#14161c');
 });
+
+test('colores propios: cambia acento y deriva el resto', async () => {
+  const { resolveTemplate: rt, mixHex } = await import('./registry');
+  const th = rt('aurora', { accent: '#b8674a' });
+  assert.equal(th.colors.accent, '#b8674a');
+  assert.equal(th.colors.paper, '#faf8f5');
+  assert.notEqual(th.colors.accentSoft, '#eef0ea');
+  assert.equal(rt('aurora', { paper: '#14161c', ink: '#ffffff' }).dark, true);
+  assert.equal(mixHex('#000000', '#ffffff', 0.5), '#808080');
+  assert.equal(rt('aurora', {}).colors.accent, '#7d8471');
+});
