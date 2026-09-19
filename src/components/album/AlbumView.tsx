@@ -84,7 +84,7 @@ export function AlbumView({ slug, initial, slideshow, mediaBase }: { slug: strin
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {photos.map((p) => (
             <figure key={p.id} className="relative">
-              <img src={p.url.startsWith('http') ? p.url : `${mediaBase}/${p.url}`} alt={p.caption ?? ''} loading="lazy" className="aspect-square w-full rounded-sm object-cover" />
+              <img src={p.url.startsWith('http') || p.url.startsWith('/') ? p.url : `${mediaBase}/${p.url}`} alt={p.caption ?? ''} loading="lazy" className="aspect-square w-full rounded-sm object-cover" />
               {p.uploader ? <figcaption className="absolute bottom-1 left-1 rounded-full bg-black/50 px-2 py-0.5 text-[0.6rem] text-white">{p.uploader}</figcaption> : null}
             </figure>
           ))}
