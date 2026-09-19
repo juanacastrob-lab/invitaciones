@@ -188,6 +188,32 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
       </section>
     ),
 
+    // ------------------------------------------------------- frase / versículo
+    quote: c.quote ? (
+      <Section key="quote" tight>
+        <blockquote className="text-center">
+          <p className={`${heading} text-2xl leading-snug text-[var(--ink)]`}>“{text(c.quote.text)}”</p>
+          {c.quote.author ? <cite className="mt-4 block text-[0.7rem] not-italic uppercase tracking-[0.25em] text-[var(--muted)]">{c.quote.author}</cite> : null}
+        </blockquote>
+      </Section>
+    ) : null,
+
+    // ------------------------------------------------------ padres y padrinos
+    parents: c.parents ? (
+      <Section key="parents" title={text(c.parents.title) ?? t('parents.title')}>
+        <div className="grid gap-8 sm:grid-cols-2">
+          {c.parents.groups.map((g, i) => (
+            <div key={i} className="text-center">
+              <p className="text-[0.7rem] uppercase tracking-[0.25em] text-[var(--accent)]">{text(g.title)}</p>
+              <ul className="mt-3 space-y-1">
+                {g.names.map((n) => <li key={n} className={`${heading} text-xl text-[var(--ink)]`}>{n}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </Section>
+    ) : null,
+
     // --------------------------------------------------------- cuenta atrás
     countdown: (
       <Section key="countdown" title={text(c.countdown?.label)} tight>

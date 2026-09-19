@@ -4,12 +4,13 @@
  * pruebas.
  */
 
-export const EVENT_TYPES = ['boda', 'xv', 'bautizo', 'baby_shower', 'graduacion', 'cumpleanos', 'primera_comunion', 'confirmacion', 'otro'] as const;
+export const EVENT_TYPES = ['boda', 'xv', 'sweet_sixteen', 'bautizo', 'baby_shower', 'graduacion', 'cumpleanos', 'primera_comunion', 'confirmacion', 'otro'] as const;
 export type EventType = (typeof EVENT_TYPES)[number];
 
 export const EVENT_TYPE_LABEL: Record<EventType, { es: string; en: string }> = {
   boda: { es: 'Boda', en: 'Wedding' },
-  xv: { es: 'XV años', en: 'Quinceañera' },
+  xv: { es: 'XV años', en: 'Quinceañera (XV)' },
+  sweet_sixteen: { es: 'Sweet sixteen', en: 'Sweet Sixteen' },
   bautizo: { es: 'Bautizo', en: 'Baptism' },
   baby_shower: { es: 'Baby shower', en: 'Baby shower' },
   graduacion: { es: 'Graduación', en: 'Graduation' },

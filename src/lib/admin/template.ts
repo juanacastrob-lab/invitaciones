@@ -22,6 +22,12 @@ const PRESETS: Record<EventType, {
     acts: [{ kind: 'religiosa', title: { es: 'Misa', en: 'Mass' }, hours: 0 }, { kind: 'recepcion', title: { es: 'Fiesta', en: 'Party' }, hours: 2 }],
     story: false, noKids: false,
   },
+  sweet_sixteen: {
+    headline: { es: 'Mis dulces dieciséis', en: 'My Sweet Sixteen' },
+    description: { es: 'Celebro mis dieciséis y quiero que estés. Confirma tu asistencia.', en: 'I am turning sixteen and I want you there. Please RSVP.' },
+    acts: [{ kind: 'recepcion', title: { es: 'Fiesta', en: 'Party' }, hours: 0 }],
+    story: false, noKids: false,
+  },
   bautizo: {
     headline: { es: 'Mi bautizo', en: 'My baptism' },
     description: { es: 'Celebramos el bautizo y queremos que estés ahí. Confirma tu asistencia.', en: 'We are celebrating the baptism and we want you there. Please RSVP.' },

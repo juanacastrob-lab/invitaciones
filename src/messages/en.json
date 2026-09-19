@@ -201,6 +201,9 @@
       "default": "Thank you for being with us",
       "hello": "{name}, thank you for being with us.",
       "back": "See the invitation"
+    },
+    "parents": {
+      "title": "Parents and sponsors"
     }
   },
   "auth": {
@@ -503,7 +506,9 @@
       "gallery": "Gallery",
       "music": "Music",
       "faq": "FAQ",
-      "rsvp": "RSVP"
+      "rsvp": "RSVP",
+      "quote": "Quote or verse",
+      "parents": "Parents and sponsors"
     },
     "fields": {
       "sectionTitle": "Section title",
@@ -555,7 +560,14 @@
       "askDietary": "Ask about allergies or restrictions",
       "askSong": "Ask for a song request",
       "askMessage": "Allow a message for us",
-      "color": "Color"
+      "color": "Color",
+      "quoteText": "Quote",
+      "quoteHint": "A verse, a poem, a dedication.",
+      "author": "Author or reference",
+      "group": "Group",
+      "groupTitle": "Group title (e.g. Parents of the bride)",
+      "names": "Names",
+      "namesPlaceholder": "One name per line"
     },
     "upload": "Upload photo",
     "uploading": "Uploading…",

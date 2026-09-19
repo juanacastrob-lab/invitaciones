@@ -67,7 +67,9 @@ export const venue = z.object({
 
 export const SECTION_IDS = [
   'cover',
+  'quote',
   'countdown',
+  'parents',
   'story',
   'itinerary',
   'dressCode',
@@ -86,6 +88,18 @@ export const cover = z.object({
   headline: localizedText.optional(),
   tagline: localizedText.optional(),
   photo: image.optional(),
+});
+
+/** Una frase, versículo o dedicatoria, con autor opcional. */
+export const quote = z.object({
+  text: localizedText,
+  author: z.string().optional(),
+});
+
+/** Padres y padrinos: grupos con título y nombres ("Padres de la novia", "Padrinos de velación"...). */
+export const parents = z.object({
+  title: localizedText.optional(),
+  groups: z.array(z.object({ title: localizedText, names: z.array(z.string().min(1)).min(1) })).min(1),
 });
 
 export const countdown = z.object({
@@ -239,6 +253,8 @@ export const eventContent = z
     sectionOrder: z.array(z.enum(SECTION_IDS)).min(1),
 
     cover: cover.optional(),
+    quote: quote.optional(),
+    parents: parents.optional(),
     countdown: countdown.optional(),
     story: story.optional(),
     itinerary: itinerary.optional(),

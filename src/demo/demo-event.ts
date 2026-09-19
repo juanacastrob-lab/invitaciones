@@ -34,7 +34,9 @@ export const demoEventContent: EventContent = {
 
   sectionOrder: [
     'cover',
+    'quote',
     'countdown',
+    'parents',
     'story',
     'itinerary',
     'dressCode',
@@ -59,6 +61,20 @@ export const demoEventContent: EventContent = {
         en: 'Juan Antonio and Ana Marcela holding hands at sunset',
       },
     },
+  },
+
+  quote: {
+    text: { es: 'El amor es paciente, es bondadoso. Todo lo disculpa, todo lo cree, todo lo espera, todo lo soporta.', en: 'Love is patient, love is kind. It always protects, always trusts, always hopes, always perseveres.' },
+    author: '1 Corintios 13',
+  },
+
+  parents: {
+    title: { es: 'Con la bendición de nuestros padres', en: 'With the blessing of our parents' },
+    groups: [
+      { title: { es: 'Padres de la novia', en: 'Parents of the bride' }, names: ['María Elena Castillo', 'Roberto Basurto'] },
+      { title: { es: 'Padres del novio', en: 'Parents of the groom' }, names: ['Guadalupe Ramírez', 'Antonio Castro'] },
+      { title: { es: 'Padrinos de velación', en: 'Sponsors' }, names: ['Lucía y Fernando Ortiz'] },
+    ],
   },
 
   countdown: {

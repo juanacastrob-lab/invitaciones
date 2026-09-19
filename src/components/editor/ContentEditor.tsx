@@ -92,6 +92,29 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
             {photoFields(draft.cover.photoUrl, draft.cover.photoAlt, (d, v) => { d.cover.photoUrl = v; }, (d, v) => { d.cover.photoAlt = v; })}
           </SectionCard>
         );
+      case 'quote':
+        return (
+          <SectionCard key={id} {...cardProps(id)}>
+            {lt(t('fields.quoteText'), draft.quote.text, (d, v) => { d.quote.text = v; }, { multiline: true, hint: t('fields.quoteHint') })}
+            <Text label={t('fields.author')} value={draft.quote.author} onChange={(v) => patch((d) => { d.quote.author = v; })} placeholder="1 Corintios 13:4" />
+          </SectionCard>
+        );
+      case 'parents':
+        return (
+          <SectionCard key={id} {...cardProps(id)}>
+            {lt(t('fields.sectionTitle'), draft.parents.title, (d, v) => { d.parents.title = v; })}
+            {draft.parents.groups.map((g, i) => (
+              <Item key={i} title={`${t('fields.group')} ${i + 1}`} removeLabel={t('remove')} onRemove={() => patch((d) => { d.parents.groups.splice(i, 1); })}>
+                {lt(t('fields.groupTitle'), g.title, (d, v) => { d.parents.groups[i].title = v; })}
+                <label className="block">
+                  <span className="mb-1 block text-[0.65rem] uppercase tracking-[0.2em] text-stone-500">{t('fields.names')}</span>
+                  <textarea value={g.names} onChange={(e) => patch((d) => { d.parents.groups[i].names = e.target.value; })} className="min-h-20 w-full rounded-sm border border-stone-300 bg-white px-3 py-2 text-sm" placeholder={t('fields.namesPlaceholder')} />
+                </label>
+              </Item>
+            ))}
+            <AddButton label={t('fields.group')} onClick={() => patch((d) => { d.parents.groups.push({ title: { es: '', en: '' }, names: '' }); })} />
+          </SectionCard>
+        );
       case 'countdown':
         return (
           <SectionCard key={id} {...cardProps(id)}>

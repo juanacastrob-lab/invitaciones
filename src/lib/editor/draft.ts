@@ -1,6 +1,8 @@
 import {
   SECTION_IDS,
   cover as coverSchema,
+  quote as quoteSchema,
+  parents as parentsSchema,
   countdown as countdownSchema,
   story as storySchema,
   itinerary as itinerarySchema,
@@ -36,6 +38,8 @@ export interface Draft {
   /** Secciones visibles, en orden. Las demás se guardan si están completas. */
   sectionOrder: SectionId[];
   cover: { headline: LT; tagline: LT; photoUrl: string; photoAlt: LT };
+  quote: { text: LT; author: string };
+  parents: { title: LT; groups: { title: LT; names: string }[] };
   countdown: { label: LT };
   story: { title: LT; body: LT; photoUrl: string; photoAlt: LT };
   itinerary: {
@@ -84,6 +88,8 @@ export function toDraft(c: EventContent): Draft {
     thankYou: { title: lt(c.thankYou?.title), body: lt(c.thankYou?.body), photoUrl: c.thankYou?.photo?.url ?? '', photoAlt: lt(c.thankYou?.photo?.alt) },
     sectionOrder: [...c.sectionOrder],
     cover: { headline: lt(c.cover?.headline), tagline: lt(c.cover?.tagline), photoUrl: c.cover?.photo?.url ?? '', photoAlt: lt(c.cover?.photo?.alt) },
+    quote: { text: lt(c.quote?.text), author: c.quote?.author ?? '' },
+    parents: { title: lt(c.parents?.title), groups: (c.parents?.groups ?? []).map((g) => ({ title: lt(g.title), names: g.names.join('\n') })) },
     countdown: { label: lt(c.countdown?.label) },
     story: { title: lt(c.story?.title), body: lt(c.story?.body), photoUrl: c.story?.photo?.url ?? '', photoAlt: lt(c.story?.photo?.alt) },
     itinerary: {
@@ -164,6 +170,13 @@ function sectionValue(d: Draft, id: SectionId): unknown {
   switch (id) {
     case 'cover':
       return { headline: outLT(d.cover.headline), tagline: outLT(d.cover.tagline), photo: photo(d.cover.photoUrl, d.cover.photoAlt) };
+    case 'quote':
+      return { text: outLT(d.quote.text), author: s(d.quote.author) };
+    case 'parents':
+      return {
+        title: outLT(d.parents.title),
+        groups: d.parents.groups.map((g) => ({ title: outLT(g.title), names: g.names.split(/\n+/).map((n) => n.trim()).filter(Boolean) })),
+      };
     case 'countdown':
       return { label: outLT(d.countdown.label) };
     case 'story':
@@ -223,6 +236,8 @@ function sectionValue(d: Draft, id: SectionId): unknown {
 
 const SECTION_SCHEMA = {
   cover: coverSchema,
+  quote: quoteSchema,
+  parents: parentsSchema,
   countdown: countdownSchema,
   story: storySchema,
   itinerary: itinerarySchema,

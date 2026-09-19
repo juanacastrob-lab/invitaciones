@@ -201,6 +201,9 @@
       "default": "Gracias por acompañarnos",
       "hello": "{name}, gracias por estar con nosotros.",
       "back": "Ver la invitación"
+    },
+    "parents": {
+      "title": "Padres y padrinos"
     }
   },
   "auth": {
@@ -503,7 +506,9 @@
       "gallery": "Galería",
       "music": "Música",
       "faq": "Preguntas frecuentes",
-      "rsvp": "Confirmación"
+      "rsvp": "Confirmación",
+      "quote": "Frase o versículo",
+      "parents": "Padres y padrinos"
     },
     "fields": {
       "sectionTitle": "Título de la sección",
@@ -555,7 +560,14 @@
       "askDietary": "Preguntar alergias o restricciones",
       "askSong": "Pedir una canción",
       "askMessage": "Permitir un mensaje para nosotros",
-      "color": "Color"
+      "color": "Color",
+      "quoteText": "Frase",
+      "quoteHint": "Un versículo, un poema, una dedicatoria.",
+      "author": "Autor o cita",
+      "group": "Grupo",
+      "groupTitle": "Título del grupo (ej. Padres de la novia)",
+      "names": "Nombres",
+      "namesPlaceholder": "Un nombre por línea"
     },
     "upload": "Subir foto",
     "uploading": "Subiendo…",
