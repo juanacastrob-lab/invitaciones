@@ -28,6 +28,7 @@ export const eventBasics = z
     checkinEnabled: z.boolean().default(false),
     autoReminders: z.boolean().default(false),
     saveTheDateEnabled: z.boolean().default(false),
+    eventReminderHours: z.array(z.number().int().min(1).max(168)).max(4).default([]),
     reminderDays: z.array(z.number().int().min(0).max(90)).max(6).default([7, 3]),
   })
   .refine((v) => v.languages.includes(v.defaultLanguage), {

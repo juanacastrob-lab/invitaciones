@@ -7,7 +7,7 @@ import { Button, Field, Input, Select, Notice } from '@/components/ui';
 import { TIMEZONES } from '@/lib/admin/labels';
 import { EVENT_TYPES, EVENT_TYPE_LABEL, needsTwoNames, type EventType } from '@/lib/event-types';
 import { TEMPLATE_IDS, TEMPLATES } from '@/templates/registry';
-import { parseReminderDays } from '@/lib/reminders';
+import { parseReminderDays, parseReminderHours } from '@/lib/reminders';
 
 export interface EventBasicsValues {
   slug: string;
@@ -28,6 +28,7 @@ export interface EventBasicsValues {
   autoReminders: boolean;
   reminderDays: number[];
   saveTheDateEnabled: boolean;
+  eventReminderHours: number[];
 }
 
 export function EventBasicsForm({ eventId, initial, packages = [] }: { eventId?: string; initial: EventBasicsValues; packages?: { code: string; name: string; country: string }[] }) {
@@ -58,6 +59,7 @@ export function EventBasicsForm({ eventId, initial, packages = [] }: { eventId?:
       checkinEnabled: f.get('checkinEnabled') === 'on',
       autoReminders: f.get('autoReminders') === 'on',
       saveTheDateEnabled: f.get('saveTheDateEnabled') === 'on',
+      eventReminderHours: parseReminderHours(String(f.get('eventReminderHours') ?? '')),
       reminderDays: parseReminderDays(String(f.get('reminderDays') ?? '')),
     };
     start(async () => {
@@ -135,6 +137,10 @@ export function EventBasicsForm({ eventId, initial, packages = [] }: { eventId?:
           <input type="checkbox" name="showPrivateGifts" defaultChecked={initial.showPrivateGifts} /> Mostrar datos bancarios (solo con link personal)
         </label>
       </div>
+
+      <Field label="Recordatorio del evento (horas antes)" hint="Ej: 48,24 = un aviso dos días antes y otro el día anterior, con hora y lugar, a confirmados y pendientes. Vacío = apagado. Sale por WhatsApp Cloud si está configurado; si no, por correo.">
+        <Input name="eventReminderHours" defaultValue={initial.eventReminderHours.join(',')} className="w-40" placeholder="48,24" />
+      </Field>
 
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" name="saveTheDateEnabled" defaultChecked={initial.saveTheDateEnabled} /> Save the date público (funciona aunque la invitación siga en borrador)

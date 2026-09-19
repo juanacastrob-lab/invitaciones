@@ -23,8 +23,8 @@ const FILTERS: { key: Filter; label: string }[] = [
  * el link personal ya escritos; al regresar, marca "enviado". Nada se manda
  * solo: el envío automático es Fase 3 (WhatsApp Cloud API).
  */
-export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, guests, templates, emailEnabled = false, published = true }: {
-  eventId: string; slug: string; siteUrl: string; couple: string; startsAt: string; timezone: string;
+export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, venue, guests, templates, emailEnabled = false, published = true }: {
+  eventId: string; slug: string; siteUrl: string; couple: string; startsAt: string; timezone: string; venue?: string;
   guests: GuestRow[];
   templates: { key: string; language: string; body: string }[];
   emailEnabled?: boolean;
@@ -34,6 +34,7 @@ export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, 
   const [templateKey, setTemplateKey] = useState('invite');
   const [overrides, setOverrides] = useState<Record<string, string>>({});
   const [pending, start] = useTransition();
+  const [rapid, setRapid] = useState<{ ids: string[]; at: number } | null>(null);
   const [mailing, setMailing] = useState<{ done: number; total: number; sent: number; failed: { name: string; error: string }[] } | null>(null);
 
   const keys = useMemo(() => [...new Set(templates.map((t) => t.key))], [templates]);
@@ -78,13 +79,13 @@ export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, 
           <div>
             <p className="mb-1 text-[0.65rem] uppercase tracking-[0.2em] text-stone-500">Plantilla</p>
             <Select value={templateKey} onChange={(e) => setTemplateKey(e.target.value)}>
-              {keys.map((k) => <option key={k} value={k}>{{ invite: 'Invitación', reminder_pending: 'Recordatorio: no ha confirmado', reminder_opened: 'Recordatorio: abrió sin confirmar', save_the_date: 'Save the date (link general)', thank_you: 'Agradecimiento (después del evento)' }[k] ?? k}</option>)}
+              {keys.map((k) => <option key={k} value={k}>{{ invite: 'Invitación', reminder_pending: 'Recordatorio: no ha confirmado', reminder_opened: 'Recordatorio: abrió sin confirmar', save_the_date: 'Save the date (link general)', thank_you: 'Agradecimiento (después del evento)', event_soon: 'Ya casi: hora y lugar (24-48 h antes)' }[k] ?? k}</option>)}
             </Select>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {(['es', 'en'] as const).map((lang) => (
               <div key={lang}>
-                <p className="mb-1 text-[0.65rem] uppercase tracking-[0.2em] text-stone-500">Mensaje {lang.toUpperCase()} <span className="normal-case tracking-normal text-stone-400">· {'{nombre} {pareja} {fecha} {link} {pases}'}</span></p>
+                <p className="mb-1 text-[0.65rem] uppercase tracking-[0.2em] text-stone-500">Mensaje {lang.toUpperCase()} <span className="normal-case tracking-normal text-stone-400">· {'{nombre} {pareja} {fecha} {hora} {lugar} {link} {pases}'}</span></p>
                 <Textarea value={bodyFor(lang)} onChange={(e) => setOverrides((o) => ({ ...o, [`${templateKey}:${lang}`]: e.target.value }))} className="min-h-32 text-xs" />
               </div>
             ))}
@@ -99,6 +100,35 @@ export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, 
           </button>
         ))}
         <span className="self-center text-xs text-stone-500">{visible.length}</span>
+      </div>
+
+      {/* Modo rápido: un toque abre WhatsApp con el siguiente y lo marca; para mandar 100 sin perderse. */}
+      <div className="flex flex-wrap items-center gap-3 rounded-sm border border-stone-200 bg-white p-3 text-xs text-stone-600">
+        {!rapid ? (
+          <>
+            <Button variant="secondary" disabled={!visible.some((g) => g.phone)} onClick={() => setRapid({ ids: visible.filter((g) => g.phone).map((g) => g.id), at: 0 })}>
+              Modo rápido por WhatsApp ({visible.filter((g) => g.phone).length})
+            </Button>
+            <span>Cada toque abre WhatsApp con el siguiente invitado y lo marca. Ve con calma: 20-30 por hora y con pausas, para que WhatsApp no te bloquee el número.</span>
+          </>
+        ) : (() => {
+          const g = guests.find((x) => x.id === rapid.ids[rapid.at]);
+          if (!g) return <><span>Listo: se abrieron {rapid.at} chats.</span><Button variant="ghost" onClick={() => setRapid(null)}>Cerrar</Button></>;
+          const locale: Locale = g.language === 'en' ? 'en' : 'es';
+          const link = templateKey === 'save_the_date' ? `${siteUrl}/i/${slug}/save-the-date` : templateKey === 'thank_you' ? `${guestLink(siteUrl, slug, g.token)}/gracias` : guestLink(siteUrl, slug, g.token);
+          const message = buildGuestMessage({ template: bodyFor(locale), guestName: g.display_name, passes: g.passes, locale, couple, startsAt, timezone, link, venue });
+          return (
+            <>
+              <a href={guestWhatsappUrl(g.phone as string, message)} target="_blank" rel="noopener noreferrer"
+                onClick={() => { if (tracks) start(async () => { await markSent(eventId, g.id, isReminder); }); setRapid({ ...rapid, at: rapid.at + 1 }); }}
+                className="inline-flex items-center rounded-full bg-[#25D366] px-4 py-2 text-xs font-medium text-white">
+                Abrir WhatsApp: {g.display_name} ({rapid.at + 1} de {rapid.ids.length})
+              </a>
+              <Button variant="ghost" onClick={() => setRapid({ ...rapid, at: rapid.at + 1 })}>Saltar</Button>
+              <Button variant="ghost" onClick={() => setRapid(null)}>Salir</Button>
+            </>
+          );
+        })()}
       </div>
 
       <div className="flex flex-wrap items-center gap-3 rounded-sm border border-stone-200 bg-white p-3 text-xs text-stone-600">
@@ -124,7 +154,7 @@ export function SendQueue({ eventId, slug, siteUrl, couple, startsAt, timezone, 
         {visible.map((g) => {
           const locale: Locale = g.language === 'en' ? 'en' : 'es';
           const link = templateKey === 'save_the_date' ? `${siteUrl}/i/${slug}/save-the-date` : templateKey === 'thank_you' ? `${guestLink(siteUrl, slug, g.token)}/gracias` : guestLink(siteUrl, slug, g.token);
-          const message = buildGuestMessage({ template: bodyFor(locale), guestName: g.display_name, passes: g.passes, locale, couple, startsAt, timezone, link });
+          const message = buildGuestMessage({ template: bodyFor(locale), guestName: g.display_name, passes: g.passes, locale, couple, startsAt, timezone, link, venue });
           return (
             <li key={g.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
               <div className="min-w-0">

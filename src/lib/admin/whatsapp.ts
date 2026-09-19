@@ -1,16 +1,16 @@
 import { whatsappLink } from '@/lib/config';
-import { formatDateShort } from '@/lib/dates';
+import { formatDateShort, formatTime } from '@/lib/dates';
 import type { Locale } from '@/lib/config';
 
 /**
  * Rellena una plantilla de message_templates con los datos del invitado.
- * Variables: {nombre} {pareja} {fecha} {link} {pases}
+ * Variables: {nombre} {pareja} {fecha} {link} {pases} {hora} {lugar}
  */
 export function renderTemplate(
   body: string,
-  vars: { nombre: string; pareja: string; fecha: string; link: string; pases: string },
+  vars: { nombre: string; pareja: string; fecha: string; link: string; pases: string; hora?: string; lugar?: string },
 ): string {
-  return body.replace(/\{(nombre|pareja|fecha|link|pases)\}/g, (_, k: keyof typeof vars) => vars[k]);
+  return body.replace(/\{(nombre|pareja|fecha|link|pases|hora|lugar)\}/g, (_, k: keyof typeof vars) => vars[k] ?? '');
 }
 
 export function guestLink(siteUrl: string, slug: string, token: string): string {
@@ -30,6 +30,7 @@ export function buildGuestMessage(input: {
   startsAt: string;
   timezone: string;
   link: string;
+  venue?: string;
 }): string {
   return renderTemplate(input.template, {
     nombre: input.guestName,
@@ -37,6 +38,8 @@ export function buildGuestMessage(input: {
     fecha: formatDateShort(input.startsAt, input.timezone, input.locale),
     link: input.link,
     pases: passesLabel(input.passes, input.locale),
+    hora: formatTime(input.startsAt, input.timezone, input.locale),
+    lugar: input.venue ?? '',
   });
 }
 

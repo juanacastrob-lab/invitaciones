@@ -11,6 +11,7 @@ const SUBJECT: Record<string, Record<Locale, (pareja: string) => string>> = {
   reminder_opened: { es: (p) => `${p}: te falta confirmar`, en: (p) => `${p}: one step left` },
   save_the_date: { es: (p) => `Save the date · ${p}`, en: (p) => `Save the date · ${p}` },
   thank_you: { es: (p) => `${p}: gracias por acompañarnos`, en: (p) => `${p}: thank you for being with us` },
+  event_soon: { es: (p) => `${p}: ya casi es el día`, en: (p) => `${p}: almost time` },
 };
 
 export function escapeHtml(s: string): string {

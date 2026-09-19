@@ -39,6 +39,7 @@ export async function createEvent(raw: unknown): Promise<ActionResult<{ id: stri
       auto_reminders: b.autoReminders,
       reminder_days: b.reminderDays,
       save_the_date_enabled: b.saveTheDateEnabled,
+      event_reminder_hours: b.eventReminderHours,
       content: templateContent({ partnerA: b.partnerA, partnerB: b.partnerB || undefined, startsAt: b.startsAt, type: b.type }),
       created_by: me.userId,
     })
@@ -84,6 +85,7 @@ export async function updateEventBasics(id: string, raw: unknown): Promise<Actio
       auto_reminders: b.autoReminders,
       reminder_days: b.reminderDays,
       save_the_date_enabled: b.saveTheDateEnabled,
+      event_reminder_hours: b.eventReminderHours,
       content,
     })
     .eq('id', id);

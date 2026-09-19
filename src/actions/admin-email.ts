@@ -16,7 +16,7 @@ import type { EventContent } from '@/schemas/event-content';
 const input = z.object({
   eventId: z.string().uuid(),
   guestIds: z.array(z.string().uuid()).min(1).max(10), // por tanda: la función de Netlify tiene pocos segundos
-  templateKey: z.enum(['invite', 'reminder_pending', 'reminder_opened', 'save_the_date', 'thank_you']),
+  templateKey: z.enum(['invite', 'reminder_pending', 'reminder_opened', 'save_the_date', 'thank_you', 'event_soon']),
   bodies: z.object({ es: z.string().min(1).max(4000), en: z.string().min(1).max(4000) }),
   siteUrl: z.string().url(),
 });
@@ -60,7 +60,7 @@ export async function sendGuestEmails(raw: unknown): Promise<ActionResult<{ sent
     const locale: Locale = g.language === 'en' ? 'en' : 'es';
     const personal = guestLink(siteUrl, event.slug, g.token);
     const link = templateKey === 'save_the_date' ? `${siteUrl}/i/${event.slug}/save-the-date` : templateKey === 'thank_you' ? `${personal}/gracias` : personal;
-    const message = buildGuestMessage({ template: bodies[locale], guestName: g.display_name, passes: g.passes, locale, couple, startsAt: c.startsAt, timezone: event.timezone, link });
+    const message = buildGuestMessage({ template: bodies[locale], guestName: g.display_name, passes: g.passes, locale, couple, startsAt: c.startsAt, timezone: event.timezone, link, venue: c.itinerary?.acts[0]?.venue.name });
     const mail = renderGuestEmail({ templateKey, locale, couple, message, link, appName: APP_NAME });
     const r = await sendEmail({ to: g.email, ...mail, replyTo: CONTACT_EMAIL });
     if (!r.ok) { failed.push({ name: g.display_name, error: r.error }); continue; }

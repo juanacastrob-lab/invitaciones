@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { daysUntil, dueMilestone, parseReminderDays, reminderDeadline } from './reminders';
+import { daysUntil, dueMilestone, hoursUntil, parseReminderDays, parseReminderHours, reminderDeadline } from './reminders';
 
 test('hitos: uno por tramo, nunca repetido', () => {
   assert.equal(dueMilestone([7, 3], 10, null), null);
@@ -22,6 +22,15 @@ test('días que faltan y fecha que manda', () => {
   assert.equal(withDeadline.toISOString(), '2027-02-14T05:59:59.000Z');
   const noDeadline = reminderDeadline({ rsvp_deadline: null, startsAt: '2027-03-13T17:00', timezone: 'America/Mexico_City' });
   assert.equal(noDeadline.toISOString(), '2027-03-13T23:00:00.000Z');
+});
+
+test('horas antes del evento con la misma regla de hitos', () => {
+  assert.equal(hoursUntil(new Date('2027-03-13T23:00:00Z'), new Date('2027-03-12T00:00:00Z')), 47);
+  assert.equal(dueMilestone([48, 24], 47, null), 48);
+  assert.equal(dueMilestone([48, 24], 30, 48), null);
+  assert.equal(dueMilestone([48, 24], 23, 48), 24);
+  assert.equal(dueMilestone([48, 24], -1, 48), null);
+  assert.deepEqual(parseReminderHours('24, 48, 999, x'), [48, 24]);
 });
 
 test('parseo de días', () => {

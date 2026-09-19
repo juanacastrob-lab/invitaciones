@@ -26,11 +26,18 @@ const sans = Jost({
 export const metadata: Metadata = {
   title: APP_NAME,
   description: 'Invitaciones digitales para bodas.',
+  // Instalable en iPhone y Android: el manifest vive en manifest.ts.
+  appleWebApp: { capable: true, title: APP_NAME, statusBarStyle: 'default' },
+  applicationName: APP_NAME,
+  formatDetection: { telephone: false },
 };
 
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
+  // Sin zoom raro en los inputs de iPhone y con la barra del sistema del color del fondo.
+  viewportFit: 'cover' as const,
+  themeColor: '#faf8f5',
 };
 
 export default async function RootLayout({

@@ -37,6 +37,7 @@ normal y no rompe nada.
 | `019_auto_reminders.sql` | Recordatorios automaticos: events.auto_reminders / reminder_days y guests.auto_reminder_milestone. Se puede repetir |
 | `020_save_the_date.sql` | Save the date publico (events.save_the_date_enabled, rpc_get_save_the_date) y plantillas de mensaje save_the_date / thank_you |
 | `021_planners.sql` | Wedding planners con comision: tabla planners, orders.planner_id / commission_amount / commission_paid_at, rpc_mark_commission_paid (solo admin) |
+| `022_event_reminders.sql` | Recordatorio del evento horas antes: events.event_reminder_hours, guests.event_reminder_milestone y plantilla event_soon |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr

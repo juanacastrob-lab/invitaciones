@@ -26,6 +26,21 @@ export function dueMilestone(reminderDays: number[], days: number, lastSent: num
   return Math.min(...candidates);
 }
 
+/** Horas completas que faltan para el evento. Negativo = ya empezó. */
+export function hoursUntil(start: Date, now: Date): number {
+  return Math.ceil((start.getTime() - now.getTime()) / 3_600_000);
+}
+
+/** "48,24" → [48,24]; hasta 7 días (168 h). */
+export function parseReminderHours(text: string): number[] {
+  const out = new Set<number>();
+  for (const part of text.split(/[,\s]+/).filter(Boolean)) {
+    const n = Number(part);
+    if (Number.isInteger(n) && n >= 1 && n <= 168) out.add(n);
+  }
+  return [...out].sort((a, b) => b - a);
+}
+
 /** "7,3" → [7,3]; limpia basura, quita repetidos, ordena de mayor a menor. */
 export function parseReminderDays(text: string): number[] {
   const out = new Set<number>();

@@ -29,7 +29,7 @@ export default async function SendPage({ params }: { params: Promise<{ id: strin
       {event.status !== 'publicado' ? (
         <div className="mb-4"><Notice kind="error">El evento no está publicado: los links personales todavía no abren para los invitados. Publícalo en la pestaña Datos antes de enviar.</Notice></div>
       ) : null}
-      <SendQueue eventId={id} slug={event.slug} siteUrl={site} couple={eventNames(c.couple)} startsAt={c.startsAt} timezone={event.timezone} guests={guests} templates={templates} emailEnabled={Boolean(emailConfig())} published={event.status === 'publicado'} />
+      <SendQueue eventId={id} slug={event.slug} siteUrl={site} couple={eventNames(c.couple)} startsAt={c.startsAt} timezone={event.timezone} venue={c.itinerary?.acts[0]?.venue.name} guests={guests} templates={templates} emailEnabled={Boolean(emailConfig())} published={event.status === 'publicado'} />
     </AdminShell>
   );
 }

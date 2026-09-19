@@ -35,7 +35,22 @@ Recordatorios automaticos: ademas del correo, `CRON_SECRET` (un texto largo al
 azar). Una funcion programada de Netlify (`netlify/functions/reminders-cron.mts`,
 cada 15 minutos) llama a `/api/cron/reminders` con ese secreto, y la app manda
 el recordatorio a los pendientes con correo de los eventos que lo tengan
-activado, en los "dias antes" configurados en Datos del evento.
+activado, en los "dias antes" configurados en Datos del evento. El mismo proceso
+manda el "ya casi" (hora y lugar) en las horas antes del evento que se pongan en
+Datos, a confirmados y pendientes.
+
+WhatsApp Cloud API (Meta), opcional: `WHATSAPP_TOKEN` y `WHATSAPP_PHONE_ID`. Con
+eso, el "ya casi" y los recordatorios salen por WhatsApp a quien tenga telefono
+(si no, por correo). Meta exige plantillas aprobadas: hay que crear en el
+Business Manager una plantilla por cada clave de `message_templates` que se
+quiera mandar (`event_soon`, `reminder_pending`...), en es_MX y en_US, con
+cuatro variables en este orden: nombre, pareja, fecha, link. Mientras no haya
+Cloud API, el envio masivo es a mano desde la cola con el "modo rapido", con
+calma (20-30 por hora) para que WhatsApp no bloquee el numero.
+
+App instalable: en el celular, abrir holaboda.mx/admin y "Agregar a pantalla de
+inicio". Abre a pantalla completa con barra inferior; sirve igual para el
+panel de los novios.
 
 ## Ramas y donde ver cada cosa
 
