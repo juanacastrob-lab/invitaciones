@@ -1,10 +1,10 @@
 import { getTranslations } from 'next-intl/server';
 import { signOut } from '@/actions/auth';
 import type { SessionProfile } from '@/lib/auth';
-import { APP_NAME } from '@/lib/config';
+import { APP_NAME, type Locale } from '@/lib/config';
 
-export async function SessionBar({ me }: { me: SessionProfile }) {
-  const t = await getTranslations('auth');
+export async function SessionBar({ me, locale }: { me: SessionProfile; locale?: Locale }) {
+  const t = locale ? await getTranslations({ locale, namespace: 'auth' }) : await getTranslations('auth');
   return (
     <header className="flex items-center justify-between border-b border-stone-200 px-6 py-3 text-sm">
       <div className="min-w-0">

@@ -9,13 +9,15 @@ import { EventTabs } from '@/components/admin/EventTabs';
 import { GuestsManager } from '@/components/admin/GuestsManager';
 import { LinkButton } from '@/components/ui';
 import type { EventContent } from '@/schemas/event-content';
+import { getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
 
 export const dynamic = 'force-dynamic';
 
 export default async function GuestsPage({ params }: { params: Promise<{ id: string }> }) {
   const me = await requireRole('admin', 'staff');
   const { id } = await params;
-  const [event, guests] = await Promise.all([getEvent(id), listGuests(id)]);
+  const [event, guests, messages] = await Promise.all([getEvent(id), listGuests(id), getMessages({ locale: 'es' })]);
   if (!event) notFound();
   const c = event.content as unknown as EventContent;
   const h = await headers();
@@ -26,7 +28,9 @@ export default async function GuestsPage({ params }: { params: Promise<{ id: str
     <AdminShell me={me} title={eventNames(c.couple)} current="/admin/events"
       actions={<LinkButton href={`/admin/events/${id}/guests/export.csv`}>Exportar CSV</LinkButton>}>
       <EventTabs id={id} current="invitados" />
-      <GuestsManager eventId={id} slug={event.slug} siteUrl={site} guests={guests} />
+      <NextIntlClientProvider locale="es" messages={{ guests: messages.guests }}>
+        <GuestsManager eventId={id} slug={event.slug} siteUrl={site} guests={guests} templateHref={`/admin/events/${id}/guests/template.xlsx`} />
+      </NextIntlClientProvider>
     </AdminShell>
   );
 }

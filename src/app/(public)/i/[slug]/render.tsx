@@ -7,6 +7,8 @@ import { pickText } from '@/schemas/event-content';
 import { AuroraTemplate } from '@/templates/aurora';
 import type { Locale } from '@/lib/config';
 import { getSiteUrl } from '@/lib/env';
+import { DEMO_SLUG } from '@/demo/demo-event';
+import { isTemplateId } from '@/templates/registry';
 
 /**
  * Lo compartido entre el link general y el personal.
@@ -78,14 +80,20 @@ export async function InvitationPage({
   token,
   previewKey,
   requestedLang,
+  requestedTemplate,
 }: {
   slug: string;
   token?: string;
   previewKey?: string;
   requestedLang?: string;
+  /** Solo el demo: probar una plantilla desde la landing sin tocar la base. */
+  requestedTemplate?: string;
 }) {
-  const invitation = await getInvitation(slug, token, previewKey);
-  if (!invitation) notFound();
+  const loaded = await getInvitation(slug, token, previewKey);
+  if (!loaded) notFound();
+  const invitation = slug === DEMO_SLUG && isTemplateId(requestedTemplate)
+    ? { ...loaded, event: { ...loaded.event, template: requestedTemplate } }
+    : loaded;
 
   // Primera apertura del link personal. No debe tumbar la página si falla.
   if (invitation.token_valid && token) {

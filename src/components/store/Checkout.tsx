@@ -15,7 +15,7 @@ const field = 'w-full rounded-sm border border-stone-300 bg-white px-3 py-2.5 te
 const label = 'mb-1.5 block text-[0.7rem] uppercase tracking-[0.2em] text-stone-500';
 const STEPS = ['package', 'extras', 'mode', 'contact', 'payment'] as const;
 
-export function Checkout({ locale, packages, extras, featureLabels, preselected, bank, planner }: {
+export function Checkout({ locale, packages, extras, featureLabels, preselected, bank, planner, initialType }: {
   locale: Locale;
   packages: StorePackage[];
   extras: StoreExtra[];
@@ -24,12 +24,13 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
   bank: { bank: string; holder: string; clabe: string };
   /** Viene de /comprar?ref=CODIGO: el pedido se atribuye a este planner. */
   planner?: { code: string; name: string; email: string } | null;
+  initialType?: EventType;
 }) {
   const t = useTranslations('store');
   const fmt = (n: number, cur: string) => new Intl.NumberFormat(locale === 'es' ? 'es-MX' : 'en-US', { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(n);
 
   const [step, setStep] = useState<number>(preselected && packages.some((p) => p.code === preselected) ? 1 : 0);
-  const [eventType, setEventType] = useState<EventType>('boda');
+  const [eventType, setEventType] = useState<EventType>(initialType ?? 'boda');
   const [pkgCode, setPkgCode] = useState(preselected ?? packages[Math.min(2, packages.length - 1)]?.code ?? '');
   const [extraCodes, setExtraCodes] = useState<string[]>([]);
   const [mode, setMode] = useState<'team' | 'self' | 'planner'>(planner ? 'planner' : 'team');

@@ -8,7 +8,7 @@
     },
     "hero": {
       "title": "Invitaciones que cuentan tu historia",
-      "body": "Invitaciones de boda digitales, en español e inglés, con un link personal para cada invitado y confirmación de asistencia desde el celular. Nosotros la armamos; tú solo apruebas.",
+      "body": "Invitaciones digitales para bodas, XV años, bautizos y más, en español e inglés, con un link personal para cada invitado y confirmación de asistencia desde el celular. Nosotros la armamos; tú solo apruebas.",
       "cta": "Quiero mi invitación",
       "demo": "Ver la invitación demo"
     },
@@ -69,6 +69,15 @@
     "footer": {
       "privacy": "Aviso de privacidad",
       "whatsapp": "Escríbenos por WhatsApp"
+    },
+    "types": {
+      "title": "No solo bodas",
+      "body": "La misma invitación, con textos y diseño para cada celebración. Elige la tuya:"
+    },
+    "templates": {
+      "title": "Cinco diseños",
+      "body": "Mismo contenido, otro look. Se cambia cuando quieras, incluso después de mandarla.",
+      "open": "Toca uno para verlo con la invitación demo."
     }
   },
   "invitation": {
@@ -318,6 +327,13 @@
       "pendingBadge": "por pagar",
       "none": "Todavía no hay pedidos con tu link.",
       "payout": "Las comisiones se pagan por transferencia. Cualquier duda:"
+    },
+    "eventStatus": {
+      "borrador": "Borrador",
+      "en_revision": "En revisión",
+      "publicado": "Publicada",
+      "finalizado": "Finalizada",
+      "archivado": "Archivada"
     }
   },
   "store": {
@@ -556,5 +572,77 @@
       "title": "Agradecimiento",
       "hint": "Después del evento. Cada invitado lo ve en su link personal, con su nombre. Sin texto, no existe."
     }
+  },
+  "guests": {
+    "addTitle": "Agregar invitado",
+    "importTitle": "Importar desde Excel o CSV",
+    "importHelp": "Columnas: Nombre, Pases, Teléfono, Correo, Idioma, Grupo, Mesa — en cualquier orden, en español o inglés. Solo Nombre es obligatorio.",
+    "importTemplate": "Descargar plantilla",
+    "import": "Importar",
+    "importing": "Importando…",
+    "imported": "{count, plural, one {# invitado cargado} other {# invitados cargados}}.",
+    "importErrors": "{count, plural, one {# fila con error:} other {# filas con error:}}",
+    "search": "Buscar por nombre, grupo o teléfono",
+    "count": "{visible} de {total}",
+    "cancel": "Cancelar",
+    "passes": "{count, plural, one {# pase} other {# pases}}",
+    "status": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmó",
+      "declined": "No asiste"
+    },
+    "tableNo": "mesa {table}",
+    "sent": "enviado",
+    "notSent": "sin enviar",
+    "opened": "abrió",
+    "reminders": "{count, plural, one {# recordatorio} other {# recordatorios}}",
+    "copyLink": "Copiar link",
+    "edit": "Editar",
+    "newLink": "Nuevo link",
+    "newLinkConfirm": "¿Generar link nuevo? El anterior deja de funcionar.",
+    "delete": "Borrar",
+    "deleteConfirm": "¿Borrar a {name}?",
+    "empty": "Sin invitados todavía.",
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "Familia López",
+      "passes": "Pases",
+      "phone": "WhatsApp",
+      "email": "Correo",
+      "language": "Idioma",
+      "group": "Grupo",
+      "groupPlaceholder": "Familia",
+      "table": "Mesa",
+      "save": "Guardar",
+      "add": "Agregar"
+    }
+  },
+  "checkin": {
+    "title": "Check-in",
+    "arrivedLabel": "Llegaron",
+    "expected": "Esperados",
+    "groups": "Grupos",
+    "pointCamera": "Apunta la cámara al QR del pase del invitado.",
+    "openCamera": "Abrir cámara",
+    "close": "Cerrar",
+    "camError": "No se pudo abrir la cámara ({message}). Busca al invitado por nombre.",
+    "arrived": "{name}: llegaron {count}",
+    "undone": "{name}: llegada deshecha",
+    "already": "{name} ya había llegado. Ahora: {count}.",
+    "errNotFound": "Ese QR no es de este evento.",
+    "errDenied": "Sin acceso a este evento.",
+    "errUnknown": "No se pudo marcar.",
+    "errOtherQr": "Ese QR no es de esta invitación.",
+    "confirmed": "Confirmó {count}",
+    "declined": "No viene",
+    "pending": "Sin confirmar",
+    "passes": "{count, plural, one {# pase} other {# pases}}",
+    "table": "Mesa {table}",
+    "arrivedShort": "llegaron {count}",
+    "search": "Buscar por nombre, mesa o grupo",
+    "undo": "Deshacer",
+    "markArrived": "Llegó",
+    "noMatch": "Nadie con ese nombre.",
+    "autoRefresh": "Se actualiza solo cada 15 segundos. Funciona con varios celulares a la vez."
   }
 }

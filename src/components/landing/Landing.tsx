@@ -4,6 +4,8 @@ import { APP_NAME, DEFAULT_LOCALE, WHATSAPP_NUMBER, whatsappLink, type Locale } 
 import { DEMO_SLUG } from '@/demo/demo-event';
 import { getActivePackages, formatPrice } from '@/lib/packages';
 import { LeadForm, WhatsAppIcon } from '@/components/landing/LeadForm';
+import { EVENT_TYPES, EVENT_TYPE_LABEL } from '@/lib/event-types';
+import { TEMPLATE_IDS, TEMPLATES } from '@/templates/registry';
 
 /**
  * La portada de holaboda. Estática con revalidación: no gasta funciones de
@@ -67,6 +69,53 @@ export async function Landing({ locale }: { locale: Locale }) {
               <img src="/brand/demo-portada.jpg" alt={t('preview.coverAlt')} loading="lazy" className="w-40 rounded-2xl border border-stone-200 shadow-lg sm:w-44" />
               <img src="/brand/demo-rsvp.jpg" alt={t('preview.rsvpAlt')} loading="lazy" className="mt-8 w-40 rounded-2xl border border-stone-200 shadow-lg sm:w-44" />
             </div>
+          </div>
+        </section>
+
+        {/* ---------------------------------------------------- tipos de evento */}
+        <section className="px-5 py-12">
+          <div className="mx-auto max-w-4xl text-center">
+            <h2 className="text-[0.7rem] uppercase tracking-[0.3em] text-stone-400">{t('types.title')}</h2>
+            <p className="mx-auto mt-3 max-w-xl text-[0.95rem] leading-relaxed text-stone-600">{t('types.body')}</p>
+            <ul className="mt-6 flex flex-wrap justify-center gap-2">
+              {EVENT_TYPES.filter((k) => k !== 'otro').map((k) => (
+                <li key={k}>
+                  <a href={`/comprar?tipo=${k}${locale === 'es' ? '' : '&lang=en'}`} className="inline-block rounded-full border border-stone-300 px-4 py-2 text-xs uppercase tracking-[0.15em] text-stone-700 hover:border-stone-900">
+                    {EVENT_TYPE_LABEL[k][locale]}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------ plantillas */}
+        <section className="bg-white px-5 py-14">
+          <div className="mx-auto max-w-5xl">
+            <h2 className="text-center text-[0.7rem] uppercase tracking-[0.3em] text-stone-400">{t('templates.title')}</h2>
+            <p className="mx-auto mt-3 max-w-xl text-center text-[0.95rem] leading-relaxed text-stone-600">{t('templates.body')}</p>
+            <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-5">
+              {TEMPLATE_IDS.map((id) => {
+                const th = TEMPLATES[id];
+                return (
+                  <li key={id}>
+                    <a href={`/i/${DEMO_SLUG}?template=${id}${locale === 'es' ? '' : '&lang=en'}`} className="block overflow-hidden rounded-2xl border border-stone-200 shadow-sm transition-transform hover:-translate-y-0.5">
+                      <div className="flex aspect-[3/4] flex-col items-center justify-center px-3 text-center" style={{ background: th.colors.paper, color: th.colors.ink }}>
+                        <span className="text-[0.55rem] uppercase tracking-[0.3em]" style={{ color: th.colors.muted }}>{locale === 'es' ? 'Nos casamos' : 'We are getting married'}</span>
+                        <span className={`mt-2 text-lg leading-tight ${th.heading === 'sans' ? 'font-sans font-light' : 'font-serif'}`}>Ana<br /><span style={{ color: th.colors.accent }}>&</span><br />Luis</span>
+                        <span className="mt-3 h-px w-8" style={{ background: th.colors.line }} />
+                        <span className="mt-2 text-[0.55rem] uppercase tracking-[0.2em]" style={{ color: th.colors.muted }}>13 · 03 · 2027</span>
+                      </div>
+                      <div className="border-t border-stone-100 bg-white px-3 py-2">
+                        <p className="text-sm font-medium text-stone-900">{th.name[locale]}</p>
+                        <p className="text-[0.7rem] leading-snug text-stone-500">{th.description[locale]}</p>
+                      </div>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="mt-4 text-center text-xs text-stone-500">{t('templates.open')}</p>
           </div>
         </section>
 

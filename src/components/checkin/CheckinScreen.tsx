@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import jsQR from 'jsqr';
 import { checkIn, checkinSnapshot, type CheckinGuest } from '@/actions/checkin';
 import { checkinTotals, tokenFromScan } from '@/lib/checkin';
@@ -12,6 +13,7 @@ import { Button, Input, Notice } from '@/components/ui';
  * llama a la base; el listado se refresca solo cada 15 s.
  */
 export function CheckinScreen({ eventId, slug, initial, demo = false }: { eventId: string; slug: string; initial: CheckinGuest[]; demo?: boolean }) {
+  const t = useTranslations('checkin');
   const [guests, setGuests] = useState<CheckinGuest[]>(initial);
   const [q, setQ] = useState('');
   const [scanning, setScanning] = useState(false);
@@ -46,24 +48,24 @@ export function CheckinScreen({ eventId, slug, initial, demo = false }: { eventI
         const n = count ?? (g.status === 'confirmed' ? Math.max(1, g.confirmed_count) : g.passes);
         const next = { ...g, checked_in_count: n, checked_in_at: n > 0 ? new Date().toISOString() : null };
         apply(next);
-        setLast({ kind: n > 0 ? 'ok' : 'error', text: n > 0 ? `${next.display_name}: llegaron ${n}` : `${next.display_name}: llegada deshecha`, guest: next });
+        setLast({ kind: n > 0 ? 'ok' : 'error', text: n > 0 ? t('arrived', { name: next.display_name, count: n }) : t('undone', { name: next.display_name }), guest: next });
         return;
       }
       const r = await checkIn({ eventId, count, ...args });
       if (!r.ok) {
-        setLast({ kind: 'error', text: r.error === 'not_found' ? 'Ese QR no es de este evento.' : r.error === 'denied' ? 'Sin acceso a este evento.' : (r.message ?? 'No se pudo marcar.') });
+        setLast({ kind: 'error', text: r.error === 'not_found' ? t('errNotFound') : r.error === 'denied' ? t('errDenied') : (r.message ?? t('errUnknown')) });
         if (navigator.vibrate) navigator.vibrate([80, 60, 80]);
         return;
       }
       apply(r.guest);
-      if (count === 0) setLast({ kind: 'ok', text: `${r.guest.display_name}: llegada deshecha`, guest: r.guest });
-      else if (r.already) setLast({ kind: 'already', text: `${r.guest.display_name} ya había llegado. Ahora: ${r.guest.checked_in_count}.`, guest: r.guest });
-      else setLast({ kind: 'ok', text: `${r.guest.display_name}: llegaron ${r.guest.checked_in_count}`, guest: r.guest });
+      if (count === 0) setLast({ kind: 'ok', text: t('undone', { name: r.guest.display_name }), guest: r.guest });
+      else if (r.already) setLast({ kind: 'already', text: t('already', { name: r.guest.display_name, count: r.guest.checked_in_count }), guest: r.guest });
+      else setLast({ kind: 'ok', text: t('arrived', { name: r.guest.display_name, count: r.guest.checked_in_count }), guest: r.guest });
       if (navigator.vibrate) navigator.vibrate(r.already ? [40, 40, 40] : 60);
     } finally {
       setBusy(false);
     }
-  }, [busy, demo, guests, eventId, apply]);
+  }, [busy, demo, guests, eventId, apply, t]);
 
   // ------------------------------------------------------------- cámara
   const stopCamera = useCallback(() => {
@@ -80,9 +82,9 @@ export function CheckinScreen({ eventId, slug, initial, demo = false }: { eventI
       if (video.current) { video.current.srcObject = s; await video.current.play(); }
       setScanning(true);
     } catch (e) {
-      setCamError(`No se pudo abrir la cámara (${(e as Error).message}). Busca al invitado por nombre.`);
+      setCamError(t('camError', { message: (e as Error).message }));
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => () => stopCamera(), [stopCamera]);
 
@@ -107,13 +109,13 @@ export function CheckinScreen({ eventId, slug, initial, demo = false }: { eventI
       if (code.data === lastCode.current.text && now - lastCode.current.at < 4000) return;
       lastCode.current = { text: code.data, at: now };
       const token = tokenFromScan(code.data, slug);
-      if (!token) { setLast({ kind: 'error', text: 'Ese QR no es de esta invitación.' }); return; }
+      if (!token) { setLast({ kind: 'error', text: t('errOtherQr') }); return; }
       // Llegan los que confirmó (o sus pases si no confirmó); se ajusta después con + / −.
       void mark({ token }, null);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [scanning, slug, mark]);
+  }, [scanning, slug, mark, t]);
 
   const visible = guests
     .filter((g) => !q.trim() || `${g.display_name} ${g.table_no ?? ''} ${g.group_tag ?? ''}`.toLowerCase().includes(q.trim().toLowerCase()))
@@ -122,9 +124,9 @@ export function CheckinScreen({ eventId, slug, initial, demo = false }: { eventI
   return (
     <div className="space-y-4">
       <dl className="grid grid-cols-3 gap-2 text-center">
-        <div className="rounded-sm border border-stone-200 bg-white p-3"><dt className="text-[0.6rem] uppercase tracking-widest text-stone-500">Llegaron</dt><dd className="font-serif text-3xl">{totals.arrivedPeople}</dd></div>
-        <div className="rounded-sm border border-stone-200 bg-white p-3"><dt className="text-[0.6rem] uppercase tracking-widest text-stone-500">Esperados</dt><dd className="font-serif text-3xl">{totals.expected}</dd></div>
-        <div className="rounded-sm border border-stone-200 bg-white p-3"><dt className="text-[0.6rem] uppercase tracking-widest text-stone-500">Grupos</dt><dd className="font-serif text-3xl">{totals.arrivedGroups}<span className="text-base text-stone-400">/{totals.confirmedGroups}</span></dd></div>
+        <div className="rounded-sm border border-stone-200 bg-white p-3"><dt className="text-[0.6rem] uppercase tracking-widest text-stone-500">{t('arrivedLabel')}</dt><dd className="font-serif text-3xl">{totals.arrivedPeople}</dd></div>
+        <div className="rounded-sm border border-stone-200 bg-white p-3"><dt className="text-[0.6rem] uppercase tracking-widest text-stone-500">{t('expected')}</dt><dd className="font-serif text-3xl">{totals.expected}</dd></div>
+        <div className="rounded-sm border border-stone-200 bg-white p-3"><dt className="text-[0.6rem] uppercase tracking-widest text-stone-500">{t('groups')}</dt><dd className="font-serif text-3xl">{totals.arrivedGroups}<span className="text-base text-stone-400">/{totals.confirmedGroups}</span></dd></div>
       </dl>
 
       <section className="overflow-hidden rounded-sm border border-stone-200 bg-black">
@@ -133,13 +135,13 @@ export function CheckinScreen({ eventId, slug, initial, demo = false }: { eventI
           <canvas ref={canvas} className="hidden" />
           {!scanning ? (
             <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center text-sm text-white/80">
-              <p>Apunta la cámara al QR del pase del invitado.</p>
-              <Button type="button" variant="secondary" onClick={startCamera} className="border-white/70 text-white hover:border-white">Abrir cámara</Button>
+              <p>{t('pointCamera')}</p>
+              <Button type="button" variant="secondary" onClick={startCamera} className="border-white/70 text-white hover:border-white">{t('openCamera')}</Button>
             </div>
           ) : (
             <>
               <div className="pointer-events-none absolute inset-0 m-auto h-44 w-44 rounded-lg border-2 border-white/80" />
-              <button type="button" onClick={stopCamera} className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-xs text-white">Cerrar</button>
+              <button type="button" onClick={stopCamera} className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-xs text-white">{t('close')}</button>
             </>
           )}
         </div>
@@ -151,7 +153,7 @@ export function CheckinScreen({ eventId, slug, initial, demo = false }: { eventI
           <p className="font-medium">{last.text}</p>
           {last.guest ? (
             <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
-              <span>{last.guest.status === 'confirmed' ? `Confirmó ${last.guest.confirmed_count}` : last.guest.status === 'declined' ? 'Había dicho que no venía' : 'No había confirmado'} · {last.guest.passes} pases{last.guest.table_no ? ` · Mesa ${last.guest.table_no}` : ''}</span>
+              <span>{last.guest.status === 'confirmed' ? t('confirmed', { count: last.guest.confirmed_count }) : last.guest.status === 'declined' ? t('declined') : t('pending')} · {t('passes', { count: last.guest.passes })}{last.guest.table_no ? ` · ${t('table', { table: last.guest.table_no })}` : ''}</span>
               <span className="ml-auto flex items-center gap-1">
                 <Button variant="secondary" disabled={busy || last.guest.checked_in_count <= 0} onClick={() => mark({ guestId: last.guest!.id }, last.guest!.checked_in_count - 1)}>−</Button>
                 <span className="w-8 text-center text-base">{last.guest.checked_in_count}</span>
@@ -162,24 +164,24 @@ export function CheckinScreen({ eventId, slug, initial, demo = false }: { eventI
         </div>
       ) : null}
 
-      <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar por nombre, mesa o grupo" />
+      <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('search')} />
       <ul className="divide-y divide-stone-200 rounded-sm border border-stone-200 bg-white">
         {visible.slice(0, 80).map((g) => (
           <li key={g.id} className={`flex items-center justify-between gap-3 p-3 text-sm ${g.checked_in_at ? 'bg-emerald-50/60' : ''}`}>
             <div className="min-w-0">
               <p className="truncate font-medium">{g.display_name}</p>
-              <p className="text-xs text-stone-500">{g.status === 'confirmed' ? `Confirmó ${g.confirmed_count}` : g.status === 'declined' ? 'No viene' : 'Sin confirmar'} · {g.passes} pases{g.table_no ? ` · Mesa ${g.table_no}` : ''}{g.checked_in_at ? ` · llegaron ${g.checked_in_count}` : ''}</p>
+              <p className="text-xs text-stone-500">{g.status === 'confirmed' ? t('confirmed', { count: g.confirmed_count }) : g.status === 'declined' ? t('declined') : t('pending')} · {t('passes', { count: g.passes })}{g.table_no ? ` · ${t('table', { table: g.table_no })}` : ''}{g.checked_in_at ? ` · ${t('arrivedShort', { count: g.checked_in_count })}` : ''}</p>
             </div>
             {g.checked_in_at ? (
-              <Button variant="ghost" disabled={busy} onClick={() => mark({ guestId: g.id }, 0)}>Deshacer</Button>
+              <Button variant="ghost" disabled={busy} onClick={() => mark({ guestId: g.id }, 0)}>{t('undo')}</Button>
             ) : (
-              <Button variant="secondary" disabled={busy} onClick={() => mark({ guestId: g.id }, Math.max(1, g.status === 'confirmed' ? g.confirmed_count : g.passes))}>Llegó</Button>
+              <Button variant="secondary" disabled={busy} onClick={() => mark({ guestId: g.id }, Math.max(1, g.status === 'confirmed' ? g.confirmed_count : g.passes))}>{t('markArrived')}</Button>
             )}
           </li>
         ))}
-        {!visible.length ? <li className="p-4 text-center text-xs text-stone-500">Nadie con ese nombre.</li> : null}
+        {!visible.length ? <li className="p-4 text-center text-xs text-stone-500">{t('noMatch')}</li> : null}
       </ul>
-      {!demo ? <p className="text-center text-[0.65rem] text-stone-400">Se actualiza solo cada 15 segundos. Funciona con varios celulares a la vez.</p> : null}
+      {!demo ? <p className="text-center text-[0.65rem] text-stone-400">{t('autoRefresh')}</p> : null}
     </div>
   );
 }

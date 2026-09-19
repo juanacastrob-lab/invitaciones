@@ -33,7 +33,7 @@ export default async function CommissionsPage({ searchParams }: { searchParams: 
 
   return (
     <div className="min-h-dvh bg-stone-50 text-stone-900">
-      <SessionBar me={me} />
+      <SessionBar me={me} locale={locale} />
       <main className="mx-auto max-w-2xl px-6 py-8">
         <a href={`/panel${lang ? `?lang=${lang}` : ''}`} className="text-xs uppercase tracking-[0.2em] text-stone-500 underline underline-offset-4">← {t('title')}</a>
         <h1 className="mb-1 mt-2 font-serif text-3xl">{t('commissions.title')}</h1>

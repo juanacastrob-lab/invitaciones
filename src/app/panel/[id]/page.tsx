@@ -9,7 +9,7 @@ import { PanelGuests } from '@/components/panel/PanelGuests';
 import { ApproveBox } from '@/components/panel/ApproveBox';
 import { GuestsManager } from '@/components/admin/GuestsManager';
 import { Badge, LinkButton } from '@/components/ui';
-import { STATUS_LABEL, STATUS_TONE } from '@/lib/admin/labels';
+import { STATUS_TONE } from '@/lib/admin/labels';
 import { isLocale, DEFAULT_LOCALE, WHATSAPP_NUMBER, whatsappLink } from '@/lib/config';
 import { getSiteUrl } from '@/lib/env';
 import type { EventContent } from '@/schemas/event-content';
@@ -44,12 +44,12 @@ export default async function PanelEventPage({ params, searchParams }: { params:
 
   return (
     <div className="min-h-dvh bg-stone-50 text-stone-900">
-      <SessionBar me={me} />
+      <SessionBar me={me} locale={locale} />
       <main className="mx-auto max-w-3xl px-6 py-8">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h1 className="font-serif text-3xl">{eventNames(c.couple)}</h1>
-            <p className="mt-1 text-xs text-stone-500">{t('status_')}: <Badge tone={STATUS_TONE[event.status]}>{STATUS_LABEL[event.status]}</Badge></p>
+            <p className="mt-1 text-xs text-stone-500">{t('status_')}: <Badge tone={STATUS_TONE[event.status]}>{t(`eventStatus.${event.status}`)}</Badge></p>
           </div>
           <div className="flex gap-2">
             <a href={`/panel/${id}?lang=${other}`} className="self-center text-[0.65rem] uppercase tracking-[0.2em] text-stone-500 underline underline-offset-4">{other.toUpperCase()}</a>
@@ -58,7 +58,7 @@ export default async function PanelEventPage({ params, searchParams }: { params:
             <LinkButton href={`/panel/${id}/invitacion.pdf?lang=${locale}`} target="_blank">{t('downloadPdf')}</LinkButton>
             <LinkButton href={`/panel/${id}/mesas${lang ? `?lang=${lang}` : ''}`}>{locale === 'es' ? 'Mesas' : 'Tables'}</LinkButton>
             {editable ? <LinkButton href={`/panel/${id}/contenido${lang ? `?lang=${lang}` : ''}`} variant="primary">{t('editContent')}</LinkButton> : null}
-            {event.checkin_enabled && event.status === 'publicado' ? <LinkButton href={`/checkin/${id}`}>{t('checkin')}</LinkButton> : null}
+            {event.checkin_enabled && event.status === 'publicado' ? <LinkButton href={`/checkin/${id}${lang ? `?lang=${lang}` : ''}`}>{t('checkin')}</LinkButton> : null}
           </div>
         </div>
 
@@ -84,7 +84,9 @@ export default async function PanelEventPage({ params, searchParams }: { params:
           {editable ? (
             <>
               <p className="mb-4 text-xs text-stone-500">{t('editListHint')}</p>
-              <GuestsManager eventId={id} slug={event.slug} siteUrl={getSiteUrl() ?? ''} guests={guests} />
+              <NextIntlClientProvider locale={locale} messages={{ guests: messages.guests }}>
+                <GuestsManager eventId={id} slug={event.slug} siteUrl={getSiteUrl() ?? ''} guests={guests} templateHref={`/admin/events/${id}/guests/template.xlsx`} />
+              </NextIntlClientProvider>
             </>
           ) : (
             <NextIntlClientProvider locale={locale} messages={{ panel: messages.panel }}>

@@ -18,7 +18,7 @@ export default async function PanelHome({ searchParams }: { searchParams: Promis
 
   return (
     <div className="min-h-dvh bg-stone-50 text-stone-900">
-      <SessionBar me={me} />
+      <SessionBar me={me} locale={locale} />
       <main className="mx-auto max-w-2xl px-6 py-10">
         <h1 className="font-serif text-3xl">{t('title')}</h1>
         {planner ? <a href={`/panel/comisiones${lang ? `?lang=${lang}` : ''}`} className="mt-3 inline-block rounded-full border border-stone-300 px-4 py-2 text-xs uppercase tracking-[0.18em] text-stone-700">{t('commissions.title')} · {planner.code}</a> : null}

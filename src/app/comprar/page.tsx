@@ -5,13 +5,14 @@ import { APP_NAME, BANK_DETAILS, DEFAULT_LOCALE, isLocale } from '@/lib/config';
 import { getActivePackages } from '@/lib/packages';
 import { getActiveExtras, getPlannerByCode } from '@/lib/store';
 import { Checkout } from '@/components/store/Checkout';
+import { isEventType } from '@/lib/event-types';
 
 export const metadata: Metadata = { title: `Arma tu invitación · ${APP_NAME}` };
 export const dynamic = 'force-dynamic';
 
 /** La tienda: paquete → extras → quién la arma → datos → pago. */
-export default async function BuyPage({ searchParams }: { searchParams: Promise<{ lang?: string; paquete?: string; ref?: string }> }) {
-  const { lang, paquete, ref } = await searchParams;
+export default async function BuyPage({ searchParams }: { searchParams: Promise<{ lang?: string; paquete?: string; ref?: string; tipo?: string }> }) {
+  const { lang, paquete, ref, tipo } = await searchParams;
   const locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
   const planner = await getPlannerByCode(ref);
   const [t, tl, messages, packages, extras] = await Promise.all([
@@ -36,7 +37,7 @@ export default async function BuyPage({ searchParams }: { searchParams: Promise<
       <main className="mx-auto max-w-3xl px-5 py-10">
         <h1 className="mb-8 font-serif text-4xl">{t('title')}</h1>
         <NextIntlClientProvider locale={locale} messages={{ store: messages.store }}>
-          <Checkout locale={locale} packages={packages} extras={extras} featureLabels={featureLabels} preselected={paquete} bank={BANK_DETAILS} planner={planner ? { code: ref!.toUpperCase(), name: planner.name, email: planner.email } : null} />
+          <Checkout locale={locale} packages={packages} extras={extras} featureLabels={featureLabels} preselected={paquete} bank={BANK_DETAILS} initialType={isEventType(tipo) ? tipo : undefined} planner={planner ? { code: ref!.toUpperCase(), name: planner.name, email: planner.email } : null} />
         </NextIntlClientProvider>
       </main>
     </div>

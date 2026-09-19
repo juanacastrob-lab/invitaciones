@@ -8,7 +8,7 @@
     },
     "hero": {
       "title": "Invitations that tell your story",
-      "body": "Digital wedding invitations in Spanish and English, with a personal link for every guest and RSVP from any phone. We build it; you just approve.",
+      "body": "Digital invitations for weddings, quinceañeras, baptisms and more, in Spanish and English, with a personal link for every guest and RSVP from their phone. We build it; you just approve.",
       "cta": "I want my invitation",
       "demo": "See the demo invitation"
     },
@@ -69,6 +69,15 @@
     "footer": {
       "privacy": "Privacy notice",
       "whatsapp": "Message us on WhatsApp"
+    },
+    "types": {
+      "title": "Not just weddings",
+      "body": "The same invitation, with texts and a design for every celebration. Pick yours:"
+    },
+    "templates": {
+      "title": "Five designs",
+      "body": "Same content, different look. Change it whenever you want, even after sending.",
+      "open": "Tap one to see it on the demo invitation."
     }
   },
   "invitation": {
@@ -318,6 +327,13 @@
       "pendingBadge": "owed",
       "none": "No orders through your link yet.",
       "payout": "Commissions are paid by bank transfer. Questions:"
+    },
+    "eventStatus": {
+      "borrador": "Draft",
+      "en_revision": "In review",
+      "publicado": "Published",
+      "finalizado": "Finished",
+      "archivado": "Archived"
     }
   },
   "store": {
@@ -556,5 +572,77 @@
       "title": "Thank-you note",
       "hint": "After the event. Each guest sees it on their personal link, with their name. No text, no page."
     }
+  },
+  "guests": {
+    "addTitle": "Add guest",
+    "importTitle": "Import from Excel or CSV",
+    "importHelp": "Columns: Name, Passes, Phone, Email, Language, Group, Table — in any order, in Spanish or English. Only Name is required.",
+    "importTemplate": "Download template",
+    "import": "Import",
+    "importing": "Importing…",
+    "imported": "{count, plural, one {# guest loaded} other {# guests loaded}}.",
+    "importErrors": "{count, plural, one {# row with errors:} other {# rows with errors:}}",
+    "search": "Search by name, group or phone",
+    "count": "{visible} of {total}",
+    "cancel": "Cancel",
+    "passes": "{count, plural, one {# pass} other {# passes}}",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "declined": "Not coming"
+    },
+    "tableNo": "table {table}",
+    "sent": "sent",
+    "notSent": "not sent",
+    "opened": "opened",
+    "reminders": "{count, plural, one {# reminder} other {# reminders}}",
+    "copyLink": "Copy link",
+    "edit": "Edit",
+    "newLink": "New link",
+    "newLinkConfirm": "Generate a new link? The old one stops working.",
+    "delete": "Delete",
+    "deleteConfirm": "Delete {name}?",
+    "empty": "No guests yet.",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "The López family",
+      "passes": "Passes",
+      "phone": "WhatsApp",
+      "email": "Email",
+      "language": "Language",
+      "group": "Group",
+      "groupPlaceholder": "Family",
+      "table": "Table",
+      "save": "Save",
+      "add": "Add"
+    }
+  },
+  "checkin": {
+    "title": "Check-in",
+    "arrivedLabel": "Arrived",
+    "expected": "Expected",
+    "groups": "Groups",
+    "pointCamera": "Point the camera at the QR on the guest's pass.",
+    "openCamera": "Open camera",
+    "close": "Close",
+    "camError": "Could not open the camera ({message}). Search the guest by name.",
+    "arrived": "{name}: {count} arrived",
+    "undone": "{name}: arrival undone",
+    "already": "{name} had already arrived. Now: {count}.",
+    "errNotFound": "That QR is not from this event.",
+    "errDenied": "No access to this event.",
+    "errUnknown": "Could not mark.",
+    "errOtherQr": "That QR is not from this invitation.",
+    "confirmed": "Confirmed {count}",
+    "declined": "Not coming",
+    "pending": "Not confirmed",
+    "passes": "{count, plural, one {# pass} other {# passes}}",
+    "table": "Table {table}",
+    "arrivedShort": "{count} arrived",
+    "search": "Search by name, table or group",
+    "undo": "Undo",
+    "markArrived": "Arrived",
+    "noMatch": "No one with that name.",
+    "autoRefresh": "Refreshes every 15 seconds. Works on several phones at once."
   }
 }

@@ -1,12 +1,17 @@
 import { notFound } from 'next/navigation';
 import { CheckinScreen } from '@/components/checkin/CheckinScreen';
 import type { CheckinGuest } from '@/actions/checkin';
+import { getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
 
 export const dynamic = 'force-dynamic';
 
 /** Check-in con datos de mentira, para revisar el diseño. No existe en producción. */
-export default function DevCheckin() {
+export default async function DevCheckin({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
   if (process.env.NODE_ENV === 'production') notFound();
+  const { lang } = await searchParams;
+  const locale = lang === 'en' ? 'en' : 'es';
+  const messages = await getMessages({ locale });
   const g = (id: string, name: string, passes: number, status: CheckinGuest['status'], confirmed: number, arrived: number, table: string | null): CheckinGuest =>
     ({ id, display_name: name, passes, status, confirmed_count: confirmed, table_no: table, group_tag: null, checked_in_at: arrived ? '2027-03-13T23:10:00Z' : null, checked_in_count: arrived });
   const guests = [
@@ -16,7 +21,9 @@ export default function DevCheckin() {
   return (
     <main className="mx-auto max-w-lg bg-stone-50 px-4 py-6">
       <h1 className="mb-4 font-serif text-3xl">Check-in</h1>
-      <CheckinScreen eventId="demo" slug="juan-y-ana" initial={guests} demo />
+      <NextIntlClientProvider locale={locale} messages={{ checkin: messages.checkin }}>
+        <CheckinScreen eventId="demo" slug="juan-y-ana" initial={guests} demo />
+      </NextIntlClientProvider>
     </main>
   );
 }

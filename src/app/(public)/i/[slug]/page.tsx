@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { InvitationPage, invitationMetadata } from './render';
 
 type Params = Promise<{ slug: string }>;
-type Search = Promise<{ lang?: string; preview?: string }>;
+type Search = Promise<{ lang?: string; preview?: string; template?: string }>;
 
 export async function generateMetadata({
   params,
@@ -25,7 +25,7 @@ export default async function Page({
   searchParams: Search;
 }) {
   const { slug } = await params;
-  const { lang, preview } = await searchParams;
+  const { lang, preview, template } = await searchParams;
 
-  return <InvitationPage slug={slug} previewKey={preview} requestedLang={lang} />;
+  return <InvitationPage slug={slug} previewKey={preview} requestedLang={lang} requestedTemplate={template} />;
 }
