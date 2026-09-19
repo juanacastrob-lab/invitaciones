@@ -204,6 +204,9 @@
     },
     "parents": {
       "title": "Parents and sponsors"
+    },
+    "envelope": {
+      "open": "Tap to open"
     }
   },
   "auth": {
@@ -567,7 +570,11 @@
       "group": "Group",
       "groupTitle": "Group title (e.g. Parents of the bride)",
       "names": "Names",
-      "namesPlaceholder": "One name per line"
+      "namesPlaceholder": "One name per line",
+      "video": "Background video (.mp4 URL)",
+      "videoHint": "Short (10–20 s), no audio, up to 5 MB. The photo shows while it loads. Upload to Storage or paste a direct link.",
+      "envelope": "Envelope that opens on tap (starts the music if any)",
+      "monogram": "Monogram with the initials"
     },
     "upload": "Upload photo",
     "uploading": "Uploading…",

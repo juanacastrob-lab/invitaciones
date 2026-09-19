@@ -90,7 +90,7 @@ export function templateContent(b: { partnerA: string; partnerB?: string; starts
   base.couple = b.partnerB ? { partnerA: b.partnerA, partnerB: b.partnerB } : { partnerA: b.partnerA };
   base.startsAt = b.startsAt;
   base.og = { title: { es: names, en: names }, description: { ...p.description } };
-  base.cover = { headline: { ...p.headline }, tagline: undefined, photo: undefined };
+  base.cover = { headline: { ...p.headline }, tagline: undefined, photo: undefined, envelope: false, monogram: false };
   base.story = undefined;
   base.gallery = undefined;
   base.lodging = undefined;

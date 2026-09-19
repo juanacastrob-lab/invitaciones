@@ -49,6 +49,8 @@ export const demoEventContent: EventContent = {
   ],
 
   cover: {
+    envelope: true,
+    monogram: true,
     headline: { es: 'Nos casamos', en: 'We are getting married' },
     tagline: {
       es: 'Hacienda Santa Elena · Tepoztlán, Morelos',

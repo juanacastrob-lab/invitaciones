@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * Música de fondo.
@@ -23,7 +23,7 @@ export function MusicPlayer({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
 
-  function toggle() {
+  function ensure() {
     if (!audioRef.current) {
       const audio = new Audio(url);
       audio.loop = true;
@@ -31,11 +31,23 @@ export function MusicPlayer({
       audio.addEventListener('play', () => setPlaying(true));
       audioRef.current = audio;
     }
+    return audioRef.current;
+  }
 
+  // El sobre avisa al abrirse: como hubo un toque, el navegador deja sonar.
+  useEffect(() => {
+    const start = () => { void ensure().play().catch(() => setPlaying(false)); };
+    window.addEventListener('hb:play', start);
+    return () => window.removeEventListener('hb:play', start);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url]);
+
+  function toggle() {
+    const audio = ensure();
     if (playing) {
-      audioRef.current.pause();
+      audio.pause();
     } else {
-      void audioRef.current.play().catch(() => setPlaying(false));
+      void audio.play().catch(() => setPlaying(false));
     }
   }
 

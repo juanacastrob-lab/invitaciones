@@ -90,6 +90,9 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
             {lt(t('fields.headline'), draft.cover.headline, (d, v) => { d.cover.headline = v; })}
             {lt(t('fields.tagline'), draft.cover.tagline, (d, v) => { d.cover.tagline = v; })}
             {photoFields(draft.cover.photoUrl, draft.cover.photoAlt, (d, v) => { d.cover.photoUrl = v; }, (d, v) => { d.cover.photoAlt = v; })}
+            <Text label={t('fields.video')} value={draft.cover.video} onChange={(v) => patch((d) => { d.cover.video = v; })} hint={t('fields.videoHint')} placeholder="https://….mp4" />
+            <Check label={t('fields.envelope')} checked={draft.cover.envelope} onChange={(v) => patch((d) => { d.cover.envelope = v; })} />
+            <Check label={t('fields.monogram')} checked={draft.cover.monogram} onChange={(v) => patch((d) => { d.cover.monogram = v; })} />
           </SectionCard>
         );
       case 'quote':

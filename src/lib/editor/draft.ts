@@ -37,7 +37,7 @@ export interface Draft {
   thankYou: { title: LT; body: LT; photoUrl: string; photoAlt: LT };
   /** Secciones visibles, en orden. Las demás se guardan si están completas. */
   sectionOrder: SectionId[];
-  cover: { headline: LT; tagline: LT; photoUrl: string; photoAlt: LT };
+  cover: { headline: LT; tagline: LT; photoUrl: string; photoAlt: LT; video: string; envelope: boolean; monogram: boolean };
   quote: { text: LT; author: string };
   parents: { title: LT; groups: { title: LT; names: string }[] };
   countdown: { label: LT };
@@ -87,7 +87,7 @@ export function toDraft(c: EventContent): Draft {
     saveTheDate: { note: lt(c.saveTheDate?.note) },
     thankYou: { title: lt(c.thankYou?.title), body: lt(c.thankYou?.body), photoUrl: c.thankYou?.photo?.url ?? '', photoAlt: lt(c.thankYou?.photo?.alt) },
     sectionOrder: [...c.sectionOrder],
-    cover: { headline: lt(c.cover?.headline), tagline: lt(c.cover?.tagline), photoUrl: c.cover?.photo?.url ?? '', photoAlt: lt(c.cover?.photo?.alt) },
+    cover: { headline: lt(c.cover?.headline), tagline: lt(c.cover?.tagline), photoUrl: c.cover?.photo?.url ?? '', photoAlt: lt(c.cover?.photo?.alt), video: c.cover?.video ?? '', envelope: c.cover?.envelope ?? false, monogram: c.cover?.monogram ?? false },
     quote: { text: lt(c.quote?.text), author: c.quote?.author ?? '' },
     parents: { title: lt(c.parents?.title), groups: (c.parents?.groups ?? []).map((g) => ({ title: lt(g.title), names: g.names.join('\n') })) },
     countdown: { label: lt(c.countdown?.label) },
@@ -169,7 +169,7 @@ function photo(url: string, alt: LT) {
 function sectionValue(d: Draft, id: SectionId): unknown {
   switch (id) {
     case 'cover':
-      return { headline: outLT(d.cover.headline), tagline: outLT(d.cover.tagline), photo: photo(d.cover.photoUrl, d.cover.photoAlt) };
+      return { headline: outLT(d.cover.headline), tagline: outLT(d.cover.tagline), photo: photo(d.cover.photoUrl, d.cover.photoAlt), video: s(d.cover.video), envelope: d.cover.envelope, monogram: d.cover.monogram };
     case 'quote':
       return { text: outLT(d.quote.text), author: s(d.quote.author) };
     case 'parents':

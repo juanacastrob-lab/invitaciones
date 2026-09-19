@@ -204,6 +204,9 @@
     },
     "parents": {
       "title": "Padres y padrinos"
+    },
+    "envelope": {
+      "open": "Toca para abrir"
     }
   },
   "auth": {
@@ -567,7 +570,11 @@
       "group": "Grupo",
       "groupTitle": "Título del grupo (ej. Padres de la novia)",
       "names": "Nombres",
-      "namesPlaceholder": "Un nombre por línea"
+      "namesPlaceholder": "Un nombre por línea",
+      "video": "Video de fondo (URL .mp4)",
+      "videoHint": "Corto (10–20 s), sin audio, máximo 5 MB. La foto se usa mientras carga. Súbelo a Storage o pega un link directo.",
+      "envelope": "Sobre que se abre al tocar (arranca la música si hay)",
+      "monogram": "Monograma con las iniciales"
     },
     "upload": "Subir foto",
     "uploading": "Subiendo…",

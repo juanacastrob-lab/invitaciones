@@ -10,6 +10,7 @@ import { Reveal } from '@/components/invitation/Reveal';
 import { Countdown } from '@/components/invitation/Countdown';
 import { CopyButton } from '@/components/invitation/CopyButton';
 import { MusicPlayer } from '@/components/invitation/MusicPlayer';
+import { EnvelopeIntro } from '@/components/invitation/EnvelopeIntro';
 import { RsvpForm } from '@/components/invitation/RsvpForm';
 import { resolveTemplate, templateCssVars } from '@/templates/registry';
 import QRCode from 'qrcode';
@@ -96,7 +97,8 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
   const theme = resolveTemplate(event.template);
   const heading = theme.heading === 'sans' ? 'font-sans font-light tracking-tight' : 'font-serif';
   const radius = theme.radius === 'xl' ? 'rounded-2xl' : 'rounded-sm';
-  const onPhoto = theme.cover === 'split' && Boolean(c.cover?.photo);
+  const onPhoto = theme.cover === 'split' && Boolean(c.cover?.photo || c.cover?.video);
+  const initials = [c.couple.partnerA, c.couple.partnerB].filter(Boolean).map((n) => n!.trim()[0]?.toUpperCase() ?? '').join(c.couple.partnerB ? ' & ' : '');
 
   // Pase con QR: solo en el link personal, confirmado y con check-in activado.
   const showPass = Boolean(event.checkin_enabled && token && guest && guest.status === 'confirmed' && guest.confirmed_count > 0);
@@ -119,14 +121,19 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
             className={`mb-8 aspect-[4/5] w-full max-w-xs object-cover shadow-lg ${radius}`}
             fetchPriority="high"
           />
-        ) : c.cover?.photo ? (
+        ) : c.cover?.photo || c.cover?.video ? (
           <>
-            <img
-              src={c.cover.photo.url}
-              alt={text(c.cover.photo.alt) ?? ''}
-              className="absolute inset-0 h-full w-full object-cover"
-              fetchPriority="high"
-            />
+            {c.cover.video ? (
+              // Video corto y sin audio; la foto queda de poster mientras carga.
+              <video src={c.cover.video} poster={c.cover.photo?.url} autoPlay muted loop playsInline preload="metadata" className="absolute inset-0 h-full w-full object-cover" />
+            ) : (
+              <img
+                src={c.cover.photo!.url}
+                alt={text(c.cover.photo!.alt) ?? ''}
+                className="absolute inset-0 h-full w-full object-cover"
+                fetchPriority="high"
+              />
+            )}
             {theme.cover === 'split' ? (
               // Nombres en claro sobre la foto, con degradado abajo para que se lean.
               <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.75) 100%)' }} />
@@ -145,6 +152,12 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
         )}
 
         <div className={`relative ${onPhoto ? 'mt-auto pb-12 text-white [--muted:rgba(255,255,255,0.75)] [--line:rgba(255,255,255,0.35)]' : ''}`}>
+          {c.cover?.monogram ? (
+            <div className={`mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--accent)] ${heading} text-xl text-[var(--accent)]`} aria-hidden>
+              {initials}
+            </div>
+          ) : null}
+
           {text(c.cover?.headline) ? (
             <p className="text-[0.7rem] uppercase tracking-[0.35em] text-[var(--muted)]">
               {text(c.cover?.headline)}
@@ -567,6 +580,8 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
           </a>
         </div>
       ) : null}
+
+      {c.cover?.envelope ? <EnvelopeIntro names={coupleNames} initials={initials} label={t('envelope.open')} /> : null}
 
       <main>{c.sectionOrder.map((id) => sections[id])}</main>
 

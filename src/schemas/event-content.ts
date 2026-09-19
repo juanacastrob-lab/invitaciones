@@ -88,6 +88,12 @@ export const cover = z.object({
   headline: localizedText.optional(),
   tagline: localizedText.optional(),
   photo: image.optional(),
+  /** Video de fondo (mp4, corto, sin audio). La foto queda de poster. */
+  video: z.string().min(1).optional(),
+  /** Sobre que se abre al tocar, antes de ver la invitación. */
+  envelope: z.boolean().default(false),
+  /** Monograma con las iniciales arriba de los nombres. */
+  monogram: z.boolean().default(false),
 });
 
 /** Una frase, versículo o dedicatoria, con autor opcional. */
