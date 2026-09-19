@@ -248,3 +248,133 @@ export async function myPlanner(userId: string): Promise<PlannerRow | null> {
   const { data } = await supabase.from('planners').select('id, email, user_id, name, phone, code, commission_pct, active, notes, created_at').eq('user_id', userId).maybeSingle();
   return data ? ({ ...data, commission_pct: Number(data.commission_pct) } as PlannerRow) : null;
 }
+
+// ----------------------------------------------------------------- CRM
+export interface LeadRow {
+  id: string; partner_a: string; partner_b: string | null; email: string | null; phone: string; country: string; language: string;
+  event_type: string; event_date: string | null; city: string | null; guests_estimate: number | null; package_code: string | null;
+  message: string | null; source: string | null; utm_source: string | null; utm_campaign: string | null; stage: string;
+  next_follow_up: string | null; notes: string | null; assigned_to: string | null; value: number | null; currency: string;
+  lost_reason: string | null; last_contact_at: string | null; order_id: string | null; created_at: string; updated_at: string;
+}
+export interface LeadActivityRow { id: string; lead_id: string; actor: string | null; kind: string; body: string | null; due_at: string | null; done_at: string | null; created_at: string; actor_name?: string | null }
+
+const LEAD_COLS = 'id, partner_a, partner_b, email, phone, country, language, event_type, event_date, city, guests_estimate, package_code, message, source, utm_source, utm_campaign, stage, next_follow_up, notes, assigned_to, value, currency, lost_reason, last_contact_at, order_id, created_at, updated_at';
+
+export async function listLeads(): Promise<LeadRow[]> {
+  const supabase = await supabaseServer();
+  const { data } = await supabase.from('leads').select(LEAD_COLS).order('created_at', { ascending: false }).limit(500);
+  return (data ?? []).map((l) => ({ ...l, value: l.value == null ? null : Number(l.value) })) as LeadRow[];
+}
+
+export async function getLead(id: string): Promise<{ lead: LeadRow; activities: LeadActivityRow[]; conversationId: string | null } | null> {
+  const supabase = await supabaseServer();
+  const [{ data: lead }, { data: acts }, { data: conv }] = await Promise.all([
+    supabase.from('leads').select(LEAD_COLS).eq('id', id).maybeSingle(),
+    supabase.from('lead_activities').select('id, lead_id, actor, kind, body, due_at, done_at, created_at').eq('lead_id', id).order('created_at', { ascending: false }).limit(200),
+    supabase.from('wa_conversations').select('id').eq('lead_id', id).maybeSingle(),
+  ]);
+  if (!lead) return null;
+  const actorIds = [...new Set((acts ?? []).map((a) => a.actor).filter(Boolean))] as string[];
+  const names = new Map<string, string | null>();
+  if (actorIds.length) {
+    const { data: profiles } = await supabase.from('profiles').select('user_id, name, email').in('user_id', actorIds);
+    for (const p of profiles ?? []) names.set(p.user_id, p.name ?? p.email ?? null);
+  }
+  return {
+    lead: { ...lead, value: lead.value == null ? null : Number(lead.value) } as LeadRow,
+    activities: (acts ?? []).map((a) => ({ ...a, actor_name: a.actor ? names.get(a.actor) ?? null : null })) as LeadActivityRow[],
+    conversationId: conv?.id ?? null,
+  };
+}
+
+export async function listTeamMembers(): Promise<{ user_id: string; name: string | null; email: string | null }[]> {
+  const supabase = await supabaseServer();
+  const { data } = await supabase.from('profiles').select('user_id, name, email').in('role', ['admin', 'staff']).order('name');
+  return data ?? [];
+}
+
+// --------------------------------------------------------- bandeja WA
+export interface WaConversationRow { id: string; phone: string; name: string | null; lead_id: string | null; assigned_to: string | null; last_message_at: string; last_inbound_at: string | null; unread: number; archived_at: string | null; lead_name?: string | null; lead_stage?: string | null; last_body?: string | null }
+export interface WaMessageRow { id: string; direction: 'in' | 'out'; body: string | null; media_type: string | null; media_id: string | null; status: string; error: string | null; created_at: string }
+
+export async function listConversations(archived = false): Promise<WaConversationRow[]> {
+  const supabase = await supabaseServer();
+  let q = supabase.from('wa_conversations').select('id, phone, name, lead_id, assigned_to, last_message_at, last_inbound_at, unread, archived_at, leads(partner_a, partner_b, stage)').order('last_message_at', { ascending: false }).limit(200);
+  q = archived ? q.not('archived_at', 'is', null) : q.is('archived_at', null);
+  const { data } = await q;
+  const rows = (data ?? []) as unknown as (WaConversationRow & { leads: { partner_a: string; partner_b: string | null; stage: string } | { partner_a: string; partner_b: string | null; stage: string }[] | null })[];
+  if (!rows.length) return [];
+  // Último mensaje de cada conversación, para la vista previa de la lista.
+  const { data: last } = await supabase.from('wa_messages').select('conversation_id, body, media_type, created_at').in('conversation_id', rows.map((r) => r.id)).order('created_at', { ascending: false }).limit(1000);
+  const preview = new Map<string, string>();
+  for (const m of last ?? []) if (!preview.has(m.conversation_id)) preview.set(m.conversation_id, m.body ?? (m.media_type ? `[${m.media_type}]` : ''));
+  return rows.map(({ leads, ...r }) => {
+    const l = Array.isArray(leads) ? leads[0] : leads;
+    return { ...r, lead_name: l ? [l.partner_a, l.partner_b].filter(Boolean).join(' & ') : null, lead_stage: l?.stage ?? null, last_body: preview.get(r.id) ?? null };
+  });
+}
+
+export async function getConversation(id: string): Promise<{ conversation: WaConversationRow; messages: WaMessageRow[] } | null> {
+  const supabase = await supabaseServer();
+  const [{ data: conv }, { data: messages }] = await Promise.all([
+    supabase.from('wa_conversations').select('id, phone, name, lead_id, assigned_to, last_message_at, last_inbound_at, unread, archived_at, leads(partner_a, partner_b, stage)').eq('id', id).maybeSingle(),
+    supabase.from('wa_messages').select('id, direction, body, media_type, media_id, status, error, created_at').eq('conversation_id', id).order('created_at').limit(500),
+  ]);
+  if (!conv) return null;
+  const { leads, ...r } = conv as unknown as WaConversationRow & { leads: { partner_a: string; partner_b: string | null; stage: string } | { partner_a: string; partner_b: string | null; stage: string }[] | null };
+  const l = Array.isArray(leads) ? leads[0] : leads;
+  return { conversation: { ...r, lead_name: l ? [l.partner_a, l.partner_b].filter(Boolean).join(' & ') : null, lead_stage: l?.stage ?? null }, messages: (messages ?? []) as WaMessageRow[] };
+}
+
+export async function countUnread(): Promise<number> {
+  const supabase = await supabaseServer();
+  const { data } = await supabase.from('wa_conversations').select('unread').gt('unread', 0).is('archived_at', null);
+  return (data ?? []).reduce((s, r) => s + Number(r.unread), 0);
+}
+
+// ------------------------------------------------------------ tablero
+export interface DashboardData {
+  leadsNew7d: number; leadsOpen: number; followUpsDue: LeadRow[]; unread: number;
+  ordersPaidMonth: number; revenueMonth: number; ordersPending: number; expressPending: number;
+  eventsByStatus: Record<string, number>; revenueByMonth: { month: string; total: number }[]; leadsByStage: Record<string, number>; leadsBySource: Record<string, number>;
+}
+
+export async function getDashboard(): Promise<DashboardData> {
+  const supabase = await supabaseServer();
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+  const sixMonths = new Date(now.getFullYear(), now.getMonth() - 5, 1).toISOString();
+  const today = now.toISOString().slice(0, 10);
+  const [{ data: leads }, { data: orders }, { data: events }, unread] = await Promise.all([
+    supabase.from('leads').select(LEAD_COLS).order('next_follow_up').limit(1000),
+    supabase.from('orders').select('id, status, total, paid_at, created_at, package_code, event_id').gte('created_at', sixMonths).limit(2000),
+    supabase.from('events').select('status'),
+    countUnread(),
+  ]);
+  const L = (leads ?? []) as LeadRow[];
+  const O = orders ?? [];
+  const open = L.filter((l) => !['entregado', 'perdido'].includes(l.stage));
+  const week = new Date(now.getTime() - 7 * 86_400_000).toISOString();
+  const byStage: Record<string, number> = {}; const bySource: Record<string, number> = {};
+  for (const l of L) { byStage[l.stage] = (byStage[l.stage] ?? 0) + 1; const s = l.source ?? 'otro'; bySource[s] = (bySource[s] ?? 0) + 1; }
+  const paid = O.filter((o) => o.status === 'pagado');
+  const revenueByMonth: Record<string, number> = {};
+  for (const o of paid) { const m = String(o.paid_at ?? o.created_at).slice(0, 7); revenueByMonth[m] = (revenueByMonth[m] ?? 0) + Number(o.total); }
+  const eventsByStatus: Record<string, number> = {};
+  for (const e of events ?? []) eventsByStatus[e.status] = (eventsByStatus[e.status] ?? 0) + 1;
+  return {
+    leadsNew7d: L.filter((l) => l.created_at >= week).length,
+    leadsOpen: open.length,
+    followUpsDue: open.filter((l) => l.next_follow_up && l.next_follow_up <= today).slice(0, 20),
+    unread,
+    ordersPaidMonth: paid.filter((o) => String(o.paid_at ?? o.created_at) >= monthStart).length,
+    revenueMonth: paid.filter((o) => String(o.paid_at ?? o.created_at) >= monthStart).reduce((s, o) => s + Number(o.total), 0),
+    ordersPending: O.filter((o) => o.status === 'pendiente').length,
+    expressPending: paid.filter((o) => o.package_code === 'express' && !o.event_id).length,
+    eventsByStatus,
+    revenueByMonth: Object.entries(revenueByMonth).sort().map(([month, total]) => ({ month, total })),
+    leadsByStage: byStage,
+    leadsBySource: bySource,
+  };
+}
