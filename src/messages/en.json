@@ -56,7 +56,8 @@
         "envio_por_nosotros": "We send the invitations for you",
         "recordatorios": "Reminder rounds",
         "qr_checkin": "QR pass and check-in on the day",
-        "save_the_date": "Save the date"
+        "save_the_date": "Save the date",
+        "entrega_20_min": "Ready in 20 minutes"
       }
     },
     "preview": {
@@ -358,7 +359,14 @@
     "openedMark": "opened",
     "nudge": "Hi {name}, this is {couple}. We saw you opened the invitation but haven't replied yet. Could you? {link}",
     "nudgeButton": "Nudge",
-    "album": "Photos"
+    "album": "Photos",
+    "next": {
+      "title": "What is next",
+      "borrador": "We are building your invitation. Meanwhile, upload your guest list below (or send it to us on WhatsApp) and check the preview. We will let you know when it is ready for your approval.",
+      "publicado": "Your invitation is live. Every guest has a personal link: you or we send them on WhatsApp, and here you see who confirms in real time.",
+      "finalizado": "The event is over. Your list with the final confirmations and the messages your guests left stays here.",
+      "archivado": "This event is archived. If you need anything, write to us on WhatsApp."
+    }
   },
   "store": {
     "title": "Build your invitation",
@@ -376,7 +384,9 @@
       "includes": "Includes",
       "chosen": "Chosen",
       "choose": "Choose",
-      "popular": "Most popular"
+      "popular": "Most popular",
+      "express": "We send it to you on WhatsApp within 20 minutes (business hours, 9 am to 9 pm).",
+      "fast": "20-minute delivery"
     },
     "extras": {
       "title": "Want to add anything?",
@@ -440,7 +450,8 @@
       "clabe": "CLABE",
       "concept": "Reference",
       "email": "We sent you an email with your access: from there you'll see your invitation and your guests.",
-      "whatsapp": "Message us on WhatsApp"
+      "whatsapp": "Message us on WhatsApp",
+      "paidExpressBody": "We are already building your invitation. You will get it on WhatsApp within 20 minutes."
     },
     "errors": {
       "invalid": "Please check the highlighted fields.",
@@ -529,7 +540,8 @@
       "faq": "FAQ",
       "rsvp": "RSVP",
       "quote": "Quote or verse",
-      "parents": "Parents and sponsors"
+      "parents": "Parents and sponsors",
+      "transport": "Transportation"
     },
     "fields": {
       "sectionTitle": "Section title",
@@ -626,6 +638,26 @@
       "title": "Guest album",
       "hint": "Guests upload photos from their phones on the day (general link or a QR on the tables). The couple can delete. Works only once the event is published.",
       "enabled": "Album on"
+    },
+    "edit": "Edit",
+    "close": "Close",
+    "steps": {
+      "1": "Check the sections you want in your invitation and uncheck the ones you don't.",
+      "2": "Tap \"Edit\" on a section to fill in its texts and photos. Use the arrows to change the order.",
+      "3": "Save and tap \"Preview\" to see how it looks. You can change it as many times as you want."
+    },
+    "summary": {
+      "photo": "Photo added",
+      "noPhoto": "No photo yet",
+      "group": "group",
+      "groups": "groups",
+      "link": "link",
+      "links": "links",
+      "bank": "bank details",
+      "photoOne": "photo",
+      "photos": "photos",
+      "question": "question",
+      "questions": "questions"
     }
   },
   "guests": {

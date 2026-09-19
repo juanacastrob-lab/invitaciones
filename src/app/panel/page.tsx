@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { eventNames } from '@/lib/event-types';
 import { requireRole } from '@/lib/auth';
@@ -15,6 +16,8 @@ export default async function PanelHome({ searchParams }: { searchParams: Promis
   const locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
   const t = await getTranslations({ locale, namespace: 'panel' });
   const [events, planner] = await Promise.all([listMyEvents(), myPlanner(me.userId)]);
+  // Lo normal: un solo evento. Sin pasos de más.
+  if (events.length === 1 && me.role === 'client' && !planner) redirect(`/panel/${events[0].id}${lang ? `?lang=${lang}` : ''}`);
 
   return (
     <div className="min-h-dvh bg-stone-50 text-stone-900">

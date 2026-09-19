@@ -56,7 +56,8 @@
         "envio_por_nosotros": "Nosotros hacemos el envío",
         "recordatorios": "Rondas de recordatorio",
         "qr_checkin": "Pase con QR y check-in el día del evento",
-        "save_the_date": "Save the date"
+        "save_the_date": "Save the date",
+        "entrega_20_min": "Lista en 20 minutos"
       }
     },
     "preview": {
@@ -358,7 +359,14 @@
     "openedMark": "abrió",
     "nudge": "Hola {name}, somos {couple}. Vimos que abriste la invitación pero no has confirmado. ¿Nos ayudas? {link}",
     "nudgeButton": "Recordar",
-    "album": "Fotos"
+    "album": "Fotos",
+    "next": {
+      "title": "Qué sigue",
+      "borrador": "Estamos armando tu invitación. Mientras, sube tu lista de invitados aquí abajo (o mándanosla por WhatsApp) y revisa la vista previa. Cuando esté lista te avisamos para que la apruebes.",
+      "publicado": "Tu invitación ya está publicada. Cada invitado tiene su link personal: los mandas tú o nosotros por WhatsApp, y aquí ves quién confirma en tiempo real.",
+      "finalizado": "El evento ya pasó. Aquí sigue tu lista con las confirmaciones finales y los mensajes que te dejaron.",
+      "archivado": "Este evento está archivado. Si necesitas algo, escríbenos por WhatsApp."
+    }
   },
   "store": {
     "title": "Arma tu invitación",
@@ -376,7 +384,9 @@
       "includes": "Incluye",
       "chosen": "Elegido",
       "choose": "Elegir",
-      "popular": "El más pedido"
+      "popular": "El más pedido",
+      "express": "Te la mandamos por WhatsApp en 20 minutos (en horario de atención, 9 a 21 h).",
+      "fast": "Entrega en 20 min"
     },
     "extras": {
       "title": "¿Quieres agregar algo?",
@@ -440,7 +450,8 @@
       "clabe": "CLABE",
       "concept": "Concepto",
       "email": "Te mandamos un correo con tu acceso: desde ahí vas a poder ver tu invitación y tus invitados.",
-      "whatsapp": "Escribirnos por WhatsApp"
+      "whatsapp": "Escribirnos por WhatsApp",
+      "paidExpressBody": "Ya estamos armando tu invitación. En 20 minutos te la mandamos por WhatsApp."
     },
     "errors": {
       "invalid": "Revisa los campos marcados.",
@@ -529,7 +540,8 @@
       "faq": "Preguntas frecuentes",
       "rsvp": "Confirmación",
       "quote": "Frase o versículo",
-      "parents": "Padres y padrinos"
+      "parents": "Padres y padrinos",
+      "transport": "Transporte"
     },
     "fields": {
       "sectionTitle": "Título de la sección",
@@ -626,6 +638,26 @@
       "title": "Álbum de invitados",
       "hint": "Los invitados suben fotos desde su celular el día del evento (link general o QR en las mesas). Los novios pueden borrar. Solo funciona con el evento publicado.",
       "enabled": "Álbum encendido"
+    },
+    "edit": "Editar",
+    "close": "Cerrar",
+    "steps": {
+      "1": "Palomea las secciones que quieres en tu invitación y quita la palomita a las que no.",
+      "2": "Toca \"Editar\" en una sección para llenar sus textos y fotos. Con las flechas cambias el orden.",
+      "3": "Guarda y toca \"Vista previa\" para ver cómo queda. Puedes volver a cambiarlo las veces que quieras."
+    },
+    "summary": {
+      "photo": "Con foto",
+      "noPhoto": "Sin foto todavía",
+      "group": "grupo",
+      "groups": "grupos",
+      "link": "link",
+      "links": "links",
+      "bank": "datos bancarios",
+      "photoOne": "foto",
+      "photos": "fotos",
+      "question": "pregunta",
+      "questions": "preguntas"
     }
   },
   "guests": {

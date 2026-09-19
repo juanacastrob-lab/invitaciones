@@ -140,8 +140,8 @@ export async function provisionOrder(orderId: string): Promise<{ eventId: string
   const startsAt = `${c.event_date ?? new Date(Date.now() + 180 * 86400_000).toISOString().slice(0, 10)}T17:00`;
   const slug = slugFromNames(c.partner_a, c.partner_b ?? undefined, randomBytes(2).toString('hex'));
   const content = templateContent({ partnerA: c.partner_a, partnerB: c.partner_b ?? undefined, startsAt, type: isEventType(o.event_type) ? o.event_type : 'boda' });
-  // Básico es solo PDF: sin confirmación de asistencia.
-  if (o.package_code === 'basico') content.sectionOrder = content.sectionOrder.filter((s) => s !== 'rsvp');
+  // Básico y Express son solo PDF: sin confirmación de asistencia.
+  if (o.package_code === 'basico' || o.package_code === 'express') content.sectionOrder = content.sectionOrder.filter((s) => s !== 'rsvp');
 
   const { data: ev, error } = await admin
     .from('events')

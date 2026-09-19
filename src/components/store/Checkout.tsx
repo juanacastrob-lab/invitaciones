@@ -14,6 +14,10 @@ export interface StoreExtra { code: string; name: string; description: string | 
 const field = 'w-full rounded-sm border border-stone-300 bg-white px-3 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-stone-600 focus:outline-none';
 const label = 'mb-1.5 block text-[0.7rem] uppercase tracking-[0.2em] text-stone-500';
 const STEPS = ['package', 'extras', 'mode', 'contact', 'payment'] as const;
+/** El paquete que se marca como "el más pedido" y queda elegido de entrada. */
+const POPULAR = 'completo';
+/** Paquetes solo PDF con entrega en 20 minutos. */
+const isExpress = (code: string) => code === 'express';
 
 export function Checkout({ locale, packages, extras, featureLabels, preselected, bank, planner, initialType }: {
   locale: Locale;
@@ -31,7 +35,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
 
   const [step, setStep] = useState<number>(preselected && packages.some((p) => p.code === preselected) ? 1 : 0);
   const [eventType, setEventType] = useState<EventType>(initialType ?? 'boda');
-  const [pkgCode, setPkgCode] = useState(preselected ?? packages[Math.min(2, packages.length - 1)]?.code ?? '');
+  const [pkgCode, setPkgCode] = useState(preselected ?? (packages.some((p) => p.code === POPULAR) ? POPULAR : packages[Math.min(2, packages.length - 1)]?.code ?? ''));
   const [extraCodes, setExtraCodes] = useState<string[]>([]);
   const [mode, setMode] = useState<'team' | 'self' | 'planner'>(planner ? 'planner' : 'team');
   const [plannerEmail, setPlannerEmail] = useState(planner?.email ?? '');
@@ -66,7 +70,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
     return (
       <div className="rounded-sm border border-stone-200 bg-white p-6 text-center" role="status">
         <p className="font-serif text-3xl">{t(paid ? 'done.paid' : 'done.pending', { number: result.number })}</p>
-        <p className="mt-3 text-sm leading-relaxed text-stone-600">{t(paid ? 'done.paidBody' : 'done.pendingBody')}</p>
+        <p className="mt-3 text-sm leading-relaxed text-stone-600">{t(paid ? (isExpress(pkgCode) ? 'done.paidExpressBody' : 'done.paidBody') : 'done.pendingBody')}</p>
         {!paid ? (
           <dl className="mx-auto mt-5 max-w-xs space-y-1 rounded-sm bg-stone-50 p-4 text-left text-sm">
             <div className="flex justify-between"><dt className="text-stone-500">{t('done.bank')}</dt><dd>{bank.bank}</dd></div>
@@ -115,17 +119,19 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
             </div>
             <h2 className="mb-4 font-serif text-2xl">{t('package.title')}</h2>
             <div className="grid gap-3 sm:grid-cols-2">
-              {packages.map((p, i) => (
+              {packages.map((p) => (
                 <button key={p.code} type="button" onClick={() => setPkgCode(p.code)} aria-pressed={pkgCode === p.code}
                   className={`rounded-sm border p-4 text-left ${pkgCode === p.code ? 'border-stone-900 ring-1 ring-stone-900' : 'border-stone-200'}`}>
                   <div className="flex items-baseline justify-between">
                     <span className="font-serif text-xl">{p.name}</span>
                     <span className="text-sm">{fmt(p.price, p.currency)}</span>
                   </div>
-                  {i === 2 ? <span className="mt-1 inline-block rounded-full bg-[#eef0ea] px-2 py-0.5 text-[0.6rem] uppercase tracking-widest text-[#7d8471]">{t('package.popular')}</span> : null}
+                  {p.code === POPULAR ? <span className="mt-1 inline-block rounded-full bg-[#eef0ea] px-2 py-0.5 text-[0.6rem] uppercase tracking-widest text-[#7d8471]">{t('package.popular')}</span> : null}
+                  {isExpress(p.code) ? <span className="mt-1 inline-block rounded-full bg-amber-50 px-2 py-0.5 text-[0.6rem] uppercase tracking-widest text-amber-800">⚡ {t('package.fast')}</span> : null}
                   <ul className="mt-3 space-y-1 text-xs text-stone-600">
                     {p.features.filter((f) => featureLabels[f]).map((f) => <li key={f}>· {featureLabels[f]}</li>)}
                   </ul>
+                  {isExpress(p.code) ? <p className="mt-3 text-xs leading-relaxed text-stone-500">{t('package.express')}</p> : null}
                 </button>
               ))}
             </div>

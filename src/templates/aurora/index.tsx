@@ -35,14 +35,17 @@ function Section({
   title,
   children,
   tight = false,
+  wide = false,
 }: {
   title?: string;
   children: React.ReactNode;
   tight?: boolean;
+  /** Secciones con rejilla (itinerario, hoteles, galería): más anchas en tablet y escritorio. */
+  wide?: boolean;
 }) {
   return (
-    <section className={`px-6 ${tight ? 'py-10' : 'py-14'}`}>
-      <div className="mx-auto w-full max-w-md">
+    <section className={`px-6 ${tight ? 'py-10 md:py-14' : 'py-14 md:py-20'}`}>
+      <div className={`mx-auto w-full ${wide ? 'max-w-md md:max-w-4xl' : 'max-w-md md:max-w-lg'}`}>
         <Reveal>
           {title ? (
             <h2 className="mb-7 text-center text-[0.7rem] uppercase tracking-[0.3em] text-[var(--muted)]">
@@ -165,7 +168,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
           ) : null}
 
           {/* Cada nombre en su renglón: "Juan Antonio" nunca se parte a la mitad. */}
-          <h1 className={`mt-6 flex flex-col items-center ${heading} text-[2.75rem] leading-[1.1] sm:text-6xl ${onPhoto ? 'text-white' : 'text-[var(--ink)]'}`}>
+          <h1 className={`mt-6 flex flex-col items-center ${heading} text-[2.75rem] leading-[1.1] sm:text-6xl md:text-7xl ${onPhoto ? 'text-white' : 'text-[var(--ink)]'}`}>
             <span>{c.couple.partnerA}</span>
             {c.couple.partnerB ? (
               <>
@@ -213,8 +216,8 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
 
     // ------------------------------------------------------ padres y padrinos
     parents: c.parents ? (
-      <Section key="parents" title={text(c.parents.title) ?? t('parents.title')}>
-        <div className="grid gap-8 sm:grid-cols-2">
+      <Section key="parents" title={text(c.parents.title) ?? t('parents.title')} wide>
+        <div className={`grid gap-8 sm:grid-cols-2 ${c.parents.groups.length >= 3 ? 'md:grid-cols-3' : ''}`}>
           {c.parents.groups.map((g, i) => (
             <div key={i} className="text-center">
               <p className="text-[0.7rem] uppercase tracking-[0.25em] text-[var(--accent)]">{text(g.title)}</p>
@@ -246,25 +249,27 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
 
     // ------------------------------------------------------ nuestra historia
     story: c.story ? (
-      <Section key="story" title={text(c.story.title)}>
-        {c.story.photo ? (
-          <img
-            src={c.story.photo.url}
-            alt={text(c.story.photo.alt) ?? ''}
-            loading="lazy"
-            className={`mb-6 aspect-[4/5] w-full object-cover ${radius}`}
-          />
-        ) : null}
-        <p className="text-center text-[0.95rem] leading-relaxed text-[var(--ink)]/80">
-          {text(c.story.body)}
-        </p>
+      <Section key="story" title={text(c.story.title)} wide={Boolean(c.story.photo)}>
+        <div className={c.story.photo ? 'md:grid md:grid-cols-2 md:items-center md:gap-12' : ''}>
+          {c.story.photo ? (
+            <img
+              src={c.story.photo.url}
+              alt={text(c.story.photo.alt) ?? ''}
+              loading="lazy"
+              className={`mb-6 aspect-[4/5] w-full object-cover md:mb-0 ${radius}`}
+            />
+          ) : null}
+          <p className={`text-center text-[0.95rem] leading-relaxed text-[var(--ink)]/80 ${c.story.photo ? 'md:text-left md:text-base' : ''}`}>
+            {text(c.story.body)}
+          </p>
+        </div>
       </Section>
     ) : null,
 
     // ------------------------------------------------------------ itinerario
     itinerary: c.itinerary ? (
-      <Section key="itinerary" title={text(c.itinerary.title)}>
-        <ol className="space-y-9">
+      <Section key="itinerary" title={text(c.itinerary.title)} wide>
+        <ol className={`space-y-9 md:grid md:gap-8 md:space-y-0 ${c.itinerary.acts.length >= 3 ? 'md:grid-cols-3' : c.itinerary.acts.length === 2 ? 'md:grid-cols-2' : ''}`}>
           {c.itinerary.acts.map((act) => (
             <li key={act.id} className="text-center">
               <p className="text-[0.7rem] uppercase tracking-[0.25em] text-[var(--accent)]">
@@ -366,14 +371,14 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
           </p>
         ) : null}
 
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-2 md:flex-row md:flex-wrap md:justify-center">
           {c.gifts.links.map((link) => (
             <a
               key={link.url}
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`w-full border border-[var(--line)] px-4 py-3 text-center text-sm text-[var(--ink)] transition-colors hover:border-[var(--accent)] ${radius}`}
+              className={`w-full md:w-auto md:min-w-48 md:flex-1 border border-[var(--line)] px-4 py-3 text-center text-sm text-[var(--ink)] transition-colors hover:border-[var(--accent)] ${radius}`}
             >
               {text(link.label)}
             </a>
@@ -436,8 +441,8 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
 
     // ------------------------------------------------------------- hospedaje
     lodging: c.lodging ? (
-      <Section key="lodging" title={text(c.lodging.title)}>
-        <ul className="space-y-6">
+      <Section key="lodging" title={text(c.lodging.title)} wide={c.lodging.options.length > 1}>
+        <ul className={`space-y-6 ${c.lodging.options.length > 1 ? 'md:grid md:grid-cols-2 md:gap-8 md:space-y-0' : ''}`}>
           {c.lodging.options.map((hotel) => (
             <li key={hotel.name} className="text-center">
               <p className={`${heading} text-xl text-[var(--ink)]`}>{hotel.name}</p>
@@ -460,9 +465,9 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
 
     // ------------------------------------------------------------ transporte
     transport: c.transport ? (
-      <Section key="transport" title={text(c.transport.title) ?? t('transport.title')}>
+      <Section key="transport" title={text(c.transport.title) ?? t('transport.title')} wide={c.transport.options.length > 1}>
         {text(c.transport.note) ? <p className="mb-6 text-center text-sm leading-relaxed text-[var(--muted)]">{text(c.transport.note)}</p> : null}
-        <ul className="space-y-5">
+        <ul className={`space-y-5 ${c.transport.options.length > 1 ? 'md:grid md:grid-cols-2 md:gap-8 md:space-y-0' : ''}`}>
           {c.transport.options.map((o) => (
             <li key={o.name} className="text-center">
               <p className={`${heading} text-xl text-[var(--ink)]`}>{o.name}{o.time ? <span className="ml-2 text-base text-[var(--accent)]">· {o.time}</span> : null}</p>
@@ -476,8 +481,8 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
 
     // --------------------------------------------------------------- galería
     gallery: c.gallery ? (
-      <Section key="gallery" title={text(c.gallery.title)}>
-        <div className="grid grid-cols-2 gap-2">
+      <Section key="gallery" title={text(c.gallery.title)} wide>
+        <div className={`grid grid-cols-2 gap-2 md:gap-3 ${c.gallery.photos.length % 4 === 0 || c.gallery.photos.length > 6 ? 'md:grid-cols-4' : 'md:grid-cols-3'}`}>
           {c.gallery.photos.map((photo) => (
             <img
               key={photo.url}
@@ -583,7 +588,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
       {/* Barra del invitado: quién es y cuántos pases trae. */}
       {access === 'token' && guest ? (
         <div className="sticky top-0 z-20 border-b border-[var(--line)] bg-[var(--paper)]/90 px-6 py-2.5 backdrop-blur">
-          <div className="mx-auto flex max-w-md items-center justify-between gap-3">
+          <div className="mx-auto flex max-w-md items-center justify-between gap-3 md:max-w-4xl">
             <p className="truncate text-xs text-[var(--ink)]">
               {guest.display_name}
               <span className="mx-2 text-[var(--line)]">·</span>
