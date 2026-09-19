@@ -22,39 +22,60 @@ export async function Landing({ locale }: { locale: Locale }) {
 
   return (
     <div className="min-h-dvh bg-[#faf8f5] text-stone-900">
-      {/* ------------------------------------------------------------ nav */}
-      <header className="sticky top-0 z-20 border-b border-stone-200/70 bg-[#faf8f5]/90 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-3">
-          <a href={locale === 'es' ? '/' : '/en'} className="flex items-center gap-2">
-            <img src="/brand/wordmark.png" alt={APP_NAME} className="h-5 w-auto mix-blend-multiply" />
-          </a>
-          <nav className="flex items-center gap-4 text-[0.7rem] uppercase tracking-[0.2em] text-stone-500">
-            <a href="#paquetes" className="hidden sm:inline">{t('nav.packages')}</a>
-            <a href={demoHref}>{t('nav.demo')}</a>
-            <a href={locale === 'es' ? '/en' : '/'}>{other.toUpperCase()}</a>
-            <a href="/login" className="rounded-full border border-stone-300 px-3 py-1.5">{t('nav.login')}</a>
-          </nav>
+      {/* ------------------------------------------------- portada + nav */}
+      <section className="relative isolate flex min-h-[100svh] flex-col text-white">
+        <picture className="absolute inset-0 -z-10">
+          <source media="(min-width: 768px)" srcSet="/brand/hero-desktop.webp" />
+          <img
+            src="/brand/hero-mobile.webp"
+            alt=""
+            fetchPriority="high"
+            className="h-full w-full object-cover object-[62%_center] md:object-[center_40%]"
+          />
+        </picture>
+        {/* degradado para que el logo y el texto se lean sobre la foto */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/10 to-black/60 md:from-black/35 md:via-black/10 md:to-black/45" />
+
+        <header className="relative">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+            <a href={locale === 'es' ? '/' : '/en'} className="text-[0.7rem] uppercase tracking-[0.3em] text-white/90">
+              {APP_NAME}
+            </a>
+            <nav className="flex items-center gap-4 text-[0.7rem] uppercase tracking-[0.2em] text-white/85">
+              <a href="#paquetes" className="hidden sm:inline">{t('nav.packages')}</a>
+              <a href={demoHref} className="hidden sm:inline">{t('nav.demo')}</a>
+              <a href={locale === 'es' ? '/en' : '/'}>{other.toUpperCase()}</a>
+              <a href="/login" className="rounded-full border border-white/60 px-3 py-1.5">{t('nav.login')}</a>
+            </nav>
+          </div>
+        </header>
+
+        <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col items-center px-5 pb-10 pt-4 text-center md:items-start md:justify-center md:pb-24 md:pt-6 md:text-left">
+          <img
+            src="/brand/logo-white.png"
+            alt={APP_NAME}
+            width={968}
+            height={551}
+            className="w-52 drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] sm:w-72 md:w-80"
+          />
+          <h1 className="mt-5 max-w-xl font-serif text-[1.9rem] leading-tight md:mt-8 drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)] sm:text-5xl md:text-[3.4rem]">
+            {t('hero.title')}
+          </h1>
+          <p className="mt-3 max-w-md text-[0.9rem] leading-relaxed md:mt-4 text-white/90 drop-shadow-[0_1px_6px_rgba(0,0,0,0.5)] sm:text-base">
+            {t('hero.body')}
+          </p>
+          <div className="mt-auto flex w-full flex-col items-center gap-3 pt-8 sm:w-auto sm:flex-row md:mt-8 md:pt-0">
+            <a href="#formulario" className="w-full rounded-full bg-white px-7 py-3.5 text-xs uppercase tracking-[0.25em] text-stone-900 sm:w-auto">
+              {t('hero.cta')}
+            </a>
+            <a href={demoHref} className="w-full rounded-full border border-white/80 px-7 py-3.5 text-xs uppercase tracking-[0.25em] text-white backdrop-blur-sm sm:w-auto">
+              {t('hero.demo')}
+            </a>
+          </div>
         </div>
-      </header>
+      </section>
 
       <main>
-        {/* ----------------------------------------------------------- hero */}
-        <section className="px-5 pb-14 pt-12 text-center">
-          <div className="mx-auto max-w-2xl">
-            <img src="/brand/logo.png" alt={APP_NAME} className="mx-auto w-56 mix-blend-multiply" />
-            <h1 className="mt-6 font-serif text-4xl leading-tight text-stone-900 sm:text-5xl">{t('hero.title')}</h1>
-            <p className="mx-auto mt-5 max-w-xl text-[0.95rem] leading-relaxed text-stone-600">{t('hero.body')}</p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a href="#formulario" className="w-full rounded-full bg-stone-900 px-6 py-3.5 text-xs uppercase tracking-[0.25em] text-white sm:w-auto">
-                {t('hero.cta')}
-              </a>
-              <a href={demoHref} className="w-full rounded-full border border-stone-300 px-6 py-3.5 text-xs uppercase tracking-[0.25em] text-stone-700 sm:w-auto">
-                {t('hero.demo')}
-              </a>
-            </div>
-          </div>
-        </section>
-
         {/* ------------------------------------------------------- preview */}
         <section className="bg-white px-5 py-14">
           <div className="mx-auto grid max-w-4xl items-center gap-10 sm:grid-cols-2">

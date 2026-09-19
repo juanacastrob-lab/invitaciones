@@ -1,4 +1,5 @@
 import 'server-only';
+import { dropEmptySections } from './invitation-content';
 import { cache } from 'react';
 import { z } from 'zod';
 import { supabaseAdmin } from '@/lib/supabase/admin';
@@ -86,14 +87,22 @@ export const getInvitation = cache(async function getInvitation(
   if (data === null) return null;
 
   const parsed = invitationSchema.safeParse(data);
-  if (!parsed.success) {
-    throw new Error(
-      `El contenido del evento "${slug}" no es válido: ` +
-        parsed.error.issues.map((i) => `${i.path.join('.')} ${i.message}`).join('; '),
-    );
+  if (parsed.success) return parsed.data;
+
+  // Tolerancia: una sección listada en sectionOrder sin contenido (un parche
+  // a medias en la base) no debe tumbar la invitación en el celular de un
+  // invitado. Se quita del orden, se avisa en el log y se vuelve a validar.
+  const relaxed = dropEmptySections(data);
+  const retry = relaxed ? invitationSchema.safeParse(relaxed) : null;
+  if (retry?.success) {
+    console.warn(`[invitacion] "${slug}" tenía secciones sin contenido en sectionOrder; se ocultaron.`);
+    return retry.data;
   }
 
-  return parsed.data;
+  throw new Error(
+    `El contenido del evento "${slug}" no es válido: ` +
+      parsed.error.issues.map((i) => `${i.path.join('.')} ${i.message}`).join('; '),
+  );
 });
 
 /** Registra la primera apertura. Nunca debe tumbar la página si falla. */
