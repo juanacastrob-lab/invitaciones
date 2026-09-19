@@ -33,6 +33,8 @@ const guestSchema = z.object({
       song: z.string().nullable(),
       message: z.string().nullable(),
       created_at: z.string(),
+      answers: z.record(z.string(), z.string()).optional(),
+      children_count: z.number().int().nonnegative().optional(),
     })
     .nullable(),
 });

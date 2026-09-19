@@ -10,6 +10,7 @@ import {
   noKids as noKidsSchema,
   gifts as giftsSchema,
   lodging as lodgingSchema,
+  transport as transportSchema,
   gallery as gallerySchema,
   music as musicSchema,
   faq as faqSchema,
@@ -53,8 +54,10 @@ export interface Draft {
     note: LT;
     links: { label: LT; url: string }[];
     bank: { bank: string; holder: string; clabe: string; account: string; note: LT };
+    cash: { note: LT; paymentUrl: string };
     envelopes: boolean;
   };
+  transport: { title: LT; note: LT; options: { name: string; note: LT; time: string; url: string }[] };
   lodging: { title: LT; options: { name: string; note: LT; url: string; phone: string }[] };
   gallery: { title: LT; photos: { url: string; alt: LT }[] };
   music: { url: string; title: string; artist: string };
@@ -62,6 +65,8 @@ export interface Draft {
   rsvp: {
     title: LT;
     note: LT;
+    askChildren: boolean;
+    questions: { id: string; label: LT; type: 'text' | 'yesno' | 'choice'; options: string }[];
     askMenu: boolean;
     menuOptions: { id: string; label: LT }[];
     askDietary: boolean;
@@ -119,8 +124,10 @@ export function toDraft(c: EventContent): Draft {
         account: c.gifts?.bank?.account ?? '',
         note: lt(c.gifts?.bank?.note),
       },
+      cash: { note: lt(c.gifts?.cash?.note), paymentUrl: c.gifts?.cash?.paymentUrl ?? '' },
       envelopes: c.gifts?.envelopes ?? false,
     },
+    transport: { title: lt(c.transport?.title), note: lt(c.transport?.note), options: (c.transport?.options ?? []).map((o) => ({ name: o.name, note: lt(o.note), time: o.time ?? '', url: o.url ?? '' })) },
     lodging: { title: lt(c.lodging?.title), options: (c.lodging?.options ?? []).map((o) => ({ name: o.name, note: lt(o.note), url: o.url ?? '', phone: o.phone ?? '' })) },
     gallery: { title: lt(c.gallery?.title), photos: (c.gallery?.photos ?? []).map((p) => ({ url: p.url, alt: lt(p.alt) })) },
     music: { url: c.music?.url ?? '', title: c.music?.title ?? '', artist: c.music?.artist ?? '' },
@@ -128,6 +135,8 @@ export function toDraft(c: EventContent): Draft {
     rsvp: {
       title: lt(c.rsvp?.title),
       note: lt(c.rsvp?.note),
+      askChildren: c.rsvp?.askChildren ?? false,
+      questions: (c.rsvp?.questions ?? []).map((q) => ({ id: q.id, label: lt(q.label), type: q.type, options: q.options.map((o) => `${o.es ?? ''}|${o.en ?? ''}`).join('\n') })),
       askMenu: c.rsvp?.askMenu ?? false,
       menuOptions: (c.rsvp?.menuOptions ?? []).map((m) => ({ id: m.id, label: lt(m.label) })),
       askDietary: c.rsvp?.askDietary ?? false,
@@ -207,9 +216,16 @@ function sectionValue(d: Draft, id: SectionId): unknown {
         note: outLT(d.gifts.note),
         links: d.gifts.links.filter((l) => s(l.url) || outLT(l.label)).map((l) => ({ label: outLT(l.label), url: l.url.trim() })),
         bank,
+        cash: outLT(d.gifts.cash.note) || s(d.gifts.cash.paymentUrl) ? { note: outLT(d.gifts.cash.note), paymentUrl: s(d.gifts.cash.paymentUrl) } : undefined,
         envelopes: d.gifts.envelopes,
       };
     }
+    case 'transport':
+      return {
+        title: outLT(d.transport.title),
+        note: outLT(d.transport.note),
+        options: d.transport.options.map((o) => ({ name: o.name.trim(), note: outLT(o.note), time: s(o.time), url: s(o.url) })),
+      };
     case 'lodging':
       return {
         title: outLT(d.lodging.title),
@@ -225,6 +241,13 @@ function sectionValue(d: Draft, id: SectionId): unknown {
       return {
         title: outLT(d.rsvp.title),
         note: outLT(d.rsvp.note),
+        askChildren: d.rsvp.askChildren,
+        questions: d.rsvp.questions.map((q) => ({
+          id: q.id,
+          label: outLT(q.label),
+          type: q.type,
+          options: q.type === 'choice' ? q.options.split(/\n+/).map((l) => { const [es, en] = l.split('|'); return outLT({ es: es ?? '', en: en ?? '' }); }).filter(Boolean) : [],
+        })),
         askMenu: d.rsvp.askMenu,
         menuOptions: d.rsvp.menuOptions.map((m) => ({ id: m.id, label: outLT(m.label) })),
         askDietary: d.rsvp.askDietary,
@@ -245,6 +268,7 @@ const SECTION_SCHEMA = {
   noKids: noKidsSchema,
   gifts: giftsSchema,
   lodging: lodgingSchema,
+  transport: transportSchema,
   gallery: gallerySchema,
   music: musicSchema,
   faq: faqSchema,

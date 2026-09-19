@@ -415,6 +415,19 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
           </div>
         ) : null}
 
+        {c.gifts.cash ? (
+          <div className={`mt-6 border border-[var(--line)] p-5 text-center ${radius}`}>
+            <p className="text-[0.7rem] uppercase tracking-[0.25em] text-[var(--accent)]">{t('gifts.cash.title')}</p>
+            {text(c.gifts.cash.note) ? <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">{text(c.gifts.cash.note)}</p> : null}
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              {c.gifts.bank ? (
+                <CopyButton value={[c.gifts.bank.bank, c.gifts.bank.holder, c.gifts.bank.clabe ? `CLABE ${c.gifts.bank.clabe}` : null, c.gifts.bank.account ? `${t('gifts.account')} ${c.gifts.bank.account}` : null].filter(Boolean).join(' · ')} label={t('gifts.cash.copyAll')} copiedLabel={t('gifts.copied')} />
+              ) : null}
+              {c.gifts.cash.paymentUrl ? <LinkButton href={c.gifts.cash.paymentUrl}>{t('gifts.cash.pay')}</LinkButton> : null}
+            </div>
+          </div>
+        ) : null}
+
         {c.gifts.envelopes ? (
           <p className="mt-4 text-center text-xs text-[var(--muted)]">{t('gifts.envelopes')}</p>
         ) : null}
@@ -439,6 +452,22 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
                   <LinkButton href={`tel:${hotel.phone}`}>{t('lodging.call')}</LinkButton>
                 ) : null}
               </div>
+            </li>
+          ))}
+        </ul>
+      </Section>
+    ) : null,
+
+    // ------------------------------------------------------------ transporte
+    transport: c.transport ? (
+      <Section key="transport" title={text(c.transport.title) ?? t('transport.title')}>
+        {text(c.transport.note) ? <p className="mb-6 text-center text-sm leading-relaxed text-[var(--muted)]">{text(c.transport.note)}</p> : null}
+        <ul className="space-y-5">
+          {c.transport.options.map((o) => (
+            <li key={o.name} className="text-center">
+              <p className={`${heading} text-xl text-[var(--ink)]`}>{o.name}{o.time ? <span className="ml-2 text-base text-[var(--accent)]">· {o.time}</span> : null}</p>
+              {text(o.note) ? <p className="mt-1 text-xs leading-relaxed text-[var(--muted)]">{text(o.note)}</p> : null}
+              {o.url ? <div className="mt-2"><LinkButton href={o.url}>{t('maps.google')}</LinkButton></div> : null}
             </li>
           ))}
         </ul>
@@ -522,6 +551,8 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
                 askDietary: c.rsvp?.askDietary ?? false,
                 askSong: c.rsvp?.askSong ?? false,
                 askMessage: c.rsvp?.askMessage ?? true,
+                askChildren: c.rsvp?.askChildren ?? false,
+                questions: (c.rsvp?.questions ?? []).map((q) => ({ id: q.id, label: text(q.label) ?? q.id, type: q.type, options: q.options.map((o) => text(o) ?? '').filter(Boolean) })),
               }}
             />
           </NextIntlClientProvider>

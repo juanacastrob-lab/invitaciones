@@ -113,12 +113,12 @@ export async function listMessages(eventId: string) {
   const supabase = await supabaseServer();
   const { data } = await supabase
     .from('rsvp_responses')
-    .select('id, message, song, dietary, created_at, guests!inner(display_name, event_id)')
+    .select('id, message, song, dietary, answers, children_count, created_at, guests!inner(display_name, event_id)')
     .eq('guests.event_id', eventId)
-    .not('message', 'is', null)
+    .or('message.not.is.null,answers.neq.{}')
     .order('created_at', { ascending: false })
     .limit(200);
-  return (data ?? []) as unknown as { id: string; message: string; song: string | null; dietary: string | null; created_at: string; guests: { display_name: string } }[];
+  return (data ?? []) as unknown as { id: string; message: string | null; song: string | null; dietary: string | null; answers?: Record<string, string>; children_count?: number; created_at: string; guests: { display_name: string } }[];
 }
 
 export async function listMembers(eventId: string): Promise<{ id: string; email: string; accepted_at: string | null }[]> {

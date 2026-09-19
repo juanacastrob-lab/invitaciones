@@ -43,6 +43,7 @@ export const demoEventContent: EventContent = {
     'noKids',
     'gifts',
     'lodging',
+    'transport',
     'gallery',
     'faq',
     'rsvp',
@@ -187,6 +188,9 @@ export const demoEventContent: EventContent = {
         en: 'If you prefer a bank transfer, this is the account.',
       },
     },
+    cash: {
+      note: { es: 'Si prefieres regalarnos en efectivo, aquí están los datos. También habrá sobres el día del evento.', en: 'If you prefer a cash gift, here are the details. There will also be envelopes on the day.' },
+    },
     envelopes: true,
   },
 
@@ -211,6 +215,15 @@ export const demoEventContent: EventContent = {
         url: 'https://amomoxtli.com/',
         phone: '+527393951520',
       },
+    ],
+  },
+
+  transport: {
+    title: { es: 'Transporte', en: 'Transportation' },
+    note: { es: 'Habrá camiones desde los hoteles sugeridos. Sale puntual.', en: 'Shuttles will run from the suggested hotels. They leave on time.' },
+    options: [
+      { name: 'Hotel Posada del Tepozteco → Hacienda', time: '16:00', note: { es: 'Regreso a la 1:00 am', en: 'Return at 1:00 am' } },
+      { name: 'Estacionamiento en la hacienda', note: { es: 'Gratis, con valet.', en: 'Free, with valet.' } },
     ],
   },
 
@@ -264,6 +277,11 @@ export const demoEventContent: EventContent = {
       es: 'Nos ayudaría mucho saber si vienes.',
       en: 'It would help us a lot to know if you are coming.',
     },
+    askChildren: true,
+    questions: [
+      { id: 'q_transporte', label: { es: '¿Usarán el transporte desde el hotel?', en: 'Will you use the shuttle from the hotel?' }, type: 'yesno', options: [] },
+      { id: 'q_silla', label: { es: '¿Necesitan silla para bebé?', en: 'Do you need a high chair?' }, type: 'yesno', options: [] },
+    ],
     askMenu: true,
     menuOptions: [
       { id: 'carne', label: { es: 'Corte de res', en: 'Beef' } },

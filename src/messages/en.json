@@ -125,7 +125,12 @@
       "account": "Account",
       "copy": "Copy",
       "copied": "Copied",
-      "envelopes": "There will also be envelopes on the day"
+      "envelopes": "There will also be envelopes on the day",
+      "cash": {
+        "title": "Cash gift",
+        "copyAll": "Copy details",
+        "pay": "Give online"
+      }
     },
     "lodging": {
       "site": "Hotel website",
@@ -178,7 +183,8 @@
         "menu_invalid": "Please choose a meal from the list.",
         "consent_required": "We need your consent to save your answer.",
         "unknown": "Something went wrong on our side. Please try again in a moment."
-      }
+      },
+      "children": "How many children?"
     },
     "language": {
       "switch": "Español",
@@ -207,6 +213,9 @@
     },
     "envelope": {
       "open": "Tap to open"
+    },
+    "transport": {
+      "title": "Transportation"
     }
   },
   "auth": {
@@ -294,7 +303,8 @@
       "all": "All",
       "confirmed": "Confirmed",
       "declined": "Not attending",
-      "pending": "Pending"
+      "pending": "Pending",
+      "opened": "Opened, no reply"
     },
     "status": {
       "pending": "Pending",
@@ -340,7 +350,10 @@
       "publicado": "Published",
       "finalizado": "Finished",
       "archivado": "Archived"
-    }
+    },
+    "openedMark": "opened",
+    "nudge": "Hi {name}, this is {couple}. We saw you opened the invitation but haven't replied yet. Could you? {link}",
+    "nudgeButton": "Nudge"
   },
   "store": {
     "title": "Build your invitation",
@@ -574,7 +587,20 @@
       "video": "Background video (.mp4 URL)",
       "videoHint": "Short (10–20 s), no audio, up to 5 MB. The photo shows while it loads. Upload to Storage or paste a direct link.",
       "envelope": "Envelope that opens on tap (starts the music if any)",
-      "monogram": "Monogram with the initials"
+      "monogram": "Monogram with the initials",
+      "cash": "Cash gift",
+      "cashHint": "For guests who prefer to give cash: shown with the bank details above and a button that copies them. Optional: a payment link (PayPal, Stripe, Venmo).",
+      "paymentUrl": "Payment link (optional)",
+      "transportPlaceholder": "Shuttle from the hotel",
+      "time": "Time",
+      "askChildren": "Ask how many children are coming",
+      "questions": "Custom questions",
+      "questionsHint": "Up to 6. E.g. Will you use the shuttle?, Any song we can't miss?",
+      "qText": "Free text",
+      "qYesNo": "Yes / No",
+      "qChoice": "Pick one option",
+      "qOptions": "Options",
+      "qOptionsPlaceholder": "One per line. Español|English, e.g. Camión|Bus"
     },
     "upload": "Upload photo",
     "uploading": "Uploading…",

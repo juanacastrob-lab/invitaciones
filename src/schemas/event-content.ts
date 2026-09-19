@@ -76,6 +76,7 @@ export const SECTION_IDS = [
   'noKids',
   'gifts',
   'lodging',
+  'transport',
   'gallery',
   'music',
   'faq',
@@ -162,11 +163,18 @@ export const bankDetails = z.object({
   note: localizedText.optional(),
 });
 
+/** Lluvia de sobres digital: nota y, si hay, un link de pago (Mercado Pago, PayPal, Stripe). */
+export const cashGift = z.object({
+  note: localizedText.optional(),
+  paymentUrl: z.string().min(1).optional(),
+});
+
 export const gifts = z.object({
   title: localizedText.optional(),
   note: localizedText.optional(),
   links: z.array(giftLink).default([]),
   bank: bankDetails.optional(),
+  cash: cashGift.optional(),
   envelopes: z.boolean().default(false),
 });
 
@@ -180,6 +188,13 @@ export const lodgingOption = z.object({
 export const lodging = z.object({
   title: localizedText.optional(),
   options: z.array(lodgingOption).min(1),
+});
+
+/** Transporte y traslados: camiones, horarios, estacionamiento. */
+export const transport = z.object({
+  title: localizedText.optional(),
+  note: localizedText.optional(),
+  options: z.array(z.object({ name: z.string().min(1), note: localizedText.optional(), time: z.string().optional(), url: z.string().optional() })).min(1),
 });
 
 export const gallery = z.object({
@@ -206,9 +221,19 @@ export const menuOption = z.object({
   label: localizedText,
 });
 
+/** Pregunta libre del evento: texto, sí/no o elegir una opción. */
+export const rsvpQuestion = z.object({
+  id: z.string().min(1),
+  label: localizedText,
+  type: z.enum(['text', 'yesno', 'choice']),
+  options: z.array(localizedText).default([]),
+});
+
 export const rsvp = z.object({
   title: localizedText.optional(),
   note: localizedText.optional(),
+  askChildren: z.boolean().default(false),
+  questions: z.array(rsvpQuestion).max(6).default([]),
   askMenu: z.boolean().default(false),
   menuOptions: z.array(menuOption).default([]),
   askDietary: z.boolean().default(false),
@@ -268,6 +293,7 @@ export const eventContent = z
     noKids: noKids.optional(),
     gifts: gifts.optional(),
     lodging: lodging.optional(),
+    transport: transport.optional(),
     gallery: gallery.optional(),
     music: music.optional(),
     faq: faq.optional(),

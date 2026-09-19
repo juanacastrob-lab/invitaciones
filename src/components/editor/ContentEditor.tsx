@@ -207,6 +207,12 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
               {lt(t('fields.note'), draft.gifts.bank.note, (d, v) => { d.gifts.bank.note = v; })}
             </div>
             <Check label={t('fields.envelopes')} checked={draft.gifts.envelopes} onChange={(v) => patch((d) => { d.gifts.envelopes = v; })} />
+            <div className="space-y-3 rounded-sm border border-stone-100 bg-stone-50 p-3">
+              <p className="text-xs uppercase tracking-[0.2em] text-stone-500">{t('fields.cash')}</p>
+              <p className="text-xs text-stone-400">{t('fields.cashHint')}</p>
+              {lt(t('fields.note'), draft.gifts.cash.note, (d, v) => { d.gifts.cash.note = v; })}
+              <Text label={t('fields.paymentUrl')} value={draft.gifts.cash.paymentUrl} onChange={(v) => patch((d) => { d.gifts.cash.paymentUrl = v; })} placeholder="https://…" />
+            </div>
           </SectionCard>
         );
       case 'lodging':
@@ -222,6 +228,22 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
               </Item>
             ))}
             <AddButton label={t('fields.option')} onClick={() => patch((d) => { d.lodging.options.push({ name: '', note: { es: '', en: '' }, url: '', phone: '' }); })} />
+          </SectionCard>
+        );
+      case 'transport':
+        return (
+          <SectionCard key={id} {...cardProps(id)}>
+            {lt(t('fields.sectionTitle'), draft.transport.title, (d, v) => { d.transport.title = v; })}
+            {lt(t('fields.note'), draft.transport.note, (d, v) => { d.transport.note = v; }, { multiline: true })}
+            {draft.transport.options.map((o, i) => (
+              <Item key={i} title={`${t('fields.option')} ${i + 1}`} removeLabel={t('remove')} onRemove={() => patch((d) => { d.transport.options.splice(i, 1); })}>
+                <Text label={t('fields.name')} value={o.name} onChange={(v) => patch((d) => { d.transport.options[i].name = v; })} placeholder={t('fields.transportPlaceholder')} />
+                <Text label={t('fields.time')} value={o.time} onChange={(v) => patch((d) => { d.transport.options[i].time = v; })} placeholder="16:00" />
+                {lt(t('fields.note'), o.note, (d, v) => { d.transport.options[i].note = v; })}
+                <Text label={t('fields.url')} value={o.url} onChange={(v) => patch((d) => { d.transport.options[i].url = v; })} placeholder="https://maps…" />
+              </Item>
+            ))}
+            <AddButton label={t('fields.option')} onClick={() => patch((d) => { d.transport.options.push({ name: '', note: { es: '', en: '' }, time: '', url: '' }); })} />
           </SectionCard>
         );
       case 'gallery':
@@ -274,6 +296,31 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
                 <AddButton label={t('fields.menuOption')} onClick={() => patch((d) => { d.rsvp.menuOptions.push({ id: newId('menu'), label: { es: '', en: '' } }); })} />
               </div>
             ) : null}
+            <Check label={t('fields.askChildren')} checked={draft.rsvp.askChildren} onChange={(v) => patch((d) => { d.rsvp.askChildren = v; })} />
+            <div className="space-y-3">
+              <p className="text-[0.65rem] uppercase tracking-[0.2em] text-stone-500">{t('fields.questions')}</p>
+              <p className="text-xs text-stone-400">{t('fields.questionsHint')}</p>
+              {draft.rsvp.questions.map((q, i) => (
+                <Item key={q.id} title={`${t('fields.question')} ${i + 1}`} removeLabel={t('remove')} onRemove={() => patch((d) => { d.rsvp.questions.splice(i, 1); })}>
+                  {lt(t('fields.question'), q.label, (d, v) => { d.rsvp.questions[i].label = v; })}
+                  <label className="block">
+                    <span className="mb-1 block text-[0.65rem] uppercase tracking-[0.2em] text-stone-500">{t('fields.kind')}</span>
+                    <select value={q.type} onChange={(e) => patch((d) => { d.rsvp.questions[i].type = e.target.value as 'text' | 'yesno' | 'choice'; })} className="w-full rounded-sm border border-stone-300 bg-white px-3 py-2 text-sm">
+                      <option value="text">{t('fields.qText')}</option>
+                      <option value="yesno">{t('fields.qYesNo')}</option>
+                      <option value="choice">{t('fields.qChoice')}</option>
+                    </select>
+                  </label>
+                  {q.type === 'choice' ? (
+                    <label className="block">
+                      <span className="mb-1 block text-[0.65rem] uppercase tracking-[0.2em] text-stone-500">{t('fields.qOptions')}</span>
+                      <textarea value={q.options} onChange={(e) => patch((d) => { d.rsvp.questions[i].options = e.target.value; })} className="min-h-20 w-full rounded-sm border border-stone-300 bg-white px-3 py-2 text-sm" placeholder={t('fields.qOptionsPlaceholder')} />
+                    </label>
+                  ) : null}
+                </Item>
+              ))}
+              {draft.rsvp.questions.length < 6 ? <AddButton label={t('fields.question')} onClick={() => patch((d) => { d.rsvp.questions.push({ id: newId('q'), label: { es: '', en: '' }, type: 'text', options: '' }); })} /> : null}
+            </div>
             <Check label={t('fields.askDietary')} checked={draft.rsvp.askDietary} onChange={(v) => patch((d) => { d.rsvp.askDietary = v; })} />
             <Check label={t('fields.askSong')} checked={draft.rsvp.askSong} onChange={(v) => patch((d) => { d.rsvp.askSong = v; })} />
             <Check label={t('fields.askMessage')} checked={draft.rsvp.askMessage} onChange={(v) => patch((d) => { d.rsvp.askMessage = v; })} />

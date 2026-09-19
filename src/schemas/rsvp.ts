@@ -23,6 +23,12 @@ export const rsvpInput = z.object({
 
 export type RsvpInput = z.infer<typeof rsvpInput>;
 
+/** Lo que va después del RSVP: respuestas a las preguntas del evento y niños. */
+export const rsvpExtraInput = z.object({
+  answers: z.record(z.string().max(40), z.string().trim().max(300)).default({}),
+  children: z.number().int().min(0).max(30).default(0),
+});
+
 /** Códigos que devuelve la base. Se traducen en la app, no aquí. */
 export const RSVP_ERROR_CODES = [
   'too_many_attempts',

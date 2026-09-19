@@ -12,7 +12,7 @@ import { Badge, LinkButton } from '@/components/ui';
 import { STATUS_TONE } from '@/lib/admin/labels';
 import { isLocale, DEFAULT_LOCALE, WHATSAPP_NUMBER, whatsappLink } from '@/lib/config';
 import { getSiteUrl } from '@/lib/env';
-import type { EventContent } from '@/schemas/event-content';
+import { pickText, type EventContent } from '@/schemas/event-content';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,6 +32,7 @@ export default async function PanelEventPage({ params, searchParams }: { params:
   const c = event.content as unknown as EventContent;
   const editable = event.status === 'borrador' || event.status === 'en_revision';
   const other = locale === 'es' ? 'en' : 'es';
+  const questionLabel = (id: string) => pickText(c.rsvp?.questions?.find((q) => q.id === id)?.label, locale) ?? id;
 
   const kpis: [string, number][] = [
     [t('kpi.guests'), event.stats.guests],
@@ -90,7 +91,7 @@ export default async function PanelEventPage({ params, searchParams }: { params:
             </>
           ) : (
             <NextIntlClientProvider locale={locale} messages={{ panel: messages.panel }}>
-              <PanelGuests guests={guests} />
+              <PanelGuests guests={guests} slug={event.slug} siteUrl={getSiteUrl() ?? ''} couple={eventNames(c.couple)} />
               <p className="mt-3 text-xs text-stone-500">
                 {t('readOnly')} <a className="underline" href={whatsappLink(`Hola, ${c.couple.partnerB ? 'somos' : 'soy'} ${eventNames(c.couple, ' y ')}, queremos un cambio en nuestra lista de invitados.`)} target="_blank" rel="noopener noreferrer">{WHATSAPP_NUMBER}</a>
               </p>
@@ -104,7 +105,8 @@ export default async function PanelEventPage({ params, searchParams }: { params:
             <ul className="space-y-3">
               {notes.map((n) => (
                 <li key={n.id} className="rounded-sm border border-stone-200 bg-white p-4">
-                  <p className="text-sm italic text-stone-800">“{n.message}”</p>
+                  {n.message ? <p className="text-sm italic text-stone-800">“{n.message}”</p> : null}
+                  {n.answers && Object.keys(n.answers).length ? <p className="mt-1 text-xs text-stone-600">{Object.entries(n.answers).map(([k, v]) => `${questionLabel(k)}: ${v}`).join(' · ')}</p> : null}
                   <p className="mt-2 text-xs text-stone-500">
                     — {n.guests.display_name}
                     {n.song ? ` · ${t('song')}: ${n.song}` : ''}{n.dietary ? ` · ${t('dietary')}: ${n.dietary}` : ''}

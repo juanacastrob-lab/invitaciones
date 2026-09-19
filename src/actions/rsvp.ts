@@ -3,7 +3,7 @@
 import { createHash } from 'node:crypto';
 import { headers } from 'next/headers';
 import { supabaseAdmin } from '@/lib/supabase/admin';
-import { rsvpInput, RSVP_ERROR_CODES, type RsvpErrorCode, type RsvpResult } from '@/schemas/rsvp';
+import { rsvpInput, rsvpExtraInput, RSVP_ERROR_CODES, type RsvpErrorCode, type RsvpResult } from '@/schemas/rsvp';
 
 /**
  * Huella del visitante para el rate limit. Se guarda un hash, nunca la IP:
@@ -74,4 +74,15 @@ export async function submitRsvp(
     count: result.count ?? 0,
     passes: result.passes ?? 0,
   };
+}
+
+/** Respuestas extra (preguntas del evento, niños). Si falla no tumba la confirmación: ya quedó guardada. */
+export async function submitRsvpExtra(slug: string, token: string, raw: unknown): Promise<{ ok: boolean }> {
+  const parsed = rsvpExtraInput.safeParse(raw);
+  if (!parsed.success) return { ok: false };
+  const { error, data } = await supabaseAdmin().rpc('rpc_submit_rsvp_extra', {
+    p_slug: slug, p_token: token, p_answers: parsed.data.answers, p_children: parsed.data.children,
+  });
+  if (error) { console.error('[rsvp] extra falló:', error.message); return { ok: false }; }
+  return { ok: Boolean((data as { ok?: boolean } | null)?.ok) };
 }

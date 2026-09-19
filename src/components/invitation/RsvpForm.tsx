@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { submitRsvp } from '@/actions/rsvp';
+import { submitRsvp, submitRsvpExtra } from '@/actions/rsvp';
 import type { RsvpErrorCode, RsvpResult } from '@/schemas/rsvp';
 import type { Locale } from '@/lib/config';
 
@@ -18,6 +18,8 @@ export interface RsvpFormGuest {
     dietary: string | null;
     song: string | null;
     message: string | null;
+    answers?: Record<string, string>;
+    children_count?: number;
   } | null;
 }
 
@@ -28,6 +30,9 @@ export interface RsvpFormConfig {
   askDietary: boolean;
   askSong: boolean;
   askMessage: boolean;
+  askChildren?: boolean;
+  /** Ya en el idioma del invitado. */
+  questions?: { id: string; label: string; type: 'text' | 'yesno' | 'choice'; options: string[] }[];
 }
 
 interface Props {
@@ -70,6 +75,8 @@ export function RsvpForm({ slug, token, guest, config, locale, closed, privacyHr
   const [dietary, setDietary] = useState(prev?.dietary ?? '');
   const [song, setSong] = useState(prev?.song ?? '');
   const [message, setMessage] = useState(prev?.message ?? '');
+  const [children, setChildren] = useState(prev?.children_count ?? 0);
+  const [answers, setAnswers] = useState<Record<string, string>>(prev?.answers ?? {});
   const [consent, setConsent] = useState(false);
   const [error, setError] = useState<{ code: RsvpErrorCode; passes?: number } | null>(null);
 
@@ -122,6 +129,9 @@ export function RsvpForm({ slug, token, guest, config, locale, closed, privacyHr
           : { ok: false, error: 'consent_required' };
       } else {
         result = await submitRsvp(slug, token, payload);
+        if (result.ok && attending && (config.askChildren || config.questions?.length)) {
+          await submitRsvpExtra(slug, token, { answers, children: Math.min(children, payload.count) });
+        }
       }
 
       if (!result.ok) {
@@ -282,6 +292,29 @@ export function RsvpForm({ slug, token, guest, config, locale, closed, privacyHr
               ))}
             </div>
           </div>
+
+        {attending && config.askChildren ? (
+          <div>
+            <label className={label} htmlFor="children">{t('children')}</label>
+            <select id="children" className={field} value={children} onChange={(e) => setChildren(Number(e.target.value))}>
+              {Array.from({ length: count + 1 }, (_, n) => <option key={n} value={n}>{n}</option>)}
+            </select>
+          </div>
+        ) : null}
+
+        {attending ? (config.questions ?? []).map((q) => (
+          <div key={q.id}>
+            <label className={label} htmlFor={`q-${q.id}`}>{q.label}</label>
+            {q.type === 'text' ? (
+              <input id={`q-${q.id}`} className={field} maxLength={300} value={answers[q.id] ?? ''} onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })} />
+            ) : (
+              <select id={`q-${q.id}`} className={field} value={answers[q.id] ?? ''} onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}>
+                <option value="">—</option>
+                {(q.type === 'yesno' ? [t('yes'), t('no')] : q.options).map((o) => <option key={o} value={o}>{o}</option>)}
+              </select>
+            )}
+          </div>
+        )) : null}
 
           {config.askDietary ? (
             <div className="mt-6">

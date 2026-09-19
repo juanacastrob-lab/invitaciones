@@ -125,7 +125,12 @@
       "account": "Cuenta",
       "copy": "Copiar",
       "copied": "Copiado",
-      "envelopes": "También habrá sobres el día del evento"
+      "envelopes": "También habrá sobres el día del evento",
+      "cash": {
+        "title": "Lluvia de sobres",
+        "copyAll": "Copiar datos",
+        "pay": "Regalar en línea"
+      }
     },
     "lodging": {
       "site": "Ver hotel",
@@ -178,7 +183,8 @@
         "menu_invalid": "Elige un platillo de la lista.",
         "consent_required": "Necesitamos tu consentimiento para guardar la respuesta.",
         "unknown": "Algo falló de nuestro lado. Intenta de nuevo en un momento."
-      }
+      },
+      "children": "¿Cuántos niños?"
     },
     "language": {
       "switch": "English",
@@ -207,6 +213,9 @@
     },
     "envelope": {
       "open": "Toca para abrir"
+    },
+    "transport": {
+      "title": "Transporte"
     }
   },
   "auth": {
@@ -294,7 +303,8 @@
       "all": "Todos",
       "confirmed": "Confirmaron",
       "declined": "No asisten",
-      "pending": "Pendientes"
+      "pending": "Pendientes",
+      "opened": "Abrieron sin confirmar"
     },
     "status": {
       "pending": "Pendiente",
@@ -340,7 +350,10 @@
       "publicado": "Publicada",
       "finalizado": "Finalizada",
       "archivado": "Archivada"
-    }
+    },
+    "openedMark": "abrió",
+    "nudge": "Hola {name}, somos {couple}. Vimos que abriste la invitación pero no has confirmado. ¿Nos ayudas? {link}",
+    "nudgeButton": "Recordar"
   },
   "store": {
     "title": "Arma tu invitación",
@@ -574,7 +587,20 @@
       "video": "Video de fondo (URL .mp4)",
       "videoHint": "Corto (10–20 s), sin audio, máximo 5 MB. La foto se usa mientras carga. Súbelo a Storage o pega un link directo.",
       "envelope": "Sobre que se abre al tocar (arranca la música si hay)",
-      "monogram": "Monograma con las iniciales"
+      "monogram": "Monograma con las iniciales",
+      "cash": "Lluvia de sobres",
+      "cashHint": "Para quien prefiere regalar en efectivo: se muestra con los datos bancarios de arriba y un botón que los copia. Opcional: un link de pago (Mercado Pago, PayPal, Stripe).",
+      "paymentUrl": "Link de pago (opcional)",
+      "transportPlaceholder": "Camión desde el hotel",
+      "time": "Hora",
+      "askChildren": "Preguntar cuántos niños vienen",
+      "questions": "Preguntas propias",
+      "questionsHint": "Hasta 6. Ej: ¿Usas el transporte?, ¿Alguna canción que no falte?",
+      "qText": "Texto libre",
+      "qYesNo": "Sí / No",
+      "qChoice": "Elegir una opción",
+      "qOptions": "Opciones",
+      "qOptionsPlaceholder": "Una por línea. Español|English, ej: Camión|Bus"
     },
     "upload": "Subir foto",
     "uploading": "Subiendo…",
