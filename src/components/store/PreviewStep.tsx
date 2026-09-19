@@ -8,7 +8,7 @@ import type { Locale } from '@/lib/config';
 const field = 'w-full rounded-sm border border-stone-300 bg-white px-3 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-stone-600 focus:outline-none';
 
 /** Vista previa: imagen chica para Express, la invitación real (temporal) para los paquetes web. */
-export function PreviewStep({ draftKey, express, locale, version, email }: { draftKey: string; express: boolean; locale: Locale; version: number; email: string }) {
+export function PreviewStep({ draftKey, express, locale, version, email, children }: { draftKey: string; express: boolean; locale: Locale; version: number; email: string; children?: React.ReactNode }) {
   const t = useTranslations('store');
   const [to, setTo] = useState(email);
   const [pending, start] = useTransition();
@@ -28,11 +28,12 @@ export function PreviewStep({ draftKey, express, locale, version, email }: { dra
       ) : (
         <div className="flex flex-col items-center gap-3">
           <div className="w-full max-w-[390px] overflow-hidden rounded-[2rem] border-8 border-stone-900 bg-stone-900 shadow-xl">
-            <iframe src={previewUrl} title={t('wizard.preview.title')} className="h-[700px] w-full bg-white" />
+            <iframe key={version} src={`${previewUrl}${previewUrl.includes('?') ? '&' : '?'}v=${version}`} title={t('wizard.preview.title')} className="h-[640px] w-full bg-white" />
           </div>
           <a href={previewUrl} target="_blank" rel="noopener noreferrer" className="text-xs uppercase tracking-[0.2em] text-stone-700 underline underline-offset-4">{t('wizard.preview.open')}</a>
         </div>
       )}
+      {children}
       <div className="rounded-sm border border-stone-200 bg-white p-4">
         <p className="mb-2 text-sm font-medium">{t('wizard.preview.saveTitle')}</p>
         <p className="mb-3 text-xs text-stone-500">{t('wizard.preview.saveBody')}</p>

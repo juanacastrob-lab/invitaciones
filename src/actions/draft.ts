@@ -46,14 +46,14 @@ export async function loadDraft(key: string): Promise<DraftRow | null> {
 }
 
 /** Se guarda en cada paso: si cierran el navegador, no pierden nada. */
-export async function saveDraft(key: string, raw: unknown, step?: number): Promise<ActionResult> {
+export async function saveDraft(key: string, raw: unknown, step?: number, packageCode?: string): Promise<ActionResult> {
   if (!KEY_RE.test(key)) return { ok: false, error: 'Borrador inválido.' };
   const parsed = draftData.safeParse(raw);
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? 'Datos inválidos.' };
   const d = parsed.data;
   const { error, data } = await supabaseAdmin()
     .from('design_drafts')
-    .update({ content: d, template: d.template, event_type: d.eventType, email: d.email || null, phone: d.phone || null, ...(step !== undefined ? { step } : {}) })
+    .update({ content: d, template: d.template, event_type: d.eventType, email: d.email || null, phone: d.phone || null, ...(step !== undefined ? { step } : {}), ...(packageCode ? { package_code: packageCode.slice(0, 40) } : {}) })
     .eq('key', key).is('order_id', null).gt('expires_at', new Date().toISOString())
     .select('key').maybeSingle();
   if (error) return { ok: false, error: error.message };

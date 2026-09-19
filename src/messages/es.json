@@ -395,7 +395,9 @@
       "payment": "Pago",
       "design": "Diseño",
       "details": "Datos",
-      "preview": "Vista previa"
+      "preview": "Vista previa",
+      "type": "Evento",
+      "basics": "Lo básico"
     },
     "next": "Continuar",
     "back": "Atrás",
@@ -550,8 +552,27 @@
         "next": "Me gusta, continuar",
         "saveTitle": "¿Quieres seguir después?",
         "saveBody": "Te mandamos un link a tu correo para regresar aquí. Se guarda 48 horas.",
-        "saveButton": "Mandarme el link"
-      }
+        "saveButton": "Mandarme el link",
+        "design": "Cambiar diseño y colores",
+        "details": "Agregar lugar, horario, fotos y más",
+        "refresh": "Actualizar vista previa",
+        "refreshing": "Actualizando…"
+      },
+      "type": {
+        "title": "¿Qué celebras?",
+        "body": "Elige uno y te enseñamos tu invitación en un minuto."
+      },
+      "basics": {
+        "title": "Lo básico",
+        "body": "Con esto ya te mostramos cómo se ve. Lo demás lo agregas después, si quieres.",
+        "changeType": "Cambiar tipo de evento",
+        "next": "Ver mi invitación"
+      },
+      "package": {
+        "body": "Todos parten de lo que acabas de ver.",
+        "expressPreview": "Así se verá tu hoja en PDF (la parte de abajo se desbloquea al pagar):"
+      },
+      "progress": "Paso {n} de {total}"
     }
   },
   "tables": {

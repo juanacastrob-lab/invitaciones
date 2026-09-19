@@ -395,7 +395,9 @@
       "payment": "Payment",
       "design": "Design",
       "details": "Details",
-      "preview": "Preview"
+      "preview": "Preview",
+      "type": "Event",
+      "basics": "The basics"
     },
     "next": "Continue",
     "back": "Back",
@@ -550,8 +552,27 @@
         "next": "I like it, continue",
         "saveTitle": "Want to finish later?",
         "saveBody": "We email you a link to come back here. It is kept for 48 hours.",
-        "saveButton": "Email me the link"
-      }
+        "saveButton": "Email me the link",
+        "design": "Change design and colors",
+        "details": "Add venue, schedule, photos and more",
+        "refresh": "Update preview",
+        "refreshing": "Updating…"
+      },
+      "type": {
+        "title": "What are you celebrating?",
+        "body": "Pick one and we show you your invitation in a minute."
+      },
+      "basics": {
+        "title": "The basics",
+        "body": "This is enough to show you how it looks. Add the rest later, if you want.",
+        "changeType": "Change event type",
+        "next": "See my invitation"
+      },
+      "package": {
+        "body": "All of them start from what you just saw.",
+        "expressPreview": "This is how your PDF page will look (the bottom unlocks after payment):"
+      },
+      "progress": "Step {n} of {total}"
     }
   },
   "tables": {
