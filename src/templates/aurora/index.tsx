@@ -617,6 +617,12 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
       <main>{c.sectionOrder.map((id) => sections[id])}</main>
 
       <footer className="px-6 pb-10 pt-4 text-center">
+        {c.album?.enabled && (event.status === 'publicado' || event.status === 'finalizado') ? (
+          <div className="mb-8">
+            <p className="mb-3 text-[0.7rem] uppercase tracking-[0.25em] text-[var(--muted)]">{text(c.album.title) ?? t('album.title')}</p>
+            <LinkButton href={`/i/${event.slug}/fotos`} external={false}>{t('album.open')}</LinkButton>
+          </div>
+        ) : null}
         <p className={`${heading} text-lg text-[var(--muted)]`}>{coupleNames}</p>
       </footer>
     </div>

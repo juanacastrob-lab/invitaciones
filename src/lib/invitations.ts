@@ -148,3 +148,30 @@ export const getSaveTheDate = cache(async function getSaveTheDate(slug: string):
   if (!parsed.success) throw new Error(`Save the date de "${slug}" inválido: ${parsed.error.issues.map((i) => i.path.join('.')).join(', ')}`);
   return parsed.data;
 });
+
+// -----------------------------------------------------------------------------
+// Álbum de invitados
+// -----------------------------------------------------------------------------
+
+const albumSchema = z.object({
+  event_id: z.string(),
+  couple: z.object({ partnerA: z.string(), partnerB: z.string().optional() }),
+  template: z.string(),
+  languages: z.array(z.string()).min(1),
+  default_language: z.string(),
+  title: localizedText.nullable().optional(),
+  note: localizedText.nullable().optional(),
+  photos: z.array(z.object({ id: z.string(), path: z.string(), uploader: z.string().nullable(), caption: z.string().nullable(), created_at: z.string() })),
+});
+
+export type Album = z.infer<typeof albumSchema>;
+
+/** Fotos aprobadas del álbum; `null` si el álbum no está abierto. Sin caché: cambia a cada rato el día del evento. */
+export async function getAlbum(slug: string): Promise<Album | null> {
+  const { data, error } = await supabaseAdmin().rpc('rpc_album_list', { p_slug: slug });
+  if (error) throw new Error(`No se pudo leer el álbum: ${error.message}`);
+  if (data === null) return null;
+  const parsed = albumSchema.safeParse(data);
+  if (!parsed.success) throw new Error('Álbum inválido');
+  return parsed.data;
+}

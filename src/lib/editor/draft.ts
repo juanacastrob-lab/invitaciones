@@ -36,6 +36,7 @@ export interface Draft {
   og: { title: LT; description: LT; image: string };
   saveTheDate: { note: LT };
   thankYou: { title: LT; body: LT; photoUrl: string; photoAlt: LT };
+  album: { enabled: boolean; title: LT; note: LT };
   /** Secciones visibles, en orden. Las demás se guardan si están completas. */
   sectionOrder: SectionId[];
   cover: { headline: LT; tagline: LT; photoUrl: string; photoAlt: LT; video: string; envelope: boolean; monogram: boolean };
@@ -91,6 +92,7 @@ export function toDraft(c: EventContent): Draft {
     og: { title: lt(c.og?.title), description: lt(c.og?.description), image: c.og?.image ?? '' },
     saveTheDate: { note: lt(c.saveTheDate?.note) },
     thankYou: { title: lt(c.thankYou?.title), body: lt(c.thankYou?.body), photoUrl: c.thankYou?.photo?.url ?? '', photoAlt: lt(c.thankYou?.photo?.alt) },
+    album: { enabled: c.album?.enabled ?? false, title: lt(c.album?.title), note: lt(c.album?.note) },
     sectionOrder: [...c.sectionOrder],
     cover: { headline: lt(c.cover?.headline), tagline: lt(c.cover?.tagline), photoUrl: c.cover?.photo?.url ?? '', photoAlt: lt(c.cover?.photo?.alt), video: c.cover?.video ?? '', envelope: c.cover?.envelope ?? false, monogram: c.cover?.monogram ?? false },
     quote: { text: lt(c.quote?.text), author: c.quote?.author ?? '' },
@@ -289,6 +291,7 @@ export function fromDraft(d: Draft): unknown {
     sectionOrder: d.sectionOrder,
     saveTheDate: outLT(d.saveTheDate.note) ? { note: outLT(d.saveTheDate.note) } : undefined,
     thankYou: outLT(d.thankYou.body) ? { title: outLT(d.thankYou.title), body: outLT(d.thankYou.body), photo: photo(d.thankYou.photoUrl, d.thankYou.photoAlt) } : undefined,
+    album: d.album.enabled || outLT(d.album.title) || outLT(d.album.note) ? { enabled: d.album.enabled, title: outLT(d.album.title), note: outLT(d.album.note) } : undefined,
   };
   for (const id of SECTION_IDS) {
     const value = sectionValue(d, id);

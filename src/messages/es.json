@@ -216,6 +216,10 @@
     },
     "transport": {
       "title": "Transporte"
+    },
+    "album": {
+      "title": "Fotos del evento",
+      "open": "Ver y subir fotos"
     }
   },
   "auth": {
@@ -353,7 +357,8 @@
     },
     "openedMark": "abrió",
     "nudge": "Hola {name}, somos {couple}. Vimos que abriste la invitación pero no has confirmado. ¿Nos ayudas? {link}",
-    "nudgeButton": "Recordar"
+    "nudgeButton": "Recordar",
+    "album": "Fotos"
   },
   "store": {
     "title": "Arma tu invitación",
@@ -616,6 +621,11 @@
     "thankYou": {
       "title": "Agradecimiento",
       "hint": "Después del evento. Cada invitado lo ve en su link personal, con su nombre. Sin texto, no existe."
+    },
+    "album": {
+      "title": "Álbum de invitados",
+      "hint": "Los invitados suben fotos desde su celular el día del evento (link general o QR en las mesas). Los novios pueden borrar. Solo funciona con el evento publicado.",
+      "enabled": "Álbum encendido"
     }
   },
   "guests": {
@@ -689,5 +699,24 @@
     "markArrived": "Llegó",
     "noMatch": "Nadie con ese nombre.",
     "autoRefresh": "Se actualiza solo cada 15 segundos. Funciona con varios celulares a la vez."
+  },
+  "album": {
+    "title": "Fotos del evento",
+    "note": "Sube las fotos que tomes y mira las de los demás.",
+    "open": "Ver y subir fotos",
+    "yourName": "Tu nombre (opcional)",
+    "upload": "Subir fotos",
+    "uploading": "Subiendo {done} de {total}…",
+    "hint": "Se reducen solas. Hasta 10 a la vez.",
+    "empty": "Todavía no hay fotos. ¡Sé el primero!",
+    "error": "No se pudo subir esa foto.",
+    "tooMany": "Muchas fotos seguidas. Espera un momento.",
+    "back": "Volver a la invitación",
+    "panelHint": "Comparte el link o imprime el QR para las mesas. La presentación es para la pantalla del salón.",
+    "panelOff": "El álbum está apagado: enciéndelo en Contenido → Álbum de invitados.",
+    "qr": "QR para imprimir",
+    "slideshow": "Presentación",
+    "delete": "Borrar",
+    "deleteConfirm": "¿Borrar esta foto?"
   }
 }

@@ -246,6 +246,13 @@ export const saveTheDate = z.object({
   note: localizedText.optional(),
 });
 
+/** Álbum de fotos de los invitados (/i/slug/fotos). Se enciende desde el editor. */
+export const album = z.object({
+  enabled: z.boolean().default(false),
+  title: localizedText.optional(),
+  note: localizedText.optional(),
+});
+
 /** Agradecimiento después del evento, en el link personal. */
 export const thankYou = z.object({
   title: localizedText.optional(),
@@ -301,6 +308,7 @@ export const eventContent = z
 
     saveTheDate: saveTheDate.optional(),
     thankYou: thankYou.optional(),
+    album: album.optional(),
   })
   .superRefine((value, ctx) => {
     // Una sección listada pero sin datos deja un hueco en la invitación.

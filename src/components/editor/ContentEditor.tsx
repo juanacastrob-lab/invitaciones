@@ -53,6 +53,7 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
     if (id === 'og') return t('og.title');
     if (id === 'saveTheDate') return t('saveTheDate.title');
     if (id === 'thankYou') return t('thankYou.title');
+    if (id === 'album') return t('album.title');
     return id;
   };
 
@@ -368,6 +369,13 @@ export function ContentEditor({ eventId, content, languages, previewHref }: { ev
       <SectionCard id="saveTheDate" title={t('saveTheDate.title')} enabled labels={labels} error={errorFor('saveTheDate')}>
         <p className="text-xs text-stone-400">{t('saveTheDate.hint')}</p>
         {lt(t('fields.note'), draft.saveTheDate.note, (d, v) => { d.saveTheDate.note = v; }, { multiline: true })}
+      </SectionCard>
+
+      <SectionCard id="album" title={t('album.title')} enabled labels={labels} error={errorFor('album')}>
+        <p className="text-xs text-stone-400">{t('album.hint')}</p>
+        <Check label={t('album.enabled')} checked={draft.album.enabled} onChange={(v) => patch((d) => { d.album.enabled = v; })} />
+        {lt(t('fields.sectionTitle'), draft.album.title, (d, v) => { d.album.title = v; })}
+        {lt(t('fields.note'), draft.album.note, (d, v) => { d.album.note = v; })}
       </SectionCard>
 
       <SectionCard id="thankYou" title={t('thankYou.title')} enabled labels={labels} error={errorFor('thankYou')}>

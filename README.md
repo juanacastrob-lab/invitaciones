@@ -48,6 +48,14 @@ cuatro variables en este orden: nombre, pareja, fecha, link. Mientras no haya
 Cloud API, el envio masivo es a mano desde la cola con el "modo rapido", con
 calma (20-30 por hora) para que WhatsApp no bloquee el numero.
 
+SMS por Twilio (opcional, para EE. UU. y Canada): `TWILIO_ACCOUNT_SID`,
+`TWILIO_AUTH_TOKEN` y `TWILIO_FROM` (un numero comprado en Twilio). El "ya casi"
+sale por SMS a quien tenga telefono cuando no hay WhatsApp Cloud.
+
+Album de invitados: se enciende en Contenido > Album de invitados. Los invitados
+suben fotos en /i/slug/fotos (hay QR en /i/slug/fotos/qr.png para imprimir y
+presentacion en /i/slug/fotos?slideshow=1). Los novios borran desde el panel.
+
 App instalable: en el celular, abrir holaboda.mx/admin y "Agregar a pantalla de
 inicio". Abre a pantalla completa con barra inferior; sirve igual para el
 panel de los novios.

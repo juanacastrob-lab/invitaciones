@@ -60,6 +60,7 @@ export default async function PanelEventPage({ params, searchParams }: { params:
             <LinkButton href={`/panel/${id}/mesas${lang ? `?lang=${lang}` : ''}`}>{locale === 'es' ? 'Mesas' : 'Tables'}</LinkButton>
             {editable ? <LinkButton href={`/panel/${id}/contenido${lang ? `?lang=${lang}` : ''}`} variant="primary">{t('editContent')}</LinkButton> : null}
             {event.checkin_enabled && event.status === 'publicado' ? <LinkButton href={`/checkin/${id}${lang ? `?lang=${lang}` : ''}`}>{t('checkin')}</LinkButton> : null}
+            {c.album?.enabled ? <LinkButton href={`/panel/${id}/fotos${lang ? `?lang=${lang}` : ''}`}>{t('album')}</LinkButton> : null}
           </div>
         </div>
 

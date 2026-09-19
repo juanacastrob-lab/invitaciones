@@ -216,6 +216,10 @@
     },
     "transport": {
       "title": "Transportation"
+    },
+    "album": {
+      "title": "Event photos",
+      "open": "See and upload photos"
     }
   },
   "auth": {
@@ -353,7 +357,8 @@
     },
     "openedMark": "opened",
     "nudge": "Hi {name}, this is {couple}. We saw you opened the invitation but haven't replied yet. Could you? {link}",
-    "nudgeButton": "Nudge"
+    "nudgeButton": "Nudge",
+    "album": "Photos"
   },
   "store": {
     "title": "Build your invitation",
@@ -616,6 +621,11 @@
     "thankYou": {
       "title": "Thank-you note",
       "hint": "After the event. Each guest sees it on their personal link, with their name. No text, no page."
+    },
+    "album": {
+      "title": "Guest album",
+      "hint": "Guests upload photos from their phones on the day (general link or a QR on the tables). The couple can delete. Works only once the event is published.",
+      "enabled": "Album on"
     }
   },
   "guests": {
@@ -689,5 +699,24 @@
     "markArrived": "Arrived",
     "noMatch": "No one with that name.",
     "autoRefresh": "Refreshes every 15 seconds. Works on several phones at once."
+  },
+  "album": {
+    "title": "Event photos",
+    "note": "Upload the photos you take and see everyone else's.",
+    "open": "See and upload photos",
+    "yourName": "Your name (optional)",
+    "upload": "Upload photos",
+    "uploading": "Uploading {done} of {total}…",
+    "hint": "Resized automatically. Up to 10 at a time.",
+    "empty": "No photos yet. Be the first!",
+    "error": "That photo could not be uploaded.",
+    "tooMany": "Too many photos in a row. Wait a moment.",
+    "back": "Back to the invitation",
+    "panelHint": "Share the link or print the QR for the tables. The slideshow is for the venue screen.",
+    "panelOff": "The album is off: turn it on in Content → Guest album.",
+    "qr": "Printable QR",
+    "slideshow": "Slideshow",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this photo?"
   }
 }

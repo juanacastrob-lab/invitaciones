@@ -78,6 +78,12 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
                   <dd className="flex items-center gap-1 break-all"><a className="underline" href={`/i/${event.slug}/save-the-date`} target="_blank">/i/{event.slug}/save-the-date</a><CopyButton value={`${site}/i/${event.slug}/save-the-date`} /></dd>
                 </div>
               ) : null}
+              {c.album?.enabled ? (
+                <div>
+                  <dt className="text-xs text-stone-500">Álbum de invitados</dt>
+                  <dd className="flex flex-wrap items-center gap-2 break-all"><a className="underline" href={`/i/${event.slug}/fotos`} target="_blank">/i/{event.slug}/fotos</a><a className="underline" href={`/i/${event.slug}/fotos/qr.png`} target="_blank">QR</a><a className="underline" href={`/panel/${id}/fotos`} target="_blank">moderar</a></dd>
+                </div>
+              ) : null}
               {event.checkin_enabled ? (
                 <div>
                   <dt className="text-xs text-stone-500">Check-in del día del evento</dt>

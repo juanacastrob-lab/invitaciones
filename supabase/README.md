@@ -29,6 +29,7 @@ normal y no rompe nada.
 | `011_store.sql` | Tienda: extras (precios PROVISIONALES), pedidos, pagos y marcar transferencias pagadas |
 | `012_event_types.sql` | Tipos de evento nuevos (graduacion, cumpleanos, otro). Va aparte por como funcionan los enums |
 | `024_rsvp_extras.sql` | Preguntas propias y niños en el RSVP (rsvp_responses.answers / children_count, rpc_submit_rsvp_extra) y rpc_get_invitation con esos campos |
+| `025_album.sql` | Album de fotos de invitados: event_photos, rpc_album_list / rpc_album_add (publicas con rate limit) |
 | `013_tables.sql` | Mesas: tabla event_tables, guests.table_id, rpc_assign_table (novios pueden acomodar aun publicado) y vista table_stats. Tambien pone `security_invoker` en event_stats y table_stats para que las vistas respeten RLS |
 | `014_content_editor.sql` | Tipos de evento primera_comunion y confirmacion, y rpc_update_event_content para que novios y planner guarden el contenido desde el panel (solo en borrador o en revision) |
 | `015_storage.sql` | Bucket `event-media` (publico de lectura, 6 MB, webp/jpg/png) para las fotos que se suben desde el editor. Se puede repetir |
@@ -41,6 +42,7 @@ normal y no rompe nada.
 | `022_event_reminders.sql` | Recordatorio del evento horas antes: events.event_reminder_hours, guests.event_reminder_milestone y plantilla event_soon |
 | `023_sweet_sixteen.sql` | Tipo de evento sweet_sixteen. Va aparte por como funcionan los enums |
 | `024_rsvp_extras.sql` | Preguntas propias y niños en el RSVP (rsvp_responses.answers / children_count, rpc_submit_rsvp_extra) y rpc_get_invitation con esos campos |
+| `025_album.sql` | Album de fotos de invitados: event_photos, rpc_album_list / rpc_album_add (publicas con rate limit) |
 
 `002` se genera desde `src/demo/demo-event.ts` con `npm run build:demo-seed`, así
 el contenido de la base y el que espera la app nunca se separan. Se puede correr

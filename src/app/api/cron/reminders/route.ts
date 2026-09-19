@@ -7,6 +7,7 @@ import { buildGuestMessage, guestLink } from '@/lib/admin/whatsapp';
 import { daysUntil, dueMilestone, hoursUntil, reminderDeadline } from '@/lib/reminders';
 import { zonedToInstant } from '@/lib/dates';
 import { sendWhatsappTemplate, whatsappConfig } from '@/lib/whatsapp/cloud';
+import { sendSms, smsConfig } from '@/lib/sms/twilio';
 import { eventNames } from '@/lib/event-types';
 import { APP_NAME, CONTACT_EMAIL, type Locale } from '@/lib/config';
 import type { EventContent } from '@/schemas/event-content';
@@ -26,7 +27,8 @@ export async function POST(req: Request) {
   if (!secret || auth !== `Bearer ${secret}`) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   const canEmail = Boolean(emailConfig());
   const canWhatsapp = Boolean(whatsappConfig());
-  if (!canEmail && !canWhatsapp) return NextResponse.json({ skipped: 'no_channel_configured' });
+  const canSms = Boolean(smsConfig());
+  if (!canEmail && !canWhatsapp && !canSms) return NextResponse.json({ skipped: 'no_channel_configured' });
   const site = getSiteUrl();
   if (!site) return NextResponse.json({ skipped: 'site_url_missing' });
 
@@ -102,13 +104,16 @@ export async function POST(req: Request) {
       const m = dueMilestone(hoursList, hours, g.event_reminder_milestone);
       if (m === null) continue;
       const useWa = canWhatsapp && Boolean(g.phone);
-      if (!useWa && !(canEmail && g.email)) continue;
+      const useSms = !useWa && canSms && Boolean(g.phone);
+      if (!useWa && !useSms && !(canEmail && g.email)) continue;
       const locale: Locale = g.language === 'en' ? 'en' : 'es';
       const link = guestLink(site, ev.slug, g.token);
       const message = buildGuestMessage({ template: tpl('event_soon', locale), guestName: g.display_name, passes: g.passes, locale, couple, startsAt: c.startsAt, timezone: ev.timezone, link, venue });
       const r = useWa
         ? await sendWhatsappTemplate({ to: g.phone as string, template: 'event_soon', locale, params: [g.display_name, couple, message.match(/\d{1,2}.*\d{4}/)?.[0] ?? c.startsAt.slice(0, 10), link] })
-        : await sendEmail({ to: g.email as string, ...renderGuestEmail({ templateKey: 'event_soon', locale, couple, message, link, appName: APP_NAME }), replyTo: CONTACT_EMAIL });
+        : useSms
+          ? await sendSms({ to: g.phone as string, body: message })
+          : await sendEmail({ to: g.email as string, ...renderGuestEmail({ templateKey: 'event_soon', locale, couple, message, link, appName: APP_NAME }), replyTo: CONTACT_EMAIL });
       if (!r.ok) { failed += 1; console.warn('[event_soon] falló', g.id, r.error); continue; }
       sent += 1;
       await admin.from('guests').update({ event_reminder_milestone: m }).eq('id', g.id);
