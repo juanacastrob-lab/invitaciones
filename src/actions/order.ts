@@ -12,6 +12,11 @@ import { orderInput, priceOrder, type OrderResult } from '@/schemas/order';
 import { normalizePhone } from '@/schemas/lead';
 import { templateContent, slugFromNames } from '@/lib/admin/template';
 import { isEventType } from '@/lib/event-types';
+import { loadDraft } from '@/actions/draft';
+import { draftToContent, isExpress } from '@/lib/drafts';
+
+/** Minutos de "espera" del Express: el PDF se manda cuando pasa este tiempo desde el pago. */
+const EXPRESS_MINUTES = 15;
 
 async function clientKey(): Promise<string> {
   const h = await headers();
@@ -91,6 +96,8 @@ export async function createOrder(raw: unknown): Promise<OrderResult> {
       status: paid ? 'pagado' : 'pendiente',
       paid_at: paid ? new Date().toISOString() : null,
       contact,
+      draft_key: input.draftKey || null,
+      deliver_at: paid && isExpress(pkg.code) ? new Date(Date.now() + EXPRESS_MINUTES * 60_000).toISOString() : null,
     })
     .select('id, number')
     .single();
@@ -99,6 +106,8 @@ export async function createOrder(raw: unknown): Promise<OrderResult> {
     console.error('[order] no se pudo crear:', error);
     return { ok: false, error: 'unknown' };
   }
+
+  if (input.draftKey) await admin.from('design_drafts').update({ order_id: order.id }).eq('key', input.draftKey);
 
   // CRM: si ya era prospecto (mismo teléfono o correo), el pedido lo avanza solo.
   try {
@@ -143,20 +152,27 @@ export async function createOrder(raw: unknown): Promise<OrderResult> {
  */
 export async function provisionOrder(orderId: string): Promise<{ eventId: string } | null> {
   const admin = supabaseAdmin();
-  const { data: o } = await admin.from('orders').select('id, event_id, contact, build_mode, planner_email, country, event_type, package_code').eq('id', orderId).single();
+  const { data: o } = await admin.from('orders').select('id, event_id, contact, build_mode, planner_email, country, event_type, package_code, draft_key, paid_at, deliver_at').eq('id', orderId).single();
   if (!o) return null;
   if (o.event_id) return { eventId: o.event_id };
 
   const c = o.contact as { partner_a: string; partner_b: string | null; email: string; event_date: string | null };
   const startsAt = `${c.event_date ?? new Date(Date.now() + 180 * 86400_000).toISOString().slice(0, 10)}T17:00`;
   const slug = slugFromNames(c.partner_a, c.partner_b ?? undefined, randomBytes(2).toString('hex'));
-  const content = templateContent({ partnerA: c.partner_a, partnerB: c.partner_b ?? undefined, startsAt, type: isEventType(o.event_type) ? o.event_type : 'boda' });
+  // Con borrador del wizard, el evento nace con lo que armó el cliente (y su diseño).
+  const draft = o.draft_key ? await loadDraft(o.draft_key) : null;
+  const content = draft
+    ? draftToContent({ ...draft.data, partnerA: draft.data.partnerA || c.partner_a, partnerB: draft.data.partnerB || c.partner_b || '' })
+    : templateContent({ partnerA: c.partner_a, partnerB: c.partner_b ?? undefined, startsAt, type: isEventType(o.event_type) ? o.event_type : 'boda' });
   // Básico y Express son solo PDF: sin confirmación de asistencia.
-  if (o.package_code === 'basico' || o.package_code === 'express') content.sectionOrder = content.sectionOrder.filter((s) => s !== 'rsvp');
+  if (isExpress(o.package_code)) content.sectionOrder = content.sectionOrder.filter((s) => s !== 'rsvp');
+  // Lo armó el cliente: pasa directo a revisión para que lo apruebe y publique cuando quiera.
+  const status = draft && !isExpress(o.package_code) && o.build_mode === 'self' ? 'en_revision' : 'borrador';
+  const languages = draft ? [draft.locale] : ['es', 'en'];
 
   const { data: ev, error } = await admin
     .from('events')
-    .insert({ slug, type: o.event_type, package_code: o.package_code, country: o.country, languages: ['es', 'en'], default_language: 'es', content, status: 'borrador' })
+    .insert({ slug, type: o.event_type, package_code: o.package_code, country: o.country, languages, default_language: draft?.locale ?? 'es', template: draft?.template ?? 'aurora', content, status })
     .select('id')
     .single();
   if (error || !ev) {
@@ -164,7 +180,7 @@ export async function provisionOrder(orderId: string): Promise<{ eventId: string
     return null;
   }
 
-  await admin.from('orders').update({ event_id: ev.id }).eq('id', orderId);
+  await admin.from('orders').update({ event_id: ev.id, ...(isExpress(o.package_code) && !o.deliver_at ? { deliver_at: new Date(Date.now() + EXPRESS_MINUTES * 60_000).toISOString() } : {}) }).eq('id', orderId);
 
   // Acceso por correo: el trigger de auth los liga en cuanto entren.
   const emails = [c.email, o.planner_email].filter((e): e is string => Boolean(e));

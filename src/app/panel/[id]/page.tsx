@@ -7,6 +7,10 @@ import { getEvent, listGuests, listMessages } from '@/lib/admin/queries';
 import { SessionBar } from '@/components/auth/SessionBar';
 import { PanelGuests } from '@/components/panel/PanelGuests';
 import { ApproveBox } from '@/components/panel/ApproveBox';
+import { ExpressStatus } from '@/components/panel/ExpressStatus';
+import { AdjustmentRequest } from '@/components/panel/AdjustmentRequest';
+import { getOrderForEvent } from '@/lib/admin/queries';
+import { isExpress } from '@/lib/drafts';
 import { GuestsManager } from '@/components/admin/GuestsManager';
 import { Badge, LinkButton } from '@/components/ui';
 import { STATUS_TONE } from '@/lib/admin/labels';
@@ -21,14 +25,17 @@ export default async function PanelEventPage({ params, searchParams }: { params:
   const { id } = await params;
   const { lang } = await searchParams;
   const locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
-  const [t, messages, event, guests, notes] = await Promise.all([
+  const [t, messages, event, guests, notes, order] = await Promise.all([
     getTranslations({ locale, namespace: 'panel' }),
     getMessages({ locale }),
     getEvent(id),
     listGuests(id),
     listMessages(id),
+    getOrderForEvent(id),
   ]);
   if (!event) notFound();
+  const express = isExpress(event.package_code ?? '');
+  const pdfReady = !express || Boolean(order?.delivered_at) || Boolean(order?.deliver_at && new Date(order.deliver_at) <= new Date());
   const c = event.content as unknown as EventContent;
   const editable = event.status === 'borrador' || event.status === 'en_revision';
   const other = locale === 'es' ? 'en' : 'es';
@@ -56,7 +63,7 @@ export default async function PanelEventPage({ params, searchParams }: { params:
             <a href={`/panel/${id}?lang=${other}`} className="self-center text-[0.65rem] uppercase tracking-[0.2em] text-stone-500 underline underline-offset-4">{other.toUpperCase()}</a>
             <LinkButton href={`/i/${event.slug}?preview=${event.preview_key}`} target="_blank">{t('openInvitation')}</LinkButton>
             <LinkButton href={`/admin/events/${id}/guests/export.csv`}>{t('export')}</LinkButton>
-            <LinkButton href={`/panel/${id}/invitacion.pdf?lang=${locale}`} target="_blank">{t('downloadPdf')}</LinkButton>
+            {pdfReady ? <LinkButton href={`/panel/${id}/invitacion.pdf?lang=${locale}`} target="_blank">{t('downloadPdf')}</LinkButton> : null}
             <LinkButton href={`/panel/${id}/mesas${lang ? `?lang=${lang}` : ''}`}>{locale === 'es' ? 'Mesas' : 'Tables'}</LinkButton>
             {editable ? <LinkButton href={`/panel/${id}/contenido${lang ? `?lang=${lang}` : ''}`} variant="primary">{t('editContent')}</LinkButton> : null}
             {event.checkin_enabled && event.status === 'publicado' ? <LinkButton href={`/checkin/${id}${lang ? `?lang=${lang}` : ''}`}>{t('checkin')}</LinkButton> : null}
@@ -72,7 +79,13 @@ export default async function PanelEventPage({ params, searchParams }: { params:
           </div>
         ) : null}
 
-        {event.status !== 'en_revision' ? (
+        {express ? (
+          <div className="mt-6">
+            <ExpressStatus deliverAt={order?.deliver_at ?? null} delivered={Boolean(order?.delivered_at)} pdfHref={`/panel/${id}/invitacion.pdf?lang=${locale}`} labels={{ building: t('express.building'), ready: t('express.ready'), download: t('downloadPdf'), sentTo: t('express.sentTo') }} />
+          </div>
+        ) : null}
+
+        {event.status !== 'en_revision' && !express ? (
           <div className="mt-6 rounded-sm border border-stone-200 bg-white p-4">
             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-stone-500">{t('next.title')}</p>
             <p className="mt-1 text-sm leading-relaxed text-stone-700">{t(`next.${event.status}`)}</p>
@@ -106,6 +119,10 @@ export default async function PanelEventPage({ params, searchParams }: { params:
             </NextIntlClientProvider>
           )}
         </section>
+
+        <div className="mt-8">
+          <AdjustmentRequest eventId={id} labels={{ button: t('adjust.button'), title: t('adjust.title'), hint: t('adjust.hint'), placeholder: t('adjust.placeholder'), send: t('adjust.send'), sent: t('adjust.sent') }} />
+        </div>
 
         <section className="mt-8">
           <h2 className="mb-3 text-[0.7rem] uppercase tracking-[0.25em] text-stone-500">{t('messages')}</h2>

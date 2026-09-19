@@ -1,8 +1,14 @@
 'use client';
 
-import { useMemo, useState, useTransition } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { createOrder } from '@/actions/order';
+import { createDraft, saveDraft, type DraftRow } from '@/actions/draft';
+import { draftData, isExpress, type DraftData, EMPTY_DRAFT } from '@/lib/drafts';
+import { presetFor } from '@/lib/admin/template';
+import { DesignStep } from './DesignStep';
+import { DetailsStep } from './DetailsStep';
+import { PreviewStep } from './PreviewStep';
 import type { OrderResult } from '@/schemas/order';
 import type { Locale } from '@/lib/config';
 import { WhatsAppIcon } from '@/components/landing/LeadForm';
@@ -13,13 +19,13 @@ export interface StoreExtra { code: string; name: string; description: string | 
 
 const field = 'w-full rounded-sm border border-stone-300 bg-white px-3 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-stone-600 focus:outline-none';
 const label = 'mb-1.5 block text-[0.7rem] uppercase tracking-[0.2em] text-stone-500';
-const STEPS = ['package', 'extras', 'mode', 'contact', 'payment'] as const;
+type Step = 'package' | 'design' | 'details' | 'preview' | 'extras' | 'mode' | 'payment';
+/** Express: paquete → diseño → datos → vista previa → pago. Web: además extras y quién la arma. */
+const stepsFor = (code: string): Step[] => (isExpress(code) ? ['package', 'design', 'details', 'preview', 'payment'] : ['package', 'design', 'details', 'preview', 'extras', 'mode', 'payment']);
 /** El paquete que se marca como "el más pedido" y queda elegido de entrada. */
 const POPULAR = 'completo';
-/** Paquetes solo PDF con entrega en 20 minutos. */
-const isExpress = (code: string) => code === 'express';
 
-export function Checkout({ locale, packages, extras, featureLabels, preselected, bank, planner, initialType }: {
+export function Checkout({ locale, packages, extras, featureLabels, preselected, bank, planner, initialType, initialDraft }: {
   locale: Locale;
   packages: StorePackage[];
   extras: StoreExtra[];
@@ -29,17 +35,56 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
   /** Viene de /comprar?ref=CODIGO: el pedido se atribuye a este planner. */
   planner?: { code: string; name: string; email: string } | null;
   initialType?: EventType;
+  /** Viene de /comprar?d=CLAVE: el cliente regresa a su borrador. */
+  initialDraft?: DraftRow | null;
 }) {
   const t = useTranslations('store');
   const fmt = (n: number, cur: string) => new Intl.NumberFormat(locale === 'es' ? 'es-MX' : 'en-US', { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(n);
 
-  const [step, setStep] = useState<number>(preselected && packages.some((p) => p.code === preselected) ? 1 : 0);
-  const [eventType, setEventType] = useState<EventType>(initialType ?? 'boda');
-  const [pkgCode, setPkgCode] = useState(preselected ?? (packages.some((p) => p.code === POPULAR) ? POPULAR : packages[Math.min(2, packages.length - 1)]?.code ?? ''));
+  const [eventType, setEventType] = useState<EventType>(initialDraft?.event_type ?? initialType ?? 'boda');
+  const [pkgCode, setPkgCode] = useState(initialDraft?.package_code ?? preselected ?? (packages.some((p) => p.code === POPULAR) ? POPULAR : packages[Math.min(2, packages.length - 1)]?.code ?? ''));
+  const [step, setStep] = useState<number>(initialDraft ? Math.max(1, Math.min(initialDraft.step, 3)) : preselected && packages.some((p) => p.code === preselected) ? 1 : 0);
+  const [draftKey, setDraftKey] = useState<string | null>(initialDraft?.key ?? null);
+  const [draft, setDraft] = useState<DraftData>(initialDraft?.data ?? { ...EMPTY_DRAFT, eventType: initialType ?? 'boda' });
+  const [previewVersion, setPreviewVersion] = useState(0);
+  const [draftError, setDraftError] = useState<string | null>(null);
+  const setD = (patch: Partial<DraftData>) => setDraft((d) => ({ ...d, ...patch }));
   const [extraCodes, setExtraCodes] = useState<string[]>([]);
   const [mode, setMode] = useState<'team' | 'self' | 'planner'>(planner ? 'planner' : 'team');
   const [plannerEmail, setPlannerEmail] = useState(planner?.email ?? '');
-  const [contact, setContact] = useState({ partnerA: '', partnerB: '', email: '', phone: '', country: 'MX', eventDate: '' });
+  const [contact, setContact] = useState({ partnerA: '', partnerB: '', email: initialDraft?.data.email ?? '', phone: initialDraft?.data.phone ?? '', country: initialDraft?.country ?? 'MX', eventDate: '' });
+  const STEPS = stepsFor(pkgCode);
+  const express = isExpress(pkgCode);
+  const current = STEPS[Math.min(step, STEPS.length - 1)];
+
+  // Encabezado y actos sugeridos por tipo de evento, si el cliente no ha escrito nada.
+  useEffect(() => {
+    const p = presetFor(eventType);
+    setDraft((d) => ({
+      ...d,
+      eventType,
+      headline: d.headline && d.eventType === eventType ? d.headline : p.headline[locale],
+      acts: d.acts.some((a) => a.venue || a.title) && d.eventType === eventType ? d.acts : p.acts.map((a) => ({ kind: a.kind, title: a.title[locale], time: '', venue: '', address: '', mapsUrl: '' })),
+    }));
+  }, [eventType, locale]);
+
+  /** Guarda el borrador y avanza. Al salir del paquete se crea el borrador. */
+  const goNext = () => start(async () => {
+    setDraftError(null);
+    let key = draftKey;
+    if (!key) {
+      const r = await createDraft({ packageCode: pkgCode, eventType, locale, country: contact.country });
+      if (!r.ok || !r.data) { setDraftError(r.ok ? 'draft' : r.error); return; }
+      key = r.data.key; setDraftKey(key);
+      try { const u = new URL(window.location.href); u.searchParams.set('d', key); window.history.replaceState(null, '', u.toString()); } catch { /* nada */ }
+    }
+    const next = step + 1;
+    const r = await saveDraft(key, draftData.parse({ ...draft, email: contact.email, phone: contact.phone }), next);
+    if (!r.ok) { setDraftError(r.error); return; }
+    if (STEPS[next] === 'preview') setPreviewVersion((v) => v + 1);
+    setStep(next);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
   const [method, setMethod] = useState<'card_sim' | 'transfer'>('card_sim');
   const [card, setCard] = useState({ number: '', exp: '', cvc: '', name: '' });
   const [consent, setConsent] = useState(false);
@@ -56,8 +101,9 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
     e.preventDefault();
     start(async () => {
       const r = await createOrder({
-        eventType, plannerCode: planner?.code ?? '', packageCode: pkgCode, extraCodes, buildMode: mode, plannerEmail,
-        ...contact, paymentMethod: method, card: method === 'card_sim' ? card : undefined, locale, consent,
+        eventType, plannerCode: planner?.code ?? '', packageCode: pkgCode, extraCodes, buildMode: express ? 'self' : mode, plannerEmail,
+        ...contact, partnerA: draft.partnerA, partnerB: draft.partnerB, eventDate: draft.date, draftKey: draftKey ?? '',
+        paymentMethod: method, card: method === 'card_sim' ? card : undefined, locale, consent,
       });
       setResult(r);
       if (r.ok) window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -88,7 +134,15 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
     );
   }
 
-  const canNext = [Boolean(pkg), true, mode !== 'planner' || plannerEmail.includes('@'), contact.partnerA && contact.email.includes('@') && contact.phone.length >= 6, true][step];
+  const canNext: Record<Step, boolean> = {
+    package: Boolean(pkg),
+    design: true,
+    details: Boolean(draft.partnerA && draft.date && contact.email.includes('@') && contact.phone.length >= 6),
+    preview: true,
+    extras: true,
+    mode: mode !== 'planner' || plannerEmail.includes('@'),
+    payment: true,
+  };
 
   return (
     <div>
@@ -106,7 +160,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
 
       <form onSubmit={submit} noValidate>
         {/* 1. paquete */}
-        {step === 0 ? (
+        {current === 'package' ? (
           <section>
             <h2 className="mb-3 font-serif text-2xl">{t('eventType.title')}</h2>
             <div className="mb-8 flex flex-wrap gap-2">
@@ -120,7 +174,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
             <h2 className="mb-4 font-serif text-2xl">{t('package.title')}</h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {packages.map((p) => (
-                <button key={p.code} type="button" onClick={() => setPkgCode(p.code)} aria-pressed={pkgCode === p.code}
+                <button key={p.code} type="button" onClick={() => { setPkgCode(p.code); setDraftKey(null); }} aria-pressed={pkgCode === p.code}
                   className={`rounded-sm border p-4 text-left ${pkgCode === p.code ? 'border-stone-900 ring-1 ring-stone-900' : 'border-stone-200'}`}>
                   <div className="flex items-baseline justify-between">
                     <span className="font-serif text-xl">{p.name}</span>
@@ -139,7 +193,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
         ) : null}
 
         {/* 2. extras */}
-        {step === 1 ? (
+        {current === 'extras' ? (
           <section>
             <h2 className="mb-1 font-serif text-2xl">{t('extras.title')}</h2>
             <p className="mb-4 text-sm text-stone-500">{t('extras.subtitle')}</p>
@@ -163,7 +217,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
         ) : null}
 
         {/* 3. quién la arma */}
-        {step === 2 ? (
+        {current === 'mode' ? (
           <section>
             <h2 className="mb-4 font-serif text-2xl">{t('mode.title')}</h2>
             <div className="space-y-2">
@@ -184,26 +238,12 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
           </section>
         ) : null}
 
-        {/* 4. datos */}
-        {step === 3 ? (
-          <section className="space-y-4">
-            <h2 className="font-serif text-2xl">{t('contact.title')}</h2>
-            <div className="grid grid-cols-2 gap-3">
-              <div><label className={label}>{t(needsTwoNames(eventType) ? 'contact.partnerA' : 'contact.name')}</label><input className={field} required value={contact.partnerA} onChange={(e) => setContact({ ...contact, partnerA: e.target.value })} /></div>
-              <div><label className={label}>{t(needsTwoNames(eventType) ? 'contact.partnerB' : 'contact.secondName')}</label><input className={field} value={contact.partnerB} onChange={(e) => setContact({ ...contact, partnerB: e.target.value })} /></div>
-            </div>
-            <div><label className={label}>{t('contact.email')}</label><input type="email" className={field} required value={contact.email} onChange={(e) => setContact({ ...contact, email: e.target.value })} /><p className="mt-1 text-xs text-stone-500">{t('contact.emailHelp')}</p></div>
-            <div className="grid grid-cols-[1fr_auto] gap-3">
-              <div><label className={label}>{t('contact.phone')}</label><input type="tel" className={field} required value={contact.phone} onChange={(e) => setContact({ ...contact, phone: e.target.value })} placeholder="55 1234 5678" /></div>
-              <div><label className={label}>{t('contact.country')}</label>
-                <select className={field} value={contact.country} onChange={(e) => setContact({ ...contact, country: e.target.value })}><option value="MX">México</option><option value="US">USA</option><option value="CA">Canadá</option></select></div>
-            </div>
-            <div><label className={label}>{t('contact.eventDate')}</label><input type="date" className={field} value={contact.eventDate} onChange={(e) => setContact({ ...contact, eventDate: e.target.value })} /></div>
-          </section>
-        ) : null}
+        {current === 'design' ? <DesignStep d={draft} set={setD} locale={locale} /> : null}
+        {current === 'details' && draftKey ? <DetailsStep d={draft} set={setD} draftKey={draftKey} eventType={eventType} contact={contact} setContact={(c) => setContact({ ...contact, ...c })} express={express} /> : null}
+        {current === 'preview' && draftKey ? <PreviewStep draftKey={draftKey} express={express} locale={locale} version={previewVersion} email={contact.email} /> : null}
 
         {/* 5. pago */}
-        {step === 4 ? (
+        {current === 'payment' ? (
           <section className="space-y-5">
             <h2 className="font-serif text-2xl">{t('payment.title')}</h2>
             <dl className="rounded-sm bg-stone-50 p-4 text-sm">
@@ -242,12 +282,13 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
           </section>
         ) : null}
 
+        {draftError ? <p role="alert" className="mt-4 rounded-sm bg-red-50 px-3 py-2 text-xs text-red-800">{draftError}</p> : null}
         <div className="mt-8 flex items-center justify-between">
           {step > 0 ? <button type="button" onClick={() => setStep(step - 1)} className="text-xs uppercase tracking-[0.2em] text-stone-500 underline underline-offset-4">{t('back')}</button> : <span />}
           <div className="flex items-center gap-4">
             <span className="text-sm text-stone-500">{t('payment.total')}: <strong className="text-stone-900">{fmt(total, currency)}</strong></span>
             {step < STEPS.length - 1 ? (
-              <button type="button" disabled={!canNext} onClick={() => setStep(step + 1)} className="rounded-full bg-stone-900 px-6 py-3 text-xs uppercase tracking-[0.25em] text-white disabled:opacity-40">{t('next')}</button>
+              <button type="button" disabled={!canNext[current] || pending} onClick={goNext} className="rounded-full bg-stone-900 px-6 py-3 text-xs uppercase tracking-[0.25em] text-white disabled:opacity-40">{pending ? '…' : t(current === 'preview' ? 'wizard.preview.next' : 'next')}</button>
             ) : (
               <button type="submit" disabled={pending} className="rounded-full bg-stone-900 px-6 py-3 text-xs uppercase tracking-[0.25em] text-white disabled:opacity-60">
                 {pending ? t('payment.sending') : method === 'card_sim' ? t('payment.pay', { total: fmt(total, currency) }) : t('payment.reserve')}

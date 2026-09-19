@@ -378,3 +378,10 @@ export async function getDashboard(): Promise<DashboardData> {
     leadsBySource: bySource,
   };
 }
+
+/** El pedido detrás de un evento (para el Express: cuándo se entrega). RLS: solo el dueño o el equipo. */
+export async function getOrderForEvent(eventId: string): Promise<{ id: string; package_code: string; deliver_at: string | null; delivered_at: string | null } | null> {
+  const supabase = await supabaseServer();
+  const { data } = await supabase.from('orders').select('id, package_code, deliver_at, delivered_at').eq('event_id', eventId).order('created_at', { ascending: false }).limit(1).maybeSingle();
+  return data ?? null;
+}

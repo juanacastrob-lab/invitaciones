@@ -11,6 +11,7 @@ import { Countdown } from '@/components/invitation/Countdown';
 import { CopyButton } from '@/components/invitation/CopyButton';
 import { MusicPlayer } from '@/components/invitation/MusicPlayer';
 import { EnvelopeIntro } from '@/components/invitation/EnvelopeIntro';
+import { RsvpCta } from '@/components/invitation/RsvpCta';
 import { RsvpForm } from '@/components/invitation/RsvpForm';
 import { resolveTemplate, templateCssVars } from '@/templates/registry';
 import QRCode from 'qrcode';
@@ -36,15 +37,17 @@ function Section({
   children,
   tight = false,
   wide = false,
+  id,
 }: {
   title?: string;
   children: React.ReactNode;
   tight?: boolean;
   /** Secciones con rejilla (itinerario, hoteles, galería): más anchas en tablet y escritorio. */
   wide?: boolean;
+  id?: string;
 }) {
   return (
-    <section className={`px-6 ${tight ? 'py-10 md:py-14' : 'py-14 md:py-20'}`}>
+    <section id={id} className={`scroll-mt-14 px-6 ${tight ? 'py-10 md:py-14' : 'py-14 md:py-20'}`}>
       <div className={`mx-auto w-full ${wide ? 'max-w-md md:max-w-4xl' : 'max-w-md md:max-w-lg'}`}>
         <Reveal>
           {title ? (
@@ -97,7 +100,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
 
   const otherLocale = event.languages.find((l) => l !== locale);
   const coupleNames = eventNames(c.couple);
-  const theme = resolveTemplate(event.template);
+  const theme = resolveTemplate(event.template, c.colors);
   const heading = theme.heading === 'sans' ? 'font-sans font-light tracking-tight' : 'font-serif';
   const radius = theme.radius === 'xl' ? 'rounded-2xl' : 'rounded-sm';
   const onPhoto = theme.cover === 'split' && Boolean(c.cover?.photo || c.cover?.video);
@@ -188,6 +191,12 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
 
           {text(c.cover?.tagline) ? (
             <p className="mt-5 text-sm text-[var(--muted)]">{text(c.cover?.tagline)}</p>
+          ) : null}
+
+          {guest && token && c.sectionOrder.includes('rsvp') ? (
+            <a href="#rsvp" className={`mt-8 inline-block rounded-full px-6 py-3 text-xs uppercase tracking-[0.25em] ${onPhoto ? 'border border-white/70 text-white' : 'bg-[var(--ink)] text-[var(--paper)]'}`}>
+              {guest.status === 'pending' ? t('rsvp.cta') : t('rsvp.ctaDone')}
+            </a>
           ) : null}
 
           {c.music ? (
@@ -520,7 +529,7 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
 
     // ------------------------------------------------------------------ RSVP
     rsvp: (
-      <Section key="rsvp" title={text(c.rsvp?.title)}>
+      <Section key="rsvp" id="rsvp" title={text(c.rsvp?.title)}>
         {text(c.rsvp?.note) ? (
           <p className="mb-6 text-center text-sm leading-relaxed text-[var(--muted)]">
             {text(c.rsvp?.note)}
@@ -620,6 +629,10 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
       {c.cover?.envelope ? <EnvelopeIntro names={coupleNames} initials={initials} label={t('envelope.open')} /> : null}
 
       <main>{c.sectionOrder.map((id) => sections[id])}</main>
+
+      {guest && token && guest.status === 'pending' && c.sectionOrder.includes('rsvp') && !(event.rsvp_deadline && new Date(event.rsvp_deadline) < new Date()) ? (
+        <RsvpCta label={t('rsvp.cta')} targetId="rsvp" />
+      ) : null}
 
       <footer className="px-6 pb-10 pt-4 text-center">
         {c.album?.enabled && (event.status === 'publicado' || event.status === 'finalizado') ? (

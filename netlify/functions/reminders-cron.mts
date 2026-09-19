@@ -1,7 +1,8 @@
 import type { Config } from '@netlify/functions';
 
 /**
- * Cada 15 minutos le pide a la app que mande los recordatorios que toquen.
+ * Cada 5 minutos le pide a la app que entregue los Express que ya toquen y
+ * mande los recordatorios.
  * La lógica vive en /api/cron/reminders; esto solo la despierta con el secreto.
  * Sin CRON_SECRET en Netlify no hace nada.
  */
@@ -20,4 +21,4 @@ export default async () => {
   return new Response('ok');
 };
 
-export const config: Config = { schedule: '*/15 * * * *' };
+export const config: Config = { schedule: '*/5 * * * *' };

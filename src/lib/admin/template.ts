@@ -72,6 +72,12 @@ const PRESETS: Record<EventType, {
   },
 };
 
+/** Encabezado y actos sugeridos por tipo, para prellenar el wizard de la tienda. */
+export function presetFor(type: EventType): { headline: { es: string; en: string }; acts: { kind: 'civil' | 'religiosa' | 'recepcion' | 'otro'; title: { es: string; en: string } }[] } {
+  const p = PRESETS[type] ?? PRESETS.boda;
+  return { headline: { ...p.headline }, acts: p.acts.map((a) => ({ kind: a.kind, title: { ...a.title } })) };
+}
+
 /** Suma horas a un "2027-03-13T17:00" sin zona horaria. */
 function addHours(local: string, hours: number): string {
   if (!hours) return local;
@@ -94,6 +100,13 @@ export function templateContent(b: { partnerA: string; partnerB?: string; starts
   base.story = undefined;
   base.gallery = undefined;
   base.lodging = undefined;
+  // Lo que es solo del demo no debe colarse a un evento nuevo.
+  base.quote = undefined;
+  base.parents = undefined;
+  base.transport = undefined;
+  base.music = undefined;
+  base.thankYou = undefined;
+  base.album = undefined;
   base.gifts = base.gifts ? { ...base.gifts, links: [], bank: undefined, envelopes: false } : undefined;
   if (!p.noKids) base.noKids = undefined;
   base.itinerary = {

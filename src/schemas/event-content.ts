@@ -59,6 +59,8 @@ export const venue = z.object({
   /** Coordenadas para los botones de mapas. Sin ellas se usa la dirección. */
   lat: z.number().min(-90).max(90).optional(),
   lng: z.number().min(-180).max(180).optional(),
+  /** Link de Google Maps pegado por el cliente; manda sobre dirección y coordenadas en ese botón. */
+  mapsUrl: z.string().url().max(500).optional(),
 });
 
 // -----------------------------------------------------------------------------
@@ -84,6 +86,8 @@ export const SECTION_IDS = [
 ] as const;
 
 export type SectionId = (typeof SECTION_IDS)[number];
+
+const hexColor = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Color inválido.');
 
 export const cover = z.object({
   headline: localizedText.optional(),
@@ -284,6 +288,15 @@ export const eventContent = z
         description: localizedText.optional(),
         /** Foto para la tarjeta de WhatsApp. JPEG o PNG: el generador no lee WebP. */
         image: z.string().min(1).optional(),
+      })
+      .optional(),
+
+    /** Colores propios encima de la plantilla (los elige el cliente). */
+    colors: z
+      .object({
+        paper: hexColor.optional(),
+        ink: hexColor.optional(),
+        accent: hexColor.optional(),
       })
       .optional(),
 

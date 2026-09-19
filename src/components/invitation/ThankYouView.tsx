@@ -11,7 +11,7 @@ export async function ThankYouView({ invitation, locale, backHref }: { invitatio
   const { event, guest } = invitation;
   const c = event.content;
   const ty = c.thankYou;
-  const theme = resolveTemplate(event.template);
+  const theme = resolveTemplate(event.template, c.colors);
   const heading = theme.heading === 'sans' ? 'font-sans font-light tracking-tight' : 'font-serif';
   const radius = theme.radius === 'xl' ? 'rounded-2xl' : 'rounded-sm';
   const text = (v: Parameters<typeof pickText>[0]) => pickText(v, locale);

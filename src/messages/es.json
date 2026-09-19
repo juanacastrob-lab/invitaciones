@@ -185,7 +185,11 @@
         "consent_required": "Necesitamos tu consentimiento para guardar la respuesta.",
         "unknown": "Algo falló de nuestro lado. Intenta de nuevo en un momento."
       },
-      "children": "¿Cuántos niños?"
+      "children": "¿Cuántos niños?",
+      "optional": "Agregar detalles (opcional)",
+      "optionalShort": "opcional",
+      "cta": "Confirmar asistencia",
+      "ctaDone": "Ver mi confirmación"
     },
     "language": {
       "switch": "English",
@@ -366,6 +370,19 @@
       "publicado": "Tu invitación ya está publicada. Cada invitado tiene su link personal: los mandas tú o nosotros por WhatsApp, y aquí ves quién confirma en tiempo real.",
       "finalizado": "El evento ya pasó. Aquí sigue tu lista con las confirmaciones finales y los mensajes que te dejaron.",
       "archivado": "Este evento está archivado. Si necesitas algo, escríbenos por WhatsApp."
+    },
+    "express": {
+      "building": "Tu invitación se está armando",
+      "ready": "Tu invitación está lista",
+      "sentTo": "Te la mandamos a tu correo en PDF. También puedes descargarla aquí y, si corriges algo en \"Editar invitación\", vuelve a descargarla."
+    },
+    "adjust": {
+      "button": "Pedir un ajuste",
+      "title": "¿Qué quieres cambiar?",
+      "hint": "Cuéntanos qué y dónde. Lo atendemos y te avisamos por WhatsApp. Lo que puedas cambiar tú, está en \"Editar invitación\".",
+      "placeholder": "Ej. En la recepción la hora correcta es 8:30 pm, y quitar la foto 2.",
+      "send": "Enviar",
+      "sent": "Recibido. Te avisamos en cuanto esté."
     }
   },
   "store": {
@@ -375,7 +392,10 @@
       "extras": "Extras",
       "mode": "Quién la arma",
       "contact": "Tus datos",
-      "payment": "Pago"
+      "payment": "Pago",
+      "design": "Diseño",
+      "details": "Datos",
+      "preview": "Vista previa"
     },
     "next": "Continuar",
     "back": "Atrás",
@@ -385,7 +405,7 @@
       "chosen": "Elegido",
       "choose": "Elegir",
       "popular": "El más pedido",
-      "express": "Te la mandamos por WhatsApp en 20 minutos (en horario de atención, 9 a 21 h).",
+      "express": "Tú la armas en 5 minutos, ves cómo queda y al pagar te llega en PDF a tu correo en unos 15 minutos.",
       "fast": "Entrega en 20 min"
     },
     "extras": {
@@ -451,7 +471,7 @@
       "concept": "Concepto",
       "email": "Te mandamos un correo con tu acceso: desde ahí vas a poder ver tu invitación y tus invitados.",
       "whatsapp": "Escribirnos por WhatsApp",
-      "paidExpressBody": "Ya estamos armando tu invitación. En 20 minutos te la mandamos por WhatsApp."
+      "paidExpressBody": "Ya estamos armando tu invitación. En unos 15 minutos te llega a tu correo en PDF, lista para mandar por WhatsApp. También la vas a ver en tu panel."
     },
     "errors": {
       "invalid": "Revisa los campos marcados.",
@@ -466,7 +486,73 @@
     "eventType": {
       "title": "¿Qué celebran?"
     },
-    "plannerBanner": "Te atiende {name}. Este pedido queda ligado a tu wedding planner."
+    "plannerBanner": "Te atiende {name}. Este pedido queda ligado a tu wedding planner.",
+    "wizard": {
+      "design": {
+        "title": "Elige el diseño",
+        "body": "Todos se ven bien en celular y computadora. Después puedes cambiarlo.",
+        "colors": "Tus colores",
+        "colorsBody": "Elige una combinación o pon los colores de tu boda.",
+        "original": "Los del diseño",
+        "custom": "Poner mis propios colores",
+        "paper": "Fondo",
+        "ink": "Texto",
+        "accent": "Acento",
+        "sampleHeadline": "Nos casamos",
+        "sampleButton": "Confirmar asistencia"
+      },
+      "details": {
+        "who": "Quiénes celebran",
+        "headline": "Frase de arriba",
+        "date": "Fecha del evento",
+        "message": "Un mensaje para tus invitados (opcional)",
+        "messagePlaceholder": "Nos encantaría que nos acompañes en este día tan especial.",
+        "where": "Dónde y a qué hora",
+        "whereBody": "Ceremonia, recepción o lo que tengas. Pega el link de Google Maps y a tus invitados les sale el botón \"Cómo llegar\".",
+        "kinds": {
+          "civil": "Ceremonia civil",
+          "religiosa": "Ceremonia religiosa",
+          "recepcion": "Recepción",
+          "otro": "Otro"
+        },
+        "actTitle": "Nombre (ej. Recepción)",
+        "venue": "Lugar (ej. Hacienda Santa Elena)",
+        "address": "Dirección",
+        "maps": "Link de Google Maps (opcional)",
+        "addAct": "Agregar otro",
+        "remove": "Quitar",
+        "parents": "Padres y padrinos",
+        "parentsBody": "Opcional. Un nombre por línea.",
+        "parentsBride": "Padres de la novia",
+        "parentsGroom": "Padres del novio",
+        "parentsOne": "Sus padres",
+        "parentsTwo": "Sus padrinos",
+        "parentsPlaceholder": "María Castillo\nRoberto Basurto",
+        "photos": "Fotos",
+        "photosBody": "Hasta dos. Se ven en la portada de la invitación.",
+        "photo": "Foto",
+        "photoHint": "Toca para elegir una foto",
+        "extras": "Detalles",
+        "dressCode": "Código de vestimenta (opcional)",
+        "dressCodePlaceholder": "Formal, etiqueta rigurosa, casual…",
+        "gifts": "Mesa de regalos (opcional)",
+        "giftsPlaceholder": "Liverpool evento 51234567 · Amazon · o tus datos bancarios",
+        "giftsPlaceholderExpress": "Ej. Liverpool evento 51234567, o \"Lluvia de sobres\"",
+        "contact": "Para entregarte tu invitación",
+        "contactBody": "Al correo te llega tu acceso; por WhatsApp te avisamos.",
+        "contactBodyExpress": "A este correo te llega tu invitación en PDF."
+      },
+      "preview": {
+        "title": "Así va quedando",
+        "bodyExpress": "Esto es una muestra chica. Al pagar, en unos 15 minutos te llega a tu correo la invitación completa en PDF, lista para mandar por WhatsApp.",
+        "body": "Esta es tu invitación tal como la verían tus invitados. Al pagar se activa tu link, se abren las confirmaciones y puedes seguir editando todo desde tu panel.",
+        "open": "Abrir en pantalla completa",
+        "next": "Me gusta, continuar",
+        "saveTitle": "¿Quieres seguir después?",
+        "saveBody": "Te mandamos un link a tu correo para regresar aquí. Se guarda 48 horas.",
+        "saveButton": "Mandarme el link"
+      }
+    }
   },
   "tables": {
     "title": "Mesas",

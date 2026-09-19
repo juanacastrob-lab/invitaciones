@@ -47,6 +47,7 @@ export const SOURCE_LABEL: Record<string, string> = {
   referido: 'Referido',
   planner: 'Wedding planner',
   llamada: 'Llamada',
+  panel: 'Panel del cliente',
   otro: 'Otro',
 };
 export const SOURCES = Object.keys(SOURCE_LABEL);

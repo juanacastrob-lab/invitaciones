@@ -33,6 +33,8 @@ export const orderInput = z
       .optional(),
     locale: z.enum(LOCALES),
     consent: z.literal(true),
+    /** Borrador del wizard: el evento nace con lo que armó el cliente. */
+    draftKey: z.string().regex(/^[A-Za-z0-9_-]{32}$/).optional().or(z.literal('')),
   })
   .superRefine((v, ctx) => {
     if (v.buildMode === 'planner' && !v.plannerEmail) {

@@ -17,7 +17,7 @@ export const OG_SIZE = { width: 1200, height: 630 };
  */
 
 let fontCache: ArrayBuffer | null = null;
-async function serifFont(): Promise<ArrayBuffer> {
+export async function serifFont(): Promise<ArrayBuffer> {
   if (!fontCache) {
     const buf = await readFile(join(process.cwd(), 'src/assets/fonts/CormorantGaramond-Medium.ttf'));
     fontCache = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer;
@@ -26,7 +26,7 @@ async function serifFont(): Promise<ArrayBuffer> {
 }
 
 /** Fotos del propio sitio se leen del disco; las de Storage se bajan. */
-async function loadImage(url: string | undefined): Promise<string | null> {
+export async function loadImage(url: string | undefined): Promise<string | null> {
   if (!url) return null;
   try {
     if (url.startsWith('/')) {
@@ -46,7 +46,7 @@ async function loadImage(url: string | undefined): Promise<string | null> {
 
 export async function renderInvitationCard(content: EventContent, timezone: string, locale: Locale, template?: string | null) {
   const [font, photo] = await Promise.all([serifFont(), loadImage(content.og?.image)]);
-  const th = resolveTemplate(template).colors;
+  const th = resolveTemplate(template, content.colors).colors;
   const date = formatDateShort(content.startsAt, timezone, locale);
   const place = content.itinerary?.acts[0]?.venue.name ?? pickText(content.cover?.tagline, locale) ?? '';
 

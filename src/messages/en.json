@@ -185,7 +185,11 @@
         "consent_required": "We need your consent to save your answer.",
         "unknown": "Something went wrong on our side. Please try again in a moment."
       },
-      "children": "How many children?"
+      "children": "How many children?",
+      "optional": "Add details (optional)",
+      "optionalShort": "optional",
+      "cta": "RSVP now",
+      "ctaDone": "See my RSVP"
     },
     "language": {
       "switch": "Español",
@@ -366,6 +370,19 @@
       "publicado": "Your invitation is live. Every guest has a personal link: you or we send them on WhatsApp, and here you see who confirms in real time.",
       "finalizado": "The event is over. Your list with the final confirmations and the messages your guests left stays here.",
       "archivado": "This event is archived. If you need anything, write to us on WhatsApp."
+    },
+    "express": {
+      "building": "Your invitation is being built",
+      "ready": "Your invitation is ready",
+      "sentTo": "We emailed you the PDF. You can also download it here, and if you fix anything in \"Edit invitation\", download it again."
+    },
+    "adjust": {
+      "button": "Request a change",
+      "title": "What would you like to change?",
+      "hint": "Tell us what and where. We handle it and let you know on WhatsApp. Anything you can change yourself is under \"Edit invitation\".",
+      "placeholder": "E.g. the reception starts at 8:30 pm, and remove photo 2.",
+      "send": "Send",
+      "sent": "Got it. We will let you know when it is done."
     }
   },
   "store": {
@@ -375,7 +392,10 @@
       "extras": "Extras",
       "mode": "Who builds it",
       "contact": "Your details",
-      "payment": "Payment"
+      "payment": "Payment",
+      "design": "Design",
+      "details": "Details",
+      "preview": "Preview"
     },
     "next": "Continue",
     "back": "Back",
@@ -385,7 +405,7 @@
       "chosen": "Chosen",
       "choose": "Choose",
       "popular": "Most popular",
-      "express": "We send it to you on WhatsApp within 20 minutes (business hours, 9 am to 9 pm).",
+      "express": "You build it in 5 minutes, see how it looks, and after payment the PDF reaches your email in about 15 minutes.",
       "fast": "20-minute delivery"
     },
     "extras": {
@@ -451,7 +471,7 @@
       "concept": "Reference",
       "email": "We sent you an email with your access: from there you'll see your invitation and your guests.",
       "whatsapp": "Message us on WhatsApp",
-      "paidExpressBody": "We are already building your invitation. You will get it on WhatsApp within 20 minutes."
+      "paidExpressBody": "We are building your invitation. In about 15 minutes the PDF reaches your email, ready to send on WhatsApp. You will also see it in your panel."
     },
     "errors": {
       "invalid": "Please check the highlighted fields.",
@@ -466,7 +486,73 @@
     "eventType": {
       "title": "What are you celebrating?"
     },
-    "plannerBanner": "{name} is helping you. This order is linked to your wedding planner."
+    "plannerBanner": "{name} is helping you. This order is linked to your wedding planner.",
+    "wizard": {
+      "design": {
+        "title": "Pick a design",
+        "body": "All of them look great on phones and computers. You can change it later.",
+        "colors": "Your colors",
+        "colorsBody": "Pick a combination or use your wedding colors.",
+        "original": "Design defaults",
+        "custom": "Use my own colors",
+        "paper": "Background",
+        "ink": "Text",
+        "accent": "Accent",
+        "sampleHeadline": "We are getting married",
+        "sampleButton": "RSVP"
+      },
+      "details": {
+        "who": "Who is celebrating",
+        "headline": "Top line",
+        "date": "Event date",
+        "message": "A message for your guests (optional)",
+        "messagePlaceholder": "We would love to have you with us on this special day.",
+        "where": "Where and when",
+        "whereBody": "Ceremony, reception or whatever you have. Paste the Google Maps link and guests get a \"Directions\" button.",
+        "kinds": {
+          "civil": "Civil ceremony",
+          "religiosa": "Religious ceremony",
+          "recepcion": "Reception",
+          "otro": "Other"
+        },
+        "actTitle": "Name (e.g. Reception)",
+        "venue": "Venue (e.g. Hacienda Santa Elena)",
+        "address": "Address",
+        "maps": "Google Maps link (optional)",
+        "addAct": "Add another",
+        "remove": "Remove",
+        "parents": "Parents and sponsors",
+        "parentsBody": "Optional. One name per line.",
+        "parentsBride": "Parents of the bride",
+        "parentsGroom": "Parents of the groom",
+        "parentsOne": "Parents",
+        "parentsTwo": "Godparents",
+        "parentsPlaceholder": "María Castillo\nRoberto Basurto",
+        "photos": "Photos",
+        "photosBody": "Up to two. They appear on the cover.",
+        "photo": "Photo",
+        "photoHint": "Tap to choose a photo",
+        "extras": "Details",
+        "dressCode": "Dress code (optional)",
+        "dressCodePlaceholder": "Formal, black tie, casual…",
+        "gifts": "Gift registry (optional)",
+        "giftsPlaceholder": "Amazon · Zola · or your bank details",
+        "giftsPlaceholderExpress": "E.g. Amazon registry, or \"Cash gifts welcome\"",
+        "contact": "To deliver your invitation",
+        "contactBody": "Your access goes to this email; we reach you on WhatsApp.",
+        "contactBodyExpress": "Your PDF invitation goes to this email."
+      },
+      "preview": {
+        "title": "How it looks so far",
+        "bodyExpress": "This is a small sample. After payment, the full PDF invitation reaches your email in about 15 minutes, ready to send on WhatsApp.",
+        "body": "This is your invitation exactly as guests would see it. After payment your link goes live, RSVPs open and you can keep editing everything from your panel.",
+        "open": "Open full screen",
+        "next": "I like it, continue",
+        "saveTitle": "Want to finish later?",
+        "saveBody": "We email you a link to come back here. It is kept for 48 hours.",
+        "saveButton": "Email me the link"
+      }
+    }
   },
   "tables": {
     "title": "Tables",
