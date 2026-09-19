@@ -293,9 +293,11 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
               </p>
 
               <p className="mt-4 text-sm font-medium text-[var(--ink)]">{act.venue.name}</p>
-              <p className="mt-1 text-xs leading-relaxed text-[var(--muted)]">
-                {act.venue.address}
-              </p>
+              {act.venue.address !== act.venue.name ? (
+                <p className="mt-1 text-xs leading-relaxed text-[var(--muted)]">
+                  {act.venue.address}
+                </p>
+              ) : null}
 
               {text(act.note) ? (
                 <p className="mt-3 text-xs italic text-[var(--muted)]">{text(act.note)}</p>

@@ -10,9 +10,13 @@ const label = 'mb-1.5 block text-[0.7rem] uppercase tracking-[0.2em] text-stone-
 const KINDS = ['civil', 'religiosa', 'recepcion', 'otro'] as const;
 
 /** Los datos de la invitación. Solo lo que sale impreso; lo demás se completa en el panel. */
-export function DetailsStep({ d, set, draftKey, eventType, contact, setContact, express }: {
+export function DetailsStep({ d, set, draftKey, eventType, contact, setContact, express, showContact = true, showNames = true }: {
   d: DraftData; set: (patch: Partial<DraftData>) => void; draftKey: string; eventType: EventType;
   contact: { email: string; phone: string; country: string }; setContact: (c: { email: string; phone: string; country: string }) => void; express: boolean;
+  /** En el wizard los datos de contacto se piden hasta el pago. */
+  showContact?: boolean;
+  /** Nombres y fecha ya se pidieron en "Lo básico". */
+  showNames?: boolean;
 }) {
   const t = useTranslations('store');
   const two = needsTwoNames(eventType);
@@ -21,13 +25,17 @@ export function DetailsStep({ d, set, draftKey, eventType, contact, setContact, 
   return (
     <section className="space-y-6">
       <div className="space-y-3">
-        <h2 className="font-serif text-2xl">{t('wizard.details.who')}</h2>
-        <div className="grid grid-cols-2 gap-3">
-          <div><label className={label}>{t(two ? 'contact.partnerA' : 'contact.name')}</label><input className={field} value={d.partnerA} onChange={(e) => set({ partnerA: e.target.value })} /></div>
-          <div><label className={label}>{t(two ? 'contact.partnerB' : 'contact.secondName')}</label><input className={field} value={d.partnerB} onChange={(e) => set({ partnerB: e.target.value })} /></div>
-        </div>
+        {showNames ? (
+          <>
+            <h2 className="font-serif text-2xl">{t('wizard.details.who')}</h2>
+            <div className="grid grid-cols-2 gap-3">
+              <div><label className={label}>{t(two ? 'contact.partnerA' : 'contact.name')}</label><input className={field} value={d.partnerA} onChange={(e) => set({ partnerA: e.target.value })} /></div>
+              <div><label className={label}>{t(two ? 'contact.partnerB' : 'contact.secondName')}</label><input className={field} value={d.partnerB} onChange={(e) => set({ partnerB: e.target.value })} /></div>
+            </div>
+            <div><label className={label}>{t('wizard.details.date')}</label><input type="date" className={field} value={d.date} onChange={(e) => set({ date: e.target.value })} /></div>
+          </>
+        ) : null}
         <div><label className={label}>{t('wizard.details.headline')}</label><input className={field} value={d.headline} onChange={(e) => set({ headline: e.target.value })} /></div>
-        <div><label className={label}>{t('wizard.details.date')}</label><input type="date" className={field} value={d.date} onChange={(e) => set({ date: e.target.value })} /></div>
         <div><label className={label}>{t('wizard.details.message')}</label><textarea className={`${field} min-h-16`} value={d.message} onChange={(e) => set({ message: e.target.value })} placeholder={t('wizard.details.messagePlaceholder')} /></div>
       </div>
 
@@ -79,7 +87,7 @@ export function DetailsStep({ d, set, draftKey, eventType, contact, setContact, 
         <div><label className={label}>{t('wizard.details.gifts')}</label><textarea className={`${field} min-h-16`} value={d.giftsNote} onChange={(e) => set({ giftsNote: e.target.value })} placeholder={t(express ? 'wizard.details.giftsPlaceholderExpress' : 'wizard.details.giftsPlaceholder')} /></div>
       </div>
 
-      <div className="space-y-3 rounded-sm border border-stone-200 bg-white p-4">
+      {showContact ? <div className="space-y-3 rounded-sm border border-stone-200 bg-white p-4">
         <h2 className="font-serif text-2xl">{t('wizard.details.contact')}</h2>
         <p className="text-sm text-stone-500">{t(express ? 'wizard.details.contactBodyExpress' : 'wizard.details.contactBody')}</p>
         <div><label className={label}>{t('contact.email')}</label><input type="email" className={field} required value={contact.email} onChange={(e) => setContact({ ...contact, email: e.target.value })} /></div>
@@ -88,7 +96,7 @@ export function DetailsStep({ d, set, draftKey, eventType, contact, setContact, 
           <div><label className={label}>{t('contact.country')}</label>
             <select className={field} value={contact.country} onChange={(e) => setContact({ ...contact, country: e.target.value })}><option value="MX">México</option><option value="US">USA</option><option value="CA">Canadá</option></select></div>
         </div>
-      </div>
+      </div> : null}
     </section>
   );
 }

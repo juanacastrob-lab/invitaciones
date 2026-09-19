@@ -65,7 +65,7 @@ export async function Landing({ locale }: { locale: Locale }) {
             {t('hero.body')}
           </p>
           <div className="mt-auto flex w-full flex-col items-center gap-3 pt-8 sm:w-auto sm:flex-row md:mt-8 md:pt-0">
-            <a href="#formulario" className="w-full rounded-full bg-white px-7 py-3.5 text-xs uppercase tracking-[0.25em] text-stone-900 sm:w-auto">
+            <a href={locale === 'es' ? '/comprar' : '/comprar?lang=en'} className="w-full rounded-full bg-white px-7 py-3.5 text-xs uppercase tracking-[0.25em] text-stone-900 sm:w-auto">
               {t('hero.cta')}
             </a>
             <a href={demoHref} className="w-full rounded-full border border-white/80 px-7 py-3.5 text-xs uppercase tracking-[0.25em] text-white backdrop-blur-sm sm:w-auto">

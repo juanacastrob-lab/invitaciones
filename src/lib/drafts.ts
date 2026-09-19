@@ -74,6 +74,7 @@ export function draftToContent(d: DraftData): EventContent {
   }
   if (d.photos[1]) c.gallery = { photos: [{ url: d.photos[0] }, { url: d.photos[1] }] };
 
+  // Los actos salen aunque falte el lugar ("Por confirmar"): así la vista previa ya se ve completa.
   const acts = d.acts.filter((a) => a.venue || a.title);
   const itineraryTitle = c.itinerary?.title;
   c.itinerary = undefined;
@@ -85,7 +86,7 @@ export function draftToContent(d: DraftData): EventContent {
         kind: a.kind,
         title: lt(a.title || { civil: 'Ceremonia civil', religiosa: 'Ceremonia religiosa', recepcion: 'Recepción', otro: 'Evento' }[a.kind]),
         startsAt: `${startsAt.slice(0, 10)}T${a.time || startsAt.slice(11)}`,
-        venue: { name: a.venue || 'Por definir', address: a.address || a.venue || 'Por definir', mapsUrl: a.mapsUrl || undefined },
+        venue: { name: a.venue || 'Por confirmar', address: a.address || a.venue || 'Por confirmar', mapsUrl: a.mapsUrl || undefined },
       })),
     };
   }
@@ -120,6 +121,16 @@ export function draftMissing(d: DraftData): ('names' | 'date' | 'venue')[] {
   if (!d.date) m.push('date');
   if (!d.acts.some((a) => a.venue)) m.push('venue');
   return m;
+}
+
+/** Diseño con el que arranca cada tipo de evento; el cliente lo puede cambiar. */
+export function templateForType(type: EventType): (typeof TEMPLATE_IDS)[number] {
+  switch (type) {
+    case 'xv': case 'sweet_sixteen': case 'cumpleanos': return 'fiesta';
+    case 'bautizo': case 'baby_shower': case 'primera_comunion': case 'confirmacion': return 'jardin';
+    case 'graduacion': return 'minimal';
+    default: return 'aurora';
+  }
 }
 
 export function isExpress(packageCode: string): boolean {
