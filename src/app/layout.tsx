@@ -25,7 +25,9 @@ const sans = Jost({
 
 export const metadata: Metadata = {
   title: APP_NAME,
-  description: 'Invitaciones digitales para bodas.',
+  description: 'Invitaciones de boda digitales y wedding sites. Un link personal para cada invitado y confirmación desde el celular.',
+  // Preview al compartir la portada por WhatsApp / iMessage. Las invitaciones tienen el suyo.
+  openGraph: { images: [{ url: '/brand/hero-og.jpg', width: 1200, height: 630 }] },
   // Instalable en iPhone y Android: el manifest vive en manifest.ts.
   appleWebApp: { capable: true, title: APP_NAME, statusBarStyle: 'default' },
   applicationName: APP_NAME,
