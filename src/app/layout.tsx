@@ -52,6 +52,7 @@ export default async function RootLayout({
     <html lang={locale} className={`${serif.variable} ${sans.variable}`}>
       <body className="min-h-dvh bg-stone-50 text-stone-900 antialiased">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <MetaPixel />
       </body>
     </html>
   );
