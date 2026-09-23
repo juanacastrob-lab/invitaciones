@@ -5,7 +5,7 @@ import { headers } from 'next/headers';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { supabaseServer } from '@/lib/supabase/server';
 import { getSiteUrl } from '@/lib/env';
-import { whatsappLink } from '@/lib/config';
+import { APP_NAME, whatsappLink } from '@/lib/config';
 import { getActivePackages } from '@/lib/packages';
 import { getActiveExtras, getPlannerByCode } from '@/lib/store';
 import { orderInput, priceOrder, type OrderResult } from '@/schemas/order';
@@ -14,6 +14,7 @@ import { templateContent, slugFromNames } from '@/lib/admin/template';
 import { isEventType } from '@/lib/event-types';
 import { loadDraft } from '@/actions/draft';
 import { draftToContent, isExpress } from '@/lib/drafts';
+import { createCheckoutSession, stripeConfig } from '@/lib/stripe';
 
 /** Minutos de "espera" del Express: el PDF se manda cuando pasa este tiempo desde el pago. */
 const EXPRESS_MINUTES = 15;
@@ -127,6 +128,24 @@ export async function createOrder(raw: unknown): Promise<OrderResult> {
     await provisionOrder(order.id);
   }
 
+  // Stripe: el cliente va a la página de pago; el webhook marca el pedido cuando se cobra.
+  let redirectUrl: string | undefined;
+  if (input.paymentMethod === 'stripe') {
+    const site = getSiteUrl();
+    if (!stripeConfig() || !site) return { ok: false, error: 'unknown' };
+    try {
+      const session = await createCheckoutSession({
+        orderId: order.id, orderNumber: order.number, email: input.email, currency: pkg.currency, locale: input.locale, siteUrl: site, draftKey: input.draftKey || null, packageCode: pkg.code,
+        lines: [{ name: `${pkg.name} · ${APP_NAME}`, amount: pkg.price }, ...lines.map((l) => ({ name: l.name, amount: l.price }))],
+      });
+      redirectUrl = session.url;
+      await admin.from('orders').update({ notes: `stripe:${session.id}` }).eq('id', order.id);
+    } catch (e) {
+      console.error('[order] Stripe:', (e as Error).message);
+      return { ok: false, error: 'unknown' };
+    }
+  }
+
   // Cuenta del cliente: el link de acceso se manda desde el cliente con cookies,
   // para que el canje funcione en este mismo navegador.
   try {
@@ -144,7 +163,31 @@ export async function createOrder(raw: unknown): Promise<OrderResult> {
     ? `Hi! I'm ${input.partnerA}, I just placed order #${order.number} (${pkg.name}) on holaboda.`
     : `¡Hola! Soy ${input.partnerA}, acabo de hacer el pedido #${order.number} (${pkg.name}) en holaboda.`;
 
-  return { ok: true, orderId: order.id, number: order.number, status: paid ? 'pagado' : 'pendiente', total, currency: pkg.currency, whatsappUrl: whatsappLink(msg) };
+  return { ok: true, orderId: order.id, number: order.number, status: paid ? 'pagado' : 'pendiente', total, currency: pkg.currency, whatsappUrl: whatsappLink(msg), redirectUrl };
+}
+
+/**
+ * Un pedido pendiente queda pagado (webhook de Stripe). Idempotente: si ya
+ * estaba pagado, no hace nada. Deja evento, accesos, Express y CRM listos.
+ */
+export async function settleOrder(orderId: string, reference: string, method: 'stripe' | 'transfer' = 'stripe'): Promise<{ ok: boolean; already?: boolean }> {
+  const admin = supabaseAdmin();
+  const { data: o } = await admin.from('orders').select('id, number, status, total, currency, package_code, contact').eq('id', orderId).maybeSingle();
+  if (!o) return { ok: false };
+  if (o.status === 'pagado') return { ok: true, already: true };
+  await admin.from('orders').update({ status: 'pagado', paid_at: new Date().toISOString(), payment_method: method, deliver_at: isExpress(o.package_code) ? new Date(Date.now() + EXPRESS_MINUTES * 60_000).toISOString() : null }).eq('id', orderId);
+  await admin.from('payments').insert({ order_id: orderId, amount: o.total, currency: o.currency, method, reference });
+  await admin.from('activity_log').insert({ actor: null, entity: 'order', entity_id: orderId, action: 'paid', data: { reference, method } });
+  const c = o.contact as { email?: string; phone?: string };
+  try {
+    const { data: lead } = await admin.from('leads').select('id').or([c.phone ? `phone.eq.${c.phone}` : null, c.email ? `email.eq.${c.email}` : null].filter(Boolean).join(',')).not('stage', 'in', '(entregado,perdido)').order('created_at', { ascending: false }).limit(1).maybeSingle();
+    if (lead) {
+      await admin.from('leads').update({ stage: 'en_produccion', order_id: orderId, last_contact_at: new Date().toISOString() }).eq('id', lead.id);
+      await admin.from('lead_activities').insert({ lead_id: lead.id, kind: 'pedido', body: `Pedido #${o.number} pagado (${method})` });
+    }
+  } catch { /* el CRM no detiene el pago */ }
+  await provisionOrder(orderId);
+  return { ok: true };
 }
 
 /**

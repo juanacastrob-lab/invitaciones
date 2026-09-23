@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { MetaPixel } from '@/components/MetaPixel';
 import { Cormorant_Garamond, Jost } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';

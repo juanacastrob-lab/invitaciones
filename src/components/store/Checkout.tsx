@@ -14,6 +14,7 @@ import { DesignStep } from './DesignStep';
 import { DetailsStep } from './DetailsStep';
 import { PreviewStep } from './PreviewStep';
 import { EventTypeIcon } from './EventTypeIcon';
+import { track } from '@/lib/funnel-client';
 
 export interface StorePackage { code: string; name: string; price: number; currency: string; features: string[] }
 export interface StoreExtra { code: string; name: string; description: string | null; price: number; included_in: string[] }
@@ -30,7 +31,7 @@ const stepsFor = (code: string): Step[] => (isExpress(code) ? ['type', 'basics',
 /** El paquete que se marca como "el más pedido" y queda elegido de entrada. */
 const POPULAR = 'con_pases';
 
-export function Checkout({ locale, packages, extras, featureLabels, preselected, bank, planner, initialType, initialDraft, region = 'MX', eventTypes = EVENT_TYPES_BY_REGION.MX, fontClasses = '' }: {
+export function Checkout({ locale, packages, extras, featureLabels, preselected, bank, planner, initialType, initialDraft, region = 'MX', eventTypes = EVENT_TYPES_BY_REGION.MX, fontClasses = '', stripeEnabled = false }: {
   locale: Locale;
   packages: StorePackage[];
   extras: StoreExtra[];
@@ -46,6 +47,8 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
   region?: Region;
   eventTypes?: EventType[];
   fontClasses?: string;
+  /** Stripe configurado: tarjeta, Apple Pay y OXXO reales. Si no, pago simulado. */
+  stripeEnabled?: boolean;
 }) {
   const t = useTranslations('store');
   const fmt = (n: number, cur: string) => new Intl.NumberFormat(locale === 'es' ? 'es-MX' : 'en-US', { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(n);
@@ -68,7 +71,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
   const [mode, setMode] = useState<'team' | 'self' | 'planner'>(planner ? 'planner' : 'self');
   const [plannerEmail, setPlannerEmail] = useState(planner?.email ?? '');
   const [contact, setContact] = useState({ email: initialDraft?.data.email ?? '', phone: initialDraft?.data.phone ?? '', country: initialDraft?.country ?? (region === 'US' ? 'US' : 'MX') });
-  const [method, setMethod] = useState<'card_sim' | 'apple_pay' | 'transfer'>('card_sim');
+  const [method, setMethod] = useState<'card_sim' | 'apple_pay' | 'transfer' | 'stripe'>(stripeEnabled ? 'stripe' : 'card_sim');
   const instant = method !== 'transfer';
   const [card, setCard] = useState({ number: '', exp: '', cvc: '', name: '' });
   const [consent, setConsent] = useState(false);
@@ -78,6 +81,17 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
   const STEPS = stepsFor(pkgCode);
   const express = isExpress(pkgCode);
   const current = STEPS[Math.min(step, STEPS.length - 1)];
+
+  // Embudo: un aviso por paso, para ver dónde se atora la gente.
+  useEffect(() => { track('store_open', { region }); }, [region]);
+  useEffect(() => {
+    const map: Partial<Record<Step, Parameters<typeof track>[0]>> = { basics: 'type_selected', preview: 'preview_seen', payment: 'payment_open' };
+    const st = map[current];
+    if (st) track(st, { region, eventType, packageCode: pkgCode, draftKey: draftKey ?? undefined });
+    if (current === 'preview') track('basics_done', { region, eventType, draftKey: draftKey ?? undefined });
+    if (current === 'extras' || current === 'mode' || current === 'payment') track('package_selected', { region, eventType, packageCode: pkgCode, draftKey: draftKey ?? undefined, meta: { value: pkg?.price, currency } });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current]);
   const pkg = packages.find((p) => p.code === pkgCode);
   const offered = useMemo(() => extras.filter((e) => !e.included_in.includes(pkgCode)), [extras, pkgCode]);
   const chosenExtras = offered.filter((e) => extraCodes.includes(e.code));
@@ -149,7 +163,11 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
         paymentMethod: method, card: method === 'card_sim' ? card : undefined, locale, consent,
       });
       setResult(r);
-      if (r.ok) window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (r.ok) {
+        track(r.status === 'pagado' ? 'paid' : 'order_created', { region, eventType, packageCode: pkgCode, draftKey: draftKey ?? undefined, meta: { value: r.total, currency: r.currency } });
+        if (r.redirectUrl) { window.location.href = r.redirectUrl; return; }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     });
   }
 
@@ -355,11 +373,11 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
               <div className="mt-2 flex justify-between border-t border-stone-200 pt-2 font-medium"><dt>{t('payment.total')}</dt><dd>{fmt(total, currency)}</dd></div>
             </dl>
 
-            <div className="grid grid-cols-3 gap-2">
-              {(['card_sim', 'apple_pay', 'transfer'] as const).map((m) => (
+            <div className={`grid gap-2 ${stripeEnabled ? 'grid-cols-2' : 'grid-cols-3'}`}>
+              {(stripeEnabled ? (['stripe', 'transfer'] as const) : (['card_sim', 'apple_pay', 'transfer'] as const)).map((m) => (
                 <button key={m} type="button" onClick={() => setMethod(m)} aria-pressed={method === m}
                   className={`rounded-sm border px-2 py-3 text-center ${method === m ? 'border-stone-900 bg-stone-900 text-white' : 'border-stone-300'}`}>
-                  <span className="block text-sm">{t(m === 'card_sim' ? 'payment.card' : m === 'apple_pay' ? 'payment.applePay' : 'payment.transfer')}</span>
+                  <span className="block text-sm">{t(m === 'stripe' ? (region === 'MX' ? 'payment.stripeMx' : 'payment.stripeUs') : m === 'card_sim' ? 'payment.card' : m === 'apple_pay' ? 'payment.applePay' : 'payment.transfer')}</span>
                   <span className={`mt-0.5 block text-[0.6rem] uppercase tracking-widest ${method === m ? 'text-white/70' : 'text-stone-400'}`}>{t(m === 'transfer' ? 'payment.transferTime' : 'payment.instant')}</span>
                 </button>
               ))}
@@ -376,6 +394,8 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
                   <div><label className={label}>{t('payment.cardCvc')}</label><input inputMode="numeric" className={field} value={card.cvc} onChange={(e) => setCard({ ...card, cvc: e.target.value.replace(/\D/g, '') })} placeholder="123" /></div>
                 </div>
               </div>
+            ) : method === 'stripe' ? (
+              <p className="rounded-sm border border-stone-200 p-4 text-center text-xs text-stone-600">{t('payment.stripeHelp')}</p>
             ) : method === 'apple_pay' ? (
               <div className="rounded-sm border border-stone-200 p-4 text-center">
                 <span className="inline-block rounded-md bg-black px-5 py-2 text-sm font-medium text-white"> Pay</span>

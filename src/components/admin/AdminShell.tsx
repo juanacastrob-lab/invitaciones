@@ -8,6 +8,7 @@ const NAV = [
   { href: '/admin/inbox', label: 'WhatsApp' },
   { href: '/admin/events', label: 'Eventos' },
   { href: '/admin/orders', label: 'Pedidos' },
+  { href: '/admin/funnel', label: 'Embudo' },
   { href: '/admin/reviews', label: 'Reseñas' },
   { href: '/admin/log', label: 'Bitácora' },
   { href: '/admin/pricing', label: 'Precios', admin: true },

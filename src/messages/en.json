@@ -489,7 +489,10 @@
       "transferTime": "Up to 12 h",
       "instantHelp": "Credited right away: your invitation goes live and your access arrives by email.",
       "instantHelpExpress": "Credited right away: your PDF reaches your email in about 15 minutes.",
-      "applePayHelp": "Apple Pay goes live in the next few days. For now this option is a test and makes no charge."
+      "applePayHelp": "Apple Pay goes live in the next few days. For now this option is a test and makes no charge.",
+      "stripeMx": "Card · Apple Pay · OXXO",
+      "stripeUs": "Card · Apple Pay · Google Pay",
+      "stripeHelp": "You continue to Stripe's secure payment page. Card or Apple Pay clears right away."
     },
     "done": {
       "paid": "Done! Order #{number} paid.",
@@ -503,7 +506,10 @@
       "email": "We sent you an email with your access: from there you'll see your invitation and your guests.",
       "whatsapp": "Message us on WhatsApp",
       "paidExpressBody": "We are building your invitation. In about 15 minutes the PDF reaches your email, ready to send on WhatsApp. You will also see it in your panel.",
-      "pendingBodyExpress": "Make the transfer with these details and send us the receipt on WhatsApp. We verify within 12 hours; as soon as it clears, your PDF reaches your email in about 15 minutes."
+      "pendingBodyExpress": "Make the transfer with these details and send us the receipt on WhatsApp. We verify within 12 hours; as soon as it clears, your PDF reaches your email in about 15 minutes.",
+      "awaiting": "Order #{number} awaiting payment.",
+      "awaitingBody": "We have your order. As soon as the bank confirms the payment, your access arrives by email and, for Express, your PDF within 15 minutes.",
+      "goPanel": "Go to my panel"
     },
     "errors": {
       "invalid": "Please check the highlighted fields.",
