@@ -28,7 +28,7 @@ type Step = 'type' | 'basics' | 'preview' | 'package' | 'extras' | 'mode' | 'pay
  */
 const stepsFor = (code: string): Step[] => (isExpress(code) ? ['type', 'basics', 'preview', 'package', 'payment'] : ['type', 'basics', 'preview', 'package', 'extras', 'mode', 'payment']);
 /** El paquete que se marca como "el más pedido" y queda elegido de entrada. */
-const POPULAR = 'completo';
+const POPULAR = 'con_pases';
 
 export function Checkout({ locale, packages, extras, featureLabels, preselected, bank, planner, initialType, initialDraft, region = 'MX', eventTypes = EVENT_TYPES_BY_REGION.MX, fontClasses = '' }: {
   locale: Locale;

@@ -57,7 +57,13 @@
         "recordatorios": "Rondas de recordatorio",
         "qr_checkin": "Pase con QR y check-in el día del evento",
         "save_the_date": "Save the date",
-        "entrega_20_min": "Lista en 20 minutos"
+        "entrega_20_min": "Lista en 20 minutos",
+        "entrega_correo": "Te llega a tu correo",
+        "link_general": "Un link para todos tus invitados",
+        "rsvp_formulario": "Confirmación por formulario",
+        "mesas": "Acomodo de mesas",
+        "diseno_medida": "Diseño a la medida",
+        "thank_you": "Tarjeta de agradecimiento"
       }
     },
     "preview": {
@@ -79,6 +85,10 @@
       "title": "Cinco diseños",
       "body": "Mismo contenido, otro look. Se cambia cuando quieras, incluso después de mandarla.",
       "open": "Toca uno para verlo con la invitación demo."
+    },
+    "reviews": {
+      "title": "Lo que dicen",
+      "subtitle": "Reseñas de clientes reales, publicadas con su permiso."
     }
   },
   "invitation": {
@@ -383,6 +393,19 @@
       "placeholder": "Ej. En la recepción la hora correcta es 8:30 pm, y quitar la foto 2.",
       "send": "Enviar",
       "sent": "Recibido. Te avisamos en cuanto esté."
+    },
+    "review": {
+      "title": "¿Nos dejas una reseña?",
+      "hint": "Nos ayuda muchísimo. La revisamos y, si nos das permiso, la publicamos en holaboda.mx con tu nombre y tu ciudad.",
+      "name": "Tu nombre (como quieres que aparezca)",
+      "city": "Ciudad (opcional)",
+      "rating": "Calificación",
+      "body": "Cuéntanos cómo te fue",
+      "placeholder": "Qué te gustó, cómo la recibieron tus invitados…",
+      "consent": "Autorizo que se publique en holaboda.mx.",
+      "send": "Enviar reseña",
+      "thanks": "¡Gracias! La publicamos en cuanto la revisemos.",
+      "already": "Ya nos dejaste tu reseña. ¡Gracias!"
     }
   },
   "store": {

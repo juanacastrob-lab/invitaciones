@@ -174,7 +174,13 @@ export async function provisionOrder(orderId: string): Promise<{ eventId: string
 
   const { data: ev, error } = await admin
     .from('events')
-    .insert({ slug, type: o.event_type, package_code: o.package_code, country: o.country, languages, default_language: draft?.locale ?? 'es', template: draft?.template ?? 'aurora', content, status })
+    .insert({
+      slug, type: o.event_type, package_code: o.package_code, country: o.country, languages, default_language: draft?.locale ?? 'es', template: draft?.template ?? 'aurora', content, status,
+      // Lo que trae cada paquete: Esencial confirma por formulario abierto (sin links por invitado); Premium trae QR y save the date.
+      allow_public_rsvp: o.package_code === 'esencial',
+      checkin_enabled: o.package_code === 'premium',
+      save_the_date_enabled: o.package_code === 'premium',
+    })
     .select('id')
     .single();
   if (error || !ev) {
