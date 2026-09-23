@@ -75,12 +75,12 @@ begin;
 commit;
 
 \echo ''
-\echo '--- staff: ve los 2 eventos y los 3 invitados ---'
+\echo '--- staff: ve los 2 eventos y los 3 invitados (sin contar el demo de 002) ---'
 begin;
   set local role authenticated;
   select set_config('request.jwt.claim.sub', '22222222-2222-2222-2222-222222222222', true);
-  select t_check('events', '2', t_count('select count(*) from events'));
-  select t_check('guests', '3', t_count('select count(*) from guests'));
+  select t_check('events', '2', t_count('select count(*) from events where id::text like ''aaaaaaaa-%'''));
+  select t_check('guests', '3', t_count('select count(*) from guests where event_id::text like ''aaaaaaaa-%'''));
 commit;
 
 \echo ''
