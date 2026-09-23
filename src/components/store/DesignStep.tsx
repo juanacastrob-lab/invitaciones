@@ -4,9 +4,10 @@ import { useTranslations } from 'next-intl';
 import { PALETTES, TEMPLATE_IDS, TEMPLATES, resolveTemplate, type TemplateId } from '@/templates/registry';
 import type { DraftData } from '@/lib/drafts';
 import type { Locale } from '@/lib/config';
+import { FONT_IDS, FONTS, fontCss } from '@/lib/fonts';
 
 /** Diseño y colores, con una tarjeta chica que cambia al instante. */
-export function DesignStep({ d, set, locale }: { d: DraftData; set: (patch: Partial<DraftData>) => void; locale: Locale }) {
+export function DesignStep({ d, set, locale, fontClasses = '' }: { d: DraftData; set: (patch: Partial<DraftData>) => void; locale: Locale; /** Variables CSS de las fuentes (vienen del servidor). */ fontClasses?: string }) {
   const t = useTranslations('store');
   const th = resolveTemplate(d.template, d.colors);
   const custom = Object.values(d.colors).some(Boolean) && !PALETTES.some((p) => p.paper === d.colors.paper && p.ink === d.colors.ink && p.accent === d.colors.accent);
@@ -62,10 +63,24 @@ export function DesignStep({ d, set, locale }: { d: DraftData; set: (patch: Part
         </details>
       </div>
 
+      <div>
+        <h2 className="mb-1 font-serif text-2xl">{t('wizard.design.font')}</h2>
+        <p className="mb-3 text-sm text-stone-500">{t('wizard.design.fontBody')}</p>
+        <div className={`grid grid-cols-2 gap-2 sm:grid-cols-4 ${fontClasses}`}>
+          {FONT_IDS.map((id) => (
+            <button key={id} type="button" onClick={() => set({ font: id })} aria-pressed={(d.font || 'cormorant') === id}
+              className={`rounded-sm border bg-white px-3 py-3 text-center ${(d.font || 'cormorant') === id ? 'border-stone-900 ring-1 ring-stone-900' : 'border-stone-200'}`}>
+              <span className="block text-2xl leading-none" style={{ fontFamily: FONTS[id].css }}>{d.partnerA || 'Ana'}</span>
+              <span className="mt-1.5 block text-[0.6rem] uppercase tracking-widest text-stone-400">{FONTS[id].name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* muestra en vivo */}
-      <div className="rounded-sm border p-6 text-center" style={{ background: th.colors.paper, color: th.colors.ink, borderColor: th.colors.line }}>
+      <div className={`rounded-sm border p-6 text-center ${fontClasses}`} style={{ background: th.colors.paper, color: th.colors.ink, borderColor: th.colors.line }}>
         <p className="text-[0.65rem] uppercase tracking-[0.3em]" style={{ color: th.colors.muted }}>{d.headline || t('wizard.design.sampleHeadline')}</p>
-        <p className={`mt-3 text-3xl ${th.heading === 'serif' ? 'font-serif' : 'font-sans font-light'}`}>{d.partnerA || 'Ana'}{d.partnerB || !d.partnerA ? <span style={{ color: th.colors.accent }}> &amp; </span> : null}{d.partnerB || (!d.partnerA ? 'Luis' : '')}</p>
+        <p className="mt-3 text-3xl" style={{ fontFamily: th.heading === 'serif' || d.font ? fontCss(d.font) : 'inherit' }}>{d.partnerA || 'Ana'}{d.partnerB || !d.partnerA ? <span style={{ color: th.colors.accent }}> &amp; </span> : null}{d.partnerB || (!d.partnerA ? 'Luis' : '')}</p>
         <p className="mt-3 text-[0.65rem] uppercase tracking-[0.25em]" style={{ color: th.colors.muted }}>{d.date || '2027-03-13'}</p>
         <span className="mt-4 inline-block rounded-full px-4 py-1.5 text-[0.65rem] uppercase tracking-[0.2em]" style={{ background: th.colors.accentSoft, color: th.colors.ink }}>{t('wizard.design.sampleButton')}</span>
       </div>

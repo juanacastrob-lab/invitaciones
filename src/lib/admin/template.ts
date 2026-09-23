@@ -64,6 +64,30 @@ const PRESETS: Record<EventType, {
     acts: [{ kind: 'religiosa', title: { es: 'Misa', en: 'Mass' }, hours: 0 }, { kind: 'recepcion', title: { es: 'Comida', en: 'Lunch' }, hours: 1.5 }],
     story: false, noKids: false,
   },
+  bar_mitzvah: {
+    headline: { es: 'Mi Bar Mitzvah', en: 'My Bar Mitzvah' },
+    description: { es: 'Celebro mi Bar Mitzvah y quiero que me acompañes. Confirma tu asistencia.', en: 'I am celebrating my Bar Mitzvah and I want you there. Please RSVP.' },
+    acts: [{ kind: 'religiosa', title: { es: 'Servicio', en: 'Service' }, hours: 0 }, { kind: 'recepcion', title: { es: 'Celebración', en: 'Celebration' }, hours: 3 }],
+    story: false, noKids: false,
+  },
+  bridal_shower: {
+    headline: { es: 'Despedida de soltera', en: 'Bridal shower' },
+    description: { es: 'Celebramos a la novia y queremos que estés. Confirma tu asistencia.', en: 'We are celebrating the bride and we want you there. Please RSVP.' },
+    acts: [{ kind: 'recepcion', title: { es: 'Reunión', en: 'Gathering' }, hours: 0 }],
+    story: false, noKids: false,
+  },
+  engagement: {
+    headline: { es: 'Nos comprometimos', en: 'We are engaged' },
+    description: { es: 'Nos comprometimos y queremos celebrarlo contigo. Confirma tu asistencia.', en: 'We got engaged and we want to celebrate with you. Please RSVP.' },
+    acts: [{ kind: 'recepcion', title: { es: 'Celebración', en: 'Celebration' }, hours: 0 }],
+    story: true, noKids: false,
+  },
+  anniversary: {
+    headline: { es: 'Nuestro aniversario', en: 'Our anniversary' },
+    description: { es: 'Celebramos nuestro aniversario y queremos que nos acompañes. Confirma tu asistencia.', en: 'We are celebrating our anniversary and we want you there. Please RSVP.' },
+    acts: [{ kind: 'recepcion', title: { es: 'Celebración', en: 'Celebration' }, hours: 0 }],
+    story: true, noKids: false,
+  },
   otro: {
     headline: { es: 'Te invitamos', en: 'You are invited' },
     description: { es: 'Queremos que nos acompañes. Confirma tu asistencia.', en: 'We want you there. Please RSVP.' },

@@ -3,13 +3,16 @@ import { getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { Checkout } from '@/components/store/Checkout';
 import { BANK_DETAILS } from '@/lib/config';
+import { EVENT_TYPES_BY_REGION } from '@/lib/event-types';
+import { FONT_VARIABLE_CLASSES } from '@/lib/fonts-loader';
 
 export const dynamic = 'force-dynamic';
 
 /** La tienda con datos de mentira, para revisar el diseño sin base. No existe en producción. */
-export default async function DevStore({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
+export default async function DevStore({ searchParams }: { searchParams: Promise<{ lang?: string; region?: string }> }) {
   if (process.env.NODE_ENV === 'production') notFound();
-  const { lang } = await searchParams;
+  const { lang, region } = await searchParams;
+  const reg = region === 'US' ? 'US' : 'MX';
   const locale = lang === 'en' ? 'en' : 'es';
   const messages = await getMessages({ locale });
   const packages = [
@@ -28,7 +31,7 @@ export default async function DevStore({ searchParams }: { searchParams: Promise
   return (
     <main className="mx-auto max-w-3xl bg-[#faf8f5] px-5 py-10 text-stone-900">
       <NextIntlClientProvider locale={locale} messages={{ store: messages.store }}>
-        <Checkout locale={locale} packages={packages} extras={extras} featureLabels={labels} bank={BANK_DETAILS} />
+        <Checkout locale={locale} packages={packages} extras={extras} featureLabels={labels} bank={BANK_DETAILS} region={reg} eventTypes={EVENT_TYPES_BY_REGION[reg]} fontClasses={FONT_VARIABLE_CLASSES} />
       </NextIntlClientProvider>
     </main>
   );

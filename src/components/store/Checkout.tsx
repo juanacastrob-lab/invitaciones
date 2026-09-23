@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useTransition } from 'react';
+import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { createOrder } from '@/actions/order';
 import { createDraft, saveDraft, type DraftRow } from '@/actions/draft';
@@ -9,7 +9,7 @@ import { presetFor } from '@/lib/admin/template';
 import type { OrderResult } from '@/schemas/order';
 import type { Locale } from '@/lib/config';
 import { WhatsAppIcon } from '@/components/landing/LeadForm';
-import { EVENT_TYPES, EVENT_TYPE_LABEL, needsTwoNames, type EventType } from '@/lib/event-types';
+import { EVENT_TYPES_BY_REGION, EVENT_TYPE_LABEL, needsTwoNames, type EventType, type Region } from '@/lib/event-types';
 import { DesignStep } from './DesignStep';
 import { DetailsStep } from './DetailsStep';
 import { PreviewStep } from './PreviewStep';
@@ -30,7 +30,7 @@ const stepsFor = (code: string): Step[] => (isExpress(code) ? ['type', 'basics',
 /** El paquete que se marca como "el más pedido" y queda elegido de entrada. */
 const POPULAR = 'completo';
 
-export function Checkout({ locale, packages, extras, featureLabels, preselected, bank, planner, initialType, initialDraft }: {
+export function Checkout({ locale, packages, extras, featureLabels, preselected, bank, planner, initialType, initialDraft, region = 'MX', eventTypes = EVENT_TYPES_BY_REGION.MX, fontClasses = '' }: {
   locale: Locale;
   packages: StorePackage[];
   extras: StoreExtra[];
@@ -42,6 +42,10 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
   initialType?: EventType;
   /** Viene de /comprar?d=CLAVE: el cliente regresa a su borrador. */
   initialDraft?: DraftRow | null;
+  /** México o EE. UU./Canadá: cambia fiestas, países y moneda. */
+  region?: Region;
+  eventTypes?: EventType[];
+  fontClasses?: string;
 }) {
   const t = useTranslations('store');
   const fmt = (n: number, cur: string) => new Intl.NumberFormat(locale === 'es' ? 'es-MX' : 'en-US', { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(n);
@@ -63,8 +67,9 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
   const [extraCodes, setExtraCodes] = useState<string[]>([]);
   const [mode, setMode] = useState<'team' | 'self' | 'planner'>(planner ? 'planner' : 'self');
   const [plannerEmail, setPlannerEmail] = useState(planner?.email ?? '');
-  const [contact, setContact] = useState({ email: initialDraft?.data.email ?? '', phone: initialDraft?.data.phone ?? '', country: initialDraft?.country ?? 'MX' });
-  const [method, setMethod] = useState<'card_sim' | 'transfer'>('card_sim');
+  const [contact, setContact] = useState({ email: initialDraft?.data.email ?? '', phone: initialDraft?.data.phone ?? '', country: initialDraft?.country ?? (region === 'US' ? 'US' : 'MX') });
+  const [method, setMethod] = useState<'card_sim' | 'apple_pay' | 'transfer'>('card_sim');
+  const instant = method !== 'transfer';
   const [card, setCard] = useState({ number: '', exp: '', cvc: '', name: '' });
   const [consent, setConsent] = useState(false);
   const [pending, start] = useTransition();
@@ -113,7 +118,26 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  const refreshPreview = () => start(async () => { await persist(step, true); });
+  // Vista previa en vivo: colores, diseño y fuente van al iframe al instante;
+  // lo demás (textos, fotos) se guarda solo al segundo de dejar de escribir y recarga.
+  const previewFrame = () => document.querySelector<HTMLIFrameElement>('iframe[title]')?.contentWindow;
+  useEffect(() => {
+    previewFrame()?.postMessage({ type: 'hb:theme', template: draft.template, colors: draft.colors, font: draft.font }, '*');
+  }, [draft.template, draft.colors, draft.font]);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSaved = useRef<string>('');
+  useEffect(() => {
+    if (current !== 'preview' || !draftKey || !dirty) return;
+    const snapshot = JSON.stringify(draft);
+    if (snapshot === lastSaved.current) return;
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      lastSaved.current = snapshot;
+      const r = saveDraft(draftKey, draftData.parse({ ...draft, eventType, email: contact.email, phone: contact.phone }), step, pkgCode);
+      void r.then((res) => { if (res.ok) { setDirty(false); setPreviewVersion((v) => v + 1); } else setDraftError(res.error); });
+    }, 1000);
+    return () => { if (saveTimer.current) clearTimeout(saveTimer.current); };
+  }, [draft, current, draftKey, dirty, eventType, contact.email, contact.phone, step, pkgCode]);
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -135,7 +159,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
     return (
       <div className="rounded-sm border border-stone-200 bg-white p-6 text-center" role="status">
         <p className="font-serif text-3xl">{t(paid ? 'done.paid' : 'done.pending', { number: result.number })}</p>
-        <p className="mt-3 text-sm leading-relaxed text-stone-600">{t(paid ? (express ? 'done.paidExpressBody' : 'done.paidBody') : 'done.pendingBody')}</p>
+        <p className="mt-3 text-sm leading-relaxed text-stone-600">{t(paid ? (express ? 'done.paidExpressBody' : 'done.paidBody') : express ? 'done.pendingBodyExpress' : 'done.pendingBody')}</p>
         {!paid ? (
           <dl className="mx-auto mt-5 max-w-xs space-y-1 rounded-sm bg-stone-50 p-4 text-left text-sm">
             <div className="flex justify-between"><dt className="text-stone-500">{t('done.bank')}</dt><dd>{bank.bank}</dd></div>
@@ -185,7 +209,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
             <h2 className="mb-1 font-serif text-2xl">{t('wizard.type.title')}</h2>
             <p className="mb-4 text-sm text-stone-500">{t('wizard.type.body')}</p>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {EVENT_TYPES.map((k) => (
+              {eventTypes.map((k) => (
                 <button key={k} type="button" onClick={() => chooseType(k)} className="group flex flex-col items-center gap-3 rounded-sm border border-stone-200 bg-white px-3 py-5 text-center text-stone-500 transition-colors hover:border-stone-900 hover:text-stone-900">
                   <EventTypeIcon type={k} className="h-9 w-9" />
                   <span className="font-serif text-lg leading-tight text-stone-900">{EVENT_TYPE_LABEL[k][locale]}</span>
@@ -224,14 +248,12 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
                   </button>
                   {panel === p ? (
                     <div className="border-t border-stone-100 p-4">
-                      {p === 'design' ? <DesignStep d={draft} set={setD} locale={locale} /> : <DetailsStep d={draft} set={setD} draftKey={draftKey} eventType={eventType} contact={contact} setContact={setContact} express={express} showContact={false} showNames={false} />}
+                      {p === 'design' ? <DesignStep d={draft} set={setD} locale={locale} fontClasses={fontClasses} /> : <DetailsStep d={draft} set={setD} draftKey={draftKey} eventType={eventType} contact={contact} setContact={setContact} express={express} showContact={false} showNames={false} />}
                     </div>
                   ) : null}
                 </div>
               ))}
-              {dirty ? (
-                <button type="button" onClick={refreshPreview} disabled={pending} className="w-full rounded-full border border-stone-900 px-5 py-3 text-xs uppercase tracking-[0.25em] text-stone-900 disabled:opacity-40">{pending ? t('wizard.preview.refreshing') : t('wizard.preview.refresh')}</button>
-              ) : null}
+              {dirty ? <p className="text-center text-[0.65rem] uppercase tracking-[0.2em] text-stone-400">{t('wizard.preview.refreshing')}</p> : null}
             </div>
           </PreviewStep>
         ) : null}
@@ -241,6 +263,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
           <section>
             <h2 className="mb-1 font-serif text-2xl">{t('package.title')}</h2>
             <p className="mb-4 text-sm text-stone-500">{t('wizard.package.body')}</p>
+            {!packages.length ? <p className="rounded-sm border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">{t('wizard.package.none')}</p> : null}
             <div className="grid gap-3 sm:grid-cols-2">
               {packages.map((p) => (
                 <button key={p.code} type="button" onClick={() => setPkgCode(p.code)} aria-pressed={pkgCode === p.code}
@@ -323,7 +346,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
               <div className="grid grid-cols-[1fr_auto] gap-3">
                 <div><label className={label}>{t('contact.phone')}</label><input type="tel" className={field} required value={contact.phone} onChange={(e) => setContact({ ...contact, phone: e.target.value })} placeholder="55 1234 5678" /></div>
                 <div><label className={label}>{t('contact.country')}</label>
-                  <select className={field} value={contact.country} onChange={(e) => setContact({ ...contact, country: e.target.value })}><option value="MX">México</option><option value="US">USA</option><option value="CA">Canadá</option></select></div>
+                  <select className={field} value={contact.country} onChange={(e) => setContact({ ...contact, country: e.target.value })}>{region === 'MX' ? <option value="MX">México</option> : <><option value="US">USA</option><option value="CA">Canadá</option></>}</select></div>
               </div>
             </div>
             <dl className="rounded-sm bg-stone-50 p-4 text-sm">
@@ -332,14 +355,16 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
               <div className="mt-2 flex justify-between border-t border-stone-200 pt-2 font-medium"><dt>{t('payment.total')}</dt><dd>{fmt(total, currency)}</dd></div>
             </dl>
 
-            <div className="grid grid-cols-2 gap-2">
-              {(['card_sim', 'transfer'] as const).map((m) => (
+            <div className="grid grid-cols-3 gap-2">
+              {(['card_sim', 'apple_pay', 'transfer'] as const).map((m) => (
                 <button key={m} type="button" onClick={() => setMethod(m)} aria-pressed={method === m}
-                  className={`rounded-sm border px-3 py-3 text-sm ${method === m ? 'border-stone-900 bg-stone-900 text-white' : 'border-stone-300'}`}>
-                  {t(m === 'card_sim' ? 'payment.card' : 'payment.transfer')}
+                  className={`rounded-sm border px-2 py-3 text-center ${method === m ? 'border-stone-900 bg-stone-900 text-white' : 'border-stone-300'}`}>
+                  <span className="block text-sm">{t(m === 'card_sim' ? 'payment.card' : m === 'apple_pay' ? 'payment.applePay' : 'payment.transfer')}</span>
+                  <span className={`mt-0.5 block text-[0.6rem] uppercase tracking-widest ${method === m ? 'text-white/70' : 'text-stone-400'}`}>{t(m === 'transfer' ? 'payment.transferTime' : 'payment.instant')}</span>
                 </button>
               ))}
             </div>
+            <p className="text-xs text-stone-500">{t(instant ? (express ? 'payment.instantHelpExpress' : 'payment.instantHelp') : 'payment.transferHelp')}</p>
 
             {method === 'card_sim' ? (
               <div className="space-y-3 rounded-sm border border-stone-200 p-4">
@@ -351,7 +376,12 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
                   <div><label className={label}>{t('payment.cardCvc')}</label><input inputMode="numeric" className={field} value={card.cvc} onChange={(e) => setCard({ ...card, cvc: e.target.value.replace(/\D/g, '') })} placeholder="123" /></div>
                 </div>
               </div>
-            ) : <p className="text-sm text-stone-600">{t('payment.transferHelp')}</p>}
+            ) : method === 'apple_pay' ? (
+              <div className="rounded-sm border border-stone-200 p-4 text-center">
+                <span className="inline-block rounded-md bg-black px-5 py-2 text-sm font-medium text-white"> Pay</span>
+                <p className="mt-2 text-xs text-amber-800">{t('payment.applePayHelp')}</p>
+              </div>
+            ) : null}
 
             <label className="flex items-start gap-3 text-xs leading-relaxed text-stone-600">
               <input type="checkbox" className="mt-0.5 h-4 w-4 accent-stone-900" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
@@ -374,7 +404,7 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
                 </button>
               ) : (
                 <button type="submit" disabled={pending || !contactOk} className="rounded-full bg-stone-900 px-6 py-3 text-xs uppercase tracking-[0.25em] text-white disabled:opacity-60">
-                  {pending ? t('payment.sending') : method === 'card_sim' ? t('payment.pay', { total: fmt(total, currency) }) : t('payment.reserve')}
+                  {pending ? t('payment.sending') : instant ? t('payment.pay', { total: fmt(total, currency) }) : t('payment.reserve')}
                 </button>
               )}
             </div>

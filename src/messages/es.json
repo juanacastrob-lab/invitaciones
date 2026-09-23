@@ -456,24 +456,31 @@
       "cardExp": "Vence (MM/AA)",
       "cardCvc": "CVC",
       "transfer": "Transferencia o depósito",
-      "transferHelp": "Te mostramos los datos bancarios al confirmar. Tu pedido queda apartado y lo activamos en cuanto veamos el pago.",
+      "transferHelp": "Te mostramos los datos bancarios al confirmar. Nos mandas el comprobante por WhatsApp y verificamos el pago en menos de 12 horas.",
       "consent": "Acepto el <link>aviso de privacidad</link> y que me contacten por WhatsApp y correo.",
       "pay": "Pagar {total}",
       "reserve": "Apartar mi pedido",
-      "sending": "Procesando…"
+      "sending": "Procesando…",
+      "applePay": "Apple Pay",
+      "instant": "Al instante",
+      "transferTime": "Hasta 12 h",
+      "instantHelp": "Se acredita al momento: tu invitación queda activa y te llega tu acceso por correo.",
+      "instantHelpExpress": "Se acredita al momento: tu PDF te llega al correo en unos 15 minutos.",
+      "applePayHelp": "Apple Pay se activa en los próximos días. Mientras, esta opción es de prueba y no hace ningún cargo."
     },
     "done": {
       "paid": "¡Listo! Pedido #{number} pagado.",
       "pending": "Pedido #{number} apartado.",
       "paidBody": "Ya tienes tu invitación apartada. En las próximas horas te escribimos por WhatsApp para empezar.",
-      "pendingBody": "Haz la transferencia con estos datos y mándanos el comprobante por WhatsApp. En cuanto lo veamos, activamos tu pedido.",
+      "pendingBody": "Haz la transferencia con estos datos y mándanos el comprobante por WhatsApp. Verificamos el pago en menos de 12 horas; en cuanto quede, te llega tu acceso por correo.",
       "bank": "Banco",
       "holder": "A nombre de",
       "clabe": "CLABE",
       "concept": "Concepto",
       "email": "Te mandamos un correo con tu acceso: desde ahí vas a poder ver tu invitación y tus invitados.",
       "whatsapp": "Escribirnos por WhatsApp",
-      "paidExpressBody": "Ya estamos armando tu invitación. En unos 15 minutos te llega a tu correo en PDF, lista para mandar por WhatsApp. También la vas a ver en tu panel."
+      "paidExpressBody": "Ya estamos armando tu invitación. En unos 15 minutos te llega a tu correo en PDF, lista para mandar por WhatsApp. También la vas a ver en tu panel.",
+      "pendingBodyExpress": "Haz la transferencia con estos datos y mándanos el comprobante por WhatsApp. Verificamos el pago en menos de 12 horas; en cuanto quede, tu PDF te llega al correo en unos 15 minutos."
     },
     "errors": {
       "invalid": "Revisa los campos marcados.",
@@ -501,7 +508,9 @@
         "ink": "Texto",
         "accent": "Acento",
         "sampleHeadline": "Nos casamos",
-        "sampleButton": "Confirmar asistencia"
+        "sampleButton": "Confirmar asistencia",
+        "font": "Tipografía",
+        "fontBody": "La letra de los nombres y los títulos."
       },
       "details": {
         "who": "Quiénes celebran",
@@ -570,9 +579,15 @@
       },
       "package": {
         "body": "Todos parten de lo que acabas de ver.",
-        "expressPreview": "Así se verá tu hoja en PDF (la parte de abajo se desbloquea al pagar):"
+        "expressPreview": "Así se verá tu hoja en PDF (la parte de abajo se desbloquea al pagar):",
+        "none": "Todavía no tenemos precios para tu país. Escríbenos por WhatsApp y te cotizamos hoy mismo."
       },
       "progress": "Paso {n} de {total}"
+    },
+    "region": {
+      "mx": "México · MXN",
+      "us": "EE. UU. y Canadá · USD",
+      "switch": "Cambiar de país"
     }
   },
   "tables": {

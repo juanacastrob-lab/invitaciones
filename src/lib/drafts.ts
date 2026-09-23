@@ -3,6 +3,7 @@ import type { EventContent } from '@/schemas/event-content';
 import { templateContent } from '@/lib/admin/template';
 import { EVENT_TYPES, type EventType } from '@/lib/event-types';
 import { TEMPLATE_IDS } from '@/templates/registry';
+import { FONT_IDS } from '@/lib/fonts';
 
 /**
  * El borrador del wizard de la tienda: lo que el cliente llena antes de pagar.
@@ -25,6 +26,7 @@ export const draftAct = z.object({
 export const draftData = z.object({
   template: z.enum(TEMPLATE_IDS).default('aurora'),
   colors: z.object({ paper: hex.optional(), ink: hex.optional(), accent: hex.optional() }).default({}),
+  font: z.enum(FONT_IDS).or(z.literal('')).default(''),
   eventType: z.enum(EVENT_TYPES).default('boda'),
   partnerA: short(80),
   partnerB: short(80),
@@ -53,6 +55,8 @@ export function draftStartsAt(d: DraftData): string {
 
 const PARENT_TITLES: Record<string, { a: { es: string; en: string }; b: { es: string; en: string } }> = {
   boda: { a: { es: 'Padres de la novia', en: 'Parents of the bride' }, b: { es: 'Padres del novio', en: 'Parents of the groom' } },
+  engagement: { a: { es: 'Padres de ella', en: 'Her parents' }, b: { es: 'Padres de él', en: 'His parents' } },
+  anniversary: { a: { es: 'Nuestros hijos', en: 'Our children' }, b: { es: 'Nuestra familia', en: 'Our family' } },
   default: { a: { es: 'Sus padres', en: 'Parents' }, b: { es: 'Sus padrinos', en: 'Godparents' } },
 };
 
@@ -66,6 +70,7 @@ export function draftToContent(d: DraftData): EventContent {
   const lt = (v: string) => ({ es: v, en: v });
 
   if (Object.values(d.colors).some(Boolean)) c.colors = d.colors;
+  if (d.font) c.font = d.font;
   if (d.headline) c.cover = { ...c.cover, headline: lt(d.headline), envelope: false, monogram: false };
   if (d.message) c.cover = { ...(c.cover ?? { envelope: false, monogram: false }), tagline: lt(d.message) };
   if (d.photos[0]) {
@@ -127,8 +132,9 @@ export function draftMissing(d: DraftData): ('names' | 'date' | 'venue')[] {
 export function templateForType(type: EventType): (typeof TEMPLATE_IDS)[number] {
   switch (type) {
     case 'xv': case 'sweet_sixteen': case 'cumpleanos': return 'fiesta';
-    case 'bautizo': case 'baby_shower': case 'primera_comunion': case 'confirmacion': return 'jardin';
-    case 'graduacion': return 'minimal';
+    case 'bautizo': case 'baby_shower': case 'primera_comunion': case 'confirmacion': case 'bridal_shower': return 'jardin';
+    case 'graduacion': case 'bar_mitzvah': return 'minimal';
+    case 'anniversary': return 'noche';
     default: return 'aurora';
   }
 }

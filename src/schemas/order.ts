@@ -5,7 +5,7 @@ import { EVENT_TYPES } from '@/lib/event-types';
 export const BUILD_MODES = ['team', 'self', 'planner'] as const;
 export type BuildMode = (typeof BUILD_MODES)[number];
 
-export const PAYMENT_METHODS = ['card_sim', 'transfer'] as const;
+export const PAYMENT_METHODS = ['card_sim', 'apple_pay', 'transfer'] as const;
 
 export const orderInput = z
   .object({
