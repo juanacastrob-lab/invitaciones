@@ -13,6 +13,7 @@ import { EVENT_TYPES, EVENT_TYPE_LABEL, needsTwoNames, type EventType } from '@/
 import { DesignStep } from './DesignStep';
 import { DetailsStep } from './DetailsStep';
 import { PreviewStep } from './PreviewStep';
+import { EventTypeIcon } from './EventTypeIcon';
 
 export interface StorePackage { code: string; name: string; price: number; currency: string; features: string[] }
 export interface StoreExtra { code: string; name: string; description: string | null; price: number; included_in: string[] }
@@ -28,7 +29,6 @@ type Step = 'type' | 'basics' | 'preview' | 'package' | 'extras' | 'mode' | 'pay
 const stepsFor = (code: string): Step[] => (isExpress(code) ? ['type', 'basics', 'preview', 'package', 'payment'] : ['type', 'basics', 'preview', 'package', 'extras', 'mode', 'payment']);
 /** El paquete que se marca como "el más pedido" y queda elegido de entrada. */
 const POPULAR = 'completo';
-const TYPE_ICON: Record<EventType, string> = { boda: '💍', xv: '👑', sweet_sixteen: '🎀', bautizo: '🕊️', baby_shower: '🍼', graduacion: '🎓', cumpleanos: '🎂', primera_comunion: '✝️', confirmacion: '🕊️', otro: '🎉' };
 
 export function Checkout({ locale, packages, extras, featureLabels, preselected, bank, planner, initialType, initialDraft }: {
   locale: Locale;
@@ -186,9 +186,9 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
             <p className="mb-4 text-sm text-stone-500">{t('wizard.type.body')}</p>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {EVENT_TYPES.map((k) => (
-                <button key={k} type="button" onClick={() => chooseType(k)} className="flex items-center gap-3 rounded-sm border border-stone-200 bg-white p-4 text-left hover:border-stone-900">
-                  <span className="text-2xl" aria-hidden>{TYPE_ICON[k]}</span>
-                  <span className="text-sm font-medium">{EVENT_TYPE_LABEL[k][locale]}</span>
+                <button key={k} type="button" onClick={() => chooseType(k)} className="group flex flex-col items-center gap-3 rounded-sm border border-stone-200 bg-white px-3 py-5 text-center text-stone-500 transition-colors hover:border-stone-900 hover:text-stone-900">
+                  <EventTypeIcon type={k} className="h-9 w-9" />
+                  <span className="font-serif text-lg leading-tight text-stone-900">{EVENT_TYPE_LABEL[k][locale]}</span>
                 </button>
               ))}
             </div>
@@ -199,7 +199,8 @@ export function Checkout({ locale, packages, extras, featureLabels, preselected,
         {current === 'basics' ? (
           <section className="space-y-4">
             <div>
-              <h2 className="mb-1 font-serif text-2xl">{TYPE_ICON[eventType]} {t('wizard.basics.title')}</h2>
+              <p className="mb-2 flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.25em] text-stone-500"><EventTypeIcon type={eventType} className="h-5 w-5" /> {EVENT_TYPE_LABEL[eventType][locale]}</p>
+              <h2 className="mb-1 font-serif text-2xl">{t('wizard.basics.title')}</h2>
               <p className="text-sm text-stone-500">{t('wizard.basics.body')}</p>
             </div>
             <div className={`grid gap-3 ${two ? 'grid-cols-2' : ''}`}>
