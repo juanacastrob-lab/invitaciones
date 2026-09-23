@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { MetaPixel } from '@/components/MetaPixel';
 import { Cormorant_Garamond, Jost } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
@@ -51,6 +52,7 @@ export default async function RootLayout({
     <html lang={locale} className={`${serif.variable} ${sans.variable}`}>
       <body className="min-h-dvh bg-stone-50 text-stone-900 antialiased">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <MetaPixel />
       </body>
     </html>
   );

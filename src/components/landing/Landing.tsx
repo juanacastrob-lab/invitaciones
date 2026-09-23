@@ -8,6 +8,7 @@ import { EVENT_TYPES_BY_REGION, EVENT_TYPE_LABEL } from '@/lib/event-types';
 import { TEMPLATE_IDS, TEMPLATES } from '@/templates/registry';
 import { getApprovedReviews } from '@/lib/reviews';
 import { Reviews } from '@/components/landing/Reviews';
+import { FunnelPing } from '@/components/FunnelPing';
 
 /**
  * La portada de holaboda. Estática con revalidación: no gasta funciones de
@@ -24,6 +25,7 @@ export async function Landing({ locale }: { locale: Locale }) {
 
   return (
     <div className="min-h-dvh bg-[#faf8f5] text-stone-900">
+      <FunnelPing step="landing_view" />
       {/* ------------------------------------------------- portada + nav */}
       <section className="relative isolate flex min-h-[100svh] flex-col text-white">
         <picture className="absolute inset-0 -z-10">

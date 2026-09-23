@@ -489,7 +489,10 @@
       "transferTime": "Hasta 12 h",
       "instantHelp": "Se acredita al momento: tu invitación queda activa y te llega tu acceso por correo.",
       "instantHelpExpress": "Se acredita al momento: tu PDF te llega al correo en unos 15 minutos.",
-      "applePayHelp": "Apple Pay se activa en los próximos días. Mientras, esta opción es de prueba y no hace ningún cargo."
+      "applePayHelp": "Apple Pay se activa en los próximos días. Mientras, esta opción es de prueba y no hace ningún cargo.",
+      "stripeMx": "Tarjeta · Apple Pay · OXXO",
+      "stripeUs": "Card · Apple Pay · Google Pay",
+      "stripeHelp": "Al continuar pasas a la página segura de pago de Stripe. Con tarjeta o Apple Pay se acredita al momento; con OXXO, cuando el banco avisa (hasta 3 días)."
     },
     "done": {
       "paid": "¡Listo! Pedido #{number} pagado.",
@@ -503,7 +506,10 @@
       "email": "Te mandamos un correo con tu acceso: desde ahí vas a poder ver tu invitación y tus invitados.",
       "whatsapp": "Escribirnos por WhatsApp",
       "paidExpressBody": "Ya estamos armando tu invitación. En unos 15 minutos te llega a tu correo en PDF, lista para mandar por WhatsApp. También la vas a ver en tu panel.",
-      "pendingBodyExpress": "Haz la transferencia con estos datos y mándanos el comprobante por WhatsApp. Verificamos el pago en menos de 12 horas; en cuanto quede, tu PDF te llega al correo en unos 15 minutos."
+      "pendingBodyExpress": "Haz la transferencia con estos datos y mándanos el comprobante por WhatsApp. Verificamos el pago en menos de 12 horas; en cuanto quede, tu PDF te llega al correo en unos 15 minutos.",
+      "awaiting": "Pedido #{number} en espera de pago.",
+      "awaitingBody": "Ya tenemos tu pedido. En cuanto el banco confirme el pago (OXXO o SPEI pueden tardar hasta 3 días) te llega tu acceso por correo y, si es Express, tu PDF en 15 minutos.",
+      "goPanel": "Entrar a mi panel"
     },
     "errors": {
       "invalid": "Revisa los campos marcados.",

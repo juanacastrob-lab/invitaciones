@@ -5,7 +5,7 @@ import { EVENT_TYPES } from '@/lib/event-types';
 export const BUILD_MODES = ['team', 'self', 'planner'] as const;
 export type BuildMode = (typeof BUILD_MODES)[number];
 
-export const PAYMENT_METHODS = ['card_sim', 'apple_pay', 'transfer'] as const;
+export const PAYMENT_METHODS = ['card_sim', 'apple_pay', 'transfer', 'stripe'] as const;
 
 export const orderInput = z
   .object({
@@ -71,5 +71,5 @@ export function priceOrder(
 }
 
 export type OrderResult =
-  | { ok: true; orderId: string; number: number; status: 'pagado' | 'pendiente'; total: number; currency: string; whatsappUrl: string }
+  | { ok: true; orderId: string; number: number; status: 'pagado' | 'pendiente'; total: number; currency: string; whatsappUrl: string; /** Stripe: a dónde mandar al cliente a pagar. */ redirectUrl?: string }
   | { ok: false; error: 'invalid' | 'phone_invalid' | 'consent_required' | 'package_unavailable' | 'card_declined' | 'planner_email_required' | 'too_many_attempts' | 'unknown'; field?: string };
