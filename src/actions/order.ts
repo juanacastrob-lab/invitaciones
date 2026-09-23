@@ -68,6 +68,8 @@ export async function createOrder(raw: unknown): Promise<OrderResult> {
     if (!input.card || !simulateCard(input.card)) return { ok: false, error: 'card_declined', field: 'card' };
     paid = true;
   }
+  // Apple Pay: hasta que entre Stripe, se comporta como pago aprobado al instante.
+  if (input.paymentMethod === 'apple_pay') paid = true;
 
   // Referido de planner: comisión calculada aquí con el % de la base, nunca del navegador.
   const planner = input.plannerCode ? await getPlannerByCode(input.plannerCode) : null;
@@ -121,7 +123,7 @@ export async function createOrder(raw: unknown): Promise<OrderResult> {
   }
 
   if (paid) {
-    await admin.from('payments').insert({ order_id: order.id, amount: total, currency: pkg.currency, method: 'card_sim', reference: 'SIMULADO' });
+    await admin.from('payments').insert({ order_id: order.id, amount: total, currency: pkg.currency, method: input.paymentMethod, reference: 'SIMULADO' });
     await provisionOrder(order.id);
   }
 

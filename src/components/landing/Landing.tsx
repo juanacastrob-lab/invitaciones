@@ -4,7 +4,7 @@ import { APP_NAME, DEFAULT_LOCALE, WHATSAPP_NUMBER, whatsappLink, type Locale } 
 import { DEMO_SLUG } from '@/demo/demo-event';
 import { getActivePackages, formatPrice } from '@/lib/packages';
 import { LeadForm, WhatsAppIcon } from '@/components/landing/LeadForm';
-import { EVENT_TYPES, EVENT_TYPE_LABEL } from '@/lib/event-types';
+import { EVENT_TYPES_BY_REGION, EVENT_TYPE_LABEL } from '@/lib/event-types';
 import { TEMPLATE_IDS, TEMPLATES } from '@/templates/registry';
 
 /**
@@ -99,7 +99,7 @@ export async function Landing({ locale }: { locale: Locale }) {
             <h2 className="text-[0.7rem] uppercase tracking-[0.3em] text-stone-400">{t('types.title')}</h2>
             <p className="mx-auto mt-3 max-w-xl text-[0.95rem] leading-relaxed text-stone-600">{t('types.body')}</p>
             <ul className="mt-6 flex flex-wrap justify-center gap-2">
-              {EVENT_TYPES.filter((k) => k !== 'otro').map((k) => (
+              {EVENT_TYPES_BY_REGION[locale === 'en' ? 'US' : 'MX'].filter((k) => k !== 'otro').map((k) => (
                 <li key={k}>
                   <a href={`/comprar?tipo=${k}${locale === 'es' ? '' : '&lang=en'}`} className="inline-block rounded-full border border-stone-300 px-4 py-2 text-xs uppercase tracking-[0.15em] text-stone-700 hover:border-stone-900">
                     {EVENT_TYPE_LABEL[k][locale]}

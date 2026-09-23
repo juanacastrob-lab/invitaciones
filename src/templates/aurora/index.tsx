@@ -12,6 +12,8 @@ import { CopyButton } from '@/components/invitation/CopyButton';
 import { MusicPlayer } from '@/components/invitation/MusicPlayer';
 import { EnvelopeIntro } from '@/components/invitation/EnvelopeIntro';
 import { RsvpCta } from '@/components/invitation/RsvpCta';
+import { FONT_VARIABLE_CLASSES } from '@/lib/fonts-loader';
+import { fontCss } from '@/lib/fonts';
 import { RsvpForm } from '@/components/invitation/RsvpForm';
 import { resolveTemplate, templateCssVars } from '@/templates/registry';
 import QRCode from 'qrcode';
@@ -592,9 +594,10 @@ export async function AuroraTemplate({ invitation, locale, path, token, previewM
 
   return (
     <div
-      style={templateCssVars(theme)}
+      style={{ ...templateCssVars(theme), ...(c.font ? { '--font-display': fontCss(c.font), '--font-serif': fontCss(c.font) } : {}) } as React.CSSProperties}
       data-template={theme.id}
-      className="min-h-dvh bg-[var(--paper)] font-sans text-[var(--ink)] antialiased"
+      data-invitation-root
+      className={`min-h-dvh bg-[var(--paper)] font-sans text-[var(--ink)] antialiased ${FONT_VARIABLE_CLASSES}`}
     >
       {/* Barra del invitado: quién es y cuántos pases trae. */}
       {access === 'token' && guest ? (

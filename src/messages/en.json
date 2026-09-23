@@ -456,24 +456,31 @@
       "cardExp": "Expires (MM/YY)",
       "cardCvc": "CVC",
       "transfer": "Bank transfer",
-      "transferHelp": "We'll show you the bank details on confirmation. Your order is reserved and activated as soon as we see the payment.",
+      "transferHelp": "We show you the bank details on confirmation. Send us the receipt on WhatsApp and we verify the payment within 12 hours.",
       "consent": "I accept the <link>privacy notice</link> and being contacted on WhatsApp and email.",
       "pay": "Pay {total}",
       "reserve": "Reserve my order",
-      "sending": "Processing…"
+      "sending": "Processing…",
+      "applePay": "Apple Pay",
+      "instant": "Instant",
+      "transferTime": "Up to 12 h",
+      "instantHelp": "Credited right away: your invitation goes live and your access arrives by email.",
+      "instantHelpExpress": "Credited right away: your PDF reaches your email in about 15 minutes.",
+      "applePayHelp": "Apple Pay goes live in the next few days. For now this option is a test and makes no charge."
     },
     "done": {
       "paid": "Done! Order #{number} paid.",
       "pending": "Order #{number} reserved.",
       "paidBody": "Your invitation is reserved. We'll message you on WhatsApp in the next few hours to get started.",
-      "pendingBody": "Make the transfer with these details and send us the receipt on WhatsApp. We'll activate your order as soon as we see it.",
+      "pendingBody": "Make the transfer with these details and send us the receipt on WhatsApp. We verify within 12 hours; as soon as it clears, your access arrives by email.",
       "bank": "Bank",
       "holder": "Account holder",
       "clabe": "CLABE",
       "concept": "Reference",
       "email": "We sent you an email with your access: from there you'll see your invitation and your guests.",
       "whatsapp": "Message us on WhatsApp",
-      "paidExpressBody": "We are building your invitation. In about 15 minutes the PDF reaches your email, ready to send on WhatsApp. You will also see it in your panel."
+      "paidExpressBody": "We are building your invitation. In about 15 minutes the PDF reaches your email, ready to send on WhatsApp. You will also see it in your panel.",
+      "pendingBodyExpress": "Make the transfer with these details and send us the receipt on WhatsApp. We verify within 12 hours; as soon as it clears, your PDF reaches your email in about 15 minutes."
     },
     "errors": {
       "invalid": "Please check the highlighted fields.",
@@ -501,7 +508,9 @@
         "ink": "Text",
         "accent": "Accent",
         "sampleHeadline": "We are getting married",
-        "sampleButton": "RSVP"
+        "sampleButton": "RSVP",
+        "font": "Typography",
+        "fontBody": "The lettering for names and headings."
       },
       "details": {
         "who": "Who is celebrating",
@@ -570,9 +579,15 @@
       },
       "package": {
         "body": "All of them start from what you just saw.",
-        "expressPreview": "This is how your PDF page will look (the bottom unlocks after payment):"
+        "expressPreview": "This is how your PDF page will look (the bottom unlocks after payment):",
+        "none": "We do not have prices for your country yet. Write to us on WhatsApp and we will quote you today."
       },
       "progress": "Step {n} of {total}"
+    },
+    "region": {
+      "mx": "Mexico · MXN",
+      "us": "USA & Canada · USD",
+      "switch": "Change country"
     }
   },
   "tables": {

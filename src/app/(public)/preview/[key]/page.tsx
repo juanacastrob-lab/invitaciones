@@ -4,6 +4,7 @@ import { loadDraft } from '@/actions/draft';
 import { draftToContent } from '@/lib/drafts';
 import { AuroraTemplate } from '@/templates/aurora';
 import type { Invitation } from '@/lib/invitations';
+import { PreviewLive } from '@/components/invitation/PreviewLive';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { title: 'Vista previa', robots: { index: false, follow: false } };
@@ -37,6 +38,7 @@ export default async function DraftPreview({ params, searchParams }: { params: P
         <a href={`/comprar?d=${key}${es ? '' : '&lang=en'}`} className="rounded-full bg-white px-3 py-1 text-stone-900">{es ? 'Volver a la tienda' : 'Back to the store'}</a>
       </div>
       <AuroraTemplate invitation={invitation} locale={locale} path={`/preview/${key}`} previewMode />
+      <PreviewLive />
     </div>
   );
 }

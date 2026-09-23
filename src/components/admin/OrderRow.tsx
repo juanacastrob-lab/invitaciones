@@ -39,10 +39,15 @@ export function OrderRow({ order: o }: { order: Order }) {
             <span className="ml-2"><Badge tone={o.status === 'pagado' ? 'green' : o.status === 'pendiente' ? 'amber' : 'neutral'}>{o.status}</Badge></span>
             {express ? <span className="ml-2"><Badge tone={express.late ? 'red' : 'amber'}>⚡ Express · {express.late ? `${-express.left} min tarde` : `${express.left} min para entregar`}</Badge></span> : null}
           </p>
-          <p className="mt-0.5 text-sm text-stone-600">{o.package_name}{o.extras.length ? ` + ${o.extras.map((e) => e.name).join(', ')}` : ''} · <strong>{fmt.format(Number(o.total))}</strong> · {o.payment_method === 'transfer' ? 'transferencia' : 'tarjeta (simulada)'}</p>
+          <p className="mt-0.5 text-sm text-stone-600">{o.package_name}{o.extras.length ? ` + ${o.extras.map((e) => e.name).join(', ')}` : ''} · <strong>{fmt.format(Number(o.total))}</strong> · {o.payment_method === 'transfer' ? 'transferencia' : o.payment_method === 'apple_pay' ? 'Apple Pay (simulado)' : 'tarjeta (simulada)'}</p>
           <p className="mt-0.5 text-xs text-stone-500">{MODE[o.build_mode as keyof typeof MODE] ?? o.build_mode}{o.planner_email ? ` (${o.planner_email})` : ''}{Number(o.commission_amount) > 0 ? ` · comisión ${fmt.format(Number(o.commission_amount))}${o.commission_paid_at ? ' pagada' : ''}` : ''} · {new Date(o.created_at).toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })}</p>
           <p className="mt-1 flex gap-3 text-xs">
-            <a className="underline" href={whatsappLink(`Hola ${o.contact.partner_a}, soy de Hola Boda, sobre tu pedido #${o.number} 🙂`, o.contact.phone)} target="_blank" rel="noopener noreferrer">WhatsApp {o.contact.phone}</a>
+            <a className="underline" href={whatsappLink(`Hola ${o.contact.partner_a}, soy de Hola Boda, sobre tu pedido #${o.number}.`, o.contact.phone)} target="_blank" rel="noopener noreferrer">WhatsApp {o.contact.phone}</a>
+            {o.status === 'pagado' ? (
+              <a className="underline" href={whatsappLink(o.package_code === 'express'
+                ? `Hola ${o.contact.partner_a}, ya quedó tu pago del pedido #${o.number}. Tu invitación en PDF te llega a ${o.contact.email} en unos 15 minutos. También puedes entrar a https://holaboda.mx/login con ese correo para verla.`
+                : `Hola ${o.contact.partner_a}, ya quedó tu pago del pedido #${o.number}. Entra a https://holaboda.mx/login con tu correo ${o.contact.email}: te llega un link de acceso y desde ahí ves tu invitación y tu lista de invitados.`, o.contact.phone)} target="_blank" rel="noopener noreferrer">Avisar que ya quedó</a>
+            ) : null}
             <a className="underline" href={`mailto:${o.contact.email}`}>{o.contact.email}</a>
             {o.event_id ? <a className="underline" href={`/admin/events/${o.event_id}`}>Ver evento</a> : null}
           </p>

@@ -17,16 +17,16 @@ export const dynamic = 'force-dynamic';
 export default async function DevPreview({
   searchParams,
 }: {
-  searchParams: Promise<{ lang?: string; token?: string; type?: string; template?: string; confirmed?: string }>;
+  searchParams: Promise<{ lang?: string; token?: string; type?: string; template?: string; confirmed?: string; font?: string }>;
 }) {
   if (process.env.NODE_ENV === 'production') notFound();
 
-  const { lang, token, type, template, confirmed } = await searchParams;
+  const { lang, token, type, template, confirmed, font } = await searchParams;
   const conToken = token === '1';
   // ?type=xv: la plantilla de un evento de una sola persona, para revisar el diseño.
-  const content = isEventType(type) && type !== 'boda'
+  const content = { ...(isEventType(type) && type !== 'boda'
     ? templateContent({ partnerA: 'Sofía Valentina', startsAt: demoEventContent.startsAt, type })
-    : demoEventContent;
+    : demoEventContent), ...(font ? { font } : {}) };
 
   const invitation: Invitation = {
     access: conToken ? 'token' : 'public',

@@ -291,6 +291,9 @@ export const eventContent = z
       })
       .optional(),
 
+    /** Tipografía de títulos (ver src/lib/fonts.ts). Sin valor, la de la plantilla. */
+    font: z.string().max(30).optional(),
+
     /** Colores propios encima de la plantilla (los elige el cliente). */
     colors: z
       .object({
