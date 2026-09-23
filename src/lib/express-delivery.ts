@@ -36,7 +36,7 @@ export async function deliverExpressOrders(admin: SupabaseClient): Promise<{ del
       const es = locale === 'es';
       const subject = es ? `Tu invitación está lista · ${names}` : `Your invitation is ready · ${names}`;
       const text = es
-        ? `¡Lista! Aquí va tu invitación en PDF, para mandarla por WhatsApp a tus invitados.\n\nSi quieres corregir algo, entra a tu panel y vuelve a descargarla: ${panel}\n\n¿Necesitas un cambio que no puedes hacer tú? Escríbenos por WhatsApp al ${WHATSAPP_NUMBER}.\n\n${APP_NAME}`
+        ? `¡Lista! Aquí va tu invitación en PDF, para mandarla por WhatsApp a tus invitados.\n\nSi quieres corregir algo, entra a tu panel y vuelve a descargarla: ${panel}\n\n¿Necesitas un cambio que no puedes hacer tú? Escríbenos por WhatsApp al ${WHATSAPP_NUMBER}.\n\nY si te gustó, ¿nos dejas una reseña desde tu panel? Nos ayuda muchísimo.\n\n${APP_NAME}`
         : `Done! Here is your PDF invitation, ready to send to your guests on WhatsApp.\n\nTo fix anything, open your panel and download it again: ${panel}\n\nNeed a change you cannot make yourself? Write to us on WhatsApp at ${WHATSAPP_NUMBER}.\n\n${APP_NAME}`;
       const html = `<div style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.5;color:#2e2c29"><p>${escapeHtml(text).replace(panel, `<a href="${panel}">${panel}</a>`).replace(/\n/g, '<br>')}</p></div>`;
       const r = await sendEmail({ to: contact.email, subject, text, html, replyTo: CONTACT_EMAIL, attachments: [{ filename: `invitacion-${ev.slug}.pdf`, content: pdf }] });

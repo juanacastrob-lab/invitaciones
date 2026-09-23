@@ -9,6 +9,8 @@ import { PanelGuests } from '@/components/panel/PanelGuests';
 import { ApproveBox } from '@/components/panel/ApproveBox';
 import { ExpressStatus } from '@/components/panel/ExpressStatus';
 import { AdjustmentRequest } from '@/components/panel/AdjustmentRequest';
+import { ReviewBox } from '@/components/panel/ReviewBox';
+import { supabaseServer } from '@/lib/supabase/server';
 import { getOrderForEvent } from '@/lib/admin/queries';
 import { isExpress } from '@/lib/drafts';
 import { GuestsManager } from '@/components/admin/GuestsManager';
@@ -35,6 +37,8 @@ export default async function PanelEventPage({ params, searchParams }: { params:
   ]);
   if (!event) notFound();
   const express = isExpress(event.package_code ?? '');
+  const canReview = ['publicado', 'finalizado'].includes(event.status) || Boolean(order?.delivered_at);
+  const { data: myReview } = canReview ? await (await supabaseServer()).from('reviews').select('rating, body, approved_at').eq('event_id', id).maybeSingle() : { data: null };
   const pdfReady = !express || Boolean(order?.delivered_at) || Boolean(order?.deliver_at && new Date(order.deliver_at) <= new Date());
   const c = event.content as unknown as EventContent;
   const editable = event.status === 'borrador' || event.status === 'en_revision';
@@ -119,6 +123,13 @@ export default async function PanelEventPage({ params, searchParams }: { params:
             </NextIntlClientProvider>
           )}
         </section>
+
+        {canReview ? (
+          <div className="mt-8">
+            <ReviewBox eventId={id} defaultName={eventNames(c.couple, ' y ')} existing={myReview ? { rating: myReview.rating, body: myReview.body, approved: Boolean(myReview.approved_at) } : null}
+              labels={{ title: t('review.title'), hint: t('review.hint'), name: t('review.name'), city: t('review.city'), rating: t('review.rating'), body: t('review.body'), placeholder: t('review.placeholder'), consent: t('review.consent'), send: t('review.send'), thanks: t('review.thanks'), already: t('review.already') }} />
+          </div>
+        ) : null}
 
         <div className="mt-8">
           <AdjustmentRequest eventId={id} labels={{ button: t('adjust.button'), title: t('adjust.title'), hint: t('adjust.hint'), placeholder: t('adjust.placeholder'), send: t('adjust.send'), sent: t('adjust.sent') }} />

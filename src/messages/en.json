@@ -57,7 +57,13 @@
         "recordatorios": "Reminder rounds",
         "qr_checkin": "QR pass and check-in on the day",
         "save_the_date": "Save the date",
-        "entrega_20_min": "Ready in 20 minutes"
+        "entrega_20_min": "Ready in 20 minutes",
+        "entrega_correo": "Delivered to your email",
+        "link_general": "One link for all your guests",
+        "rsvp_formulario": "RSVP by form",
+        "mesas": "Table seating",
+        "diseno_medida": "Custom design",
+        "thank_you": "Thank-you card"
       }
     },
     "preview": {
@@ -79,6 +85,10 @@
       "title": "Five designs",
       "body": "Same content, different look. Change it whenever you want, even after sending.",
       "open": "Tap one to see it on the demo invitation."
+    },
+    "reviews": {
+      "title": "What they say",
+      "subtitle": "Reviews from real clients, published with their permission."
     }
   },
   "invitation": {
@@ -383,6 +393,19 @@
       "placeholder": "E.g. the reception starts at 8:30 pm, and remove photo 2.",
       "send": "Send",
       "sent": "Got it. We will let you know when it is done."
+    },
+    "review": {
+      "title": "Would you leave us a review?",
+      "hint": "It helps us a lot. We read it and, with your permission, publish it on holaboda.mx with your name and city.",
+      "name": "Your name (as you want it shown)",
+      "city": "City (optional)",
+      "rating": "Rating",
+      "body": "Tell us how it went",
+      "placeholder": "What you liked, how your guests received it…",
+      "consent": "I allow it to be published on holaboda.mx.",
+      "send": "Send review",
+      "thanks": "Thank you! We publish it as soon as we review it.",
+      "already": "You already left your review. Thank you!"
     }
   },
   "store": {

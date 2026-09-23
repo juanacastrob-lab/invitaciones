@@ -6,6 +6,8 @@ import { getActivePackages, formatPrice } from '@/lib/packages';
 import { LeadForm, WhatsAppIcon } from '@/components/landing/LeadForm';
 import { EVENT_TYPES_BY_REGION, EVENT_TYPE_LABEL } from '@/lib/event-types';
 import { TEMPLATE_IDS, TEMPLATES } from '@/templates/registry';
+import { getApprovedReviews } from '@/lib/reviews';
+import { Reviews } from '@/components/landing/Reviews';
 
 /**
  * La portada de holaboda. Estática con revalidación: no gasta funciones de
@@ -15,7 +17,7 @@ export async function Landing({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing' });
   const tLead = await getTranslations({ locale, namespace: 'lead' });
   const messages = await getMessages({ locale });
-  const packages = await getActivePackages('MX');
+  const [packages, reviews] = await Promise.all([getActivePackages('MX'), getApprovedReviews()]);
   const other: Locale = locale === 'es' ? 'en' : 'es';
   const demoHref = `/i/${DEMO_SLUG}${locale === DEFAULT_LOCALE ? '' : `?lang=${locale}`}`;
   const featureKeys = (codes: string[]) => codes.filter((c) => t.has(`packages.features.${c}`));
@@ -163,8 +165,8 @@ export async function Landing({ locale }: { locale: Locale }) {
               <h2 className="text-center text-[0.7rem] uppercase tracking-[0.3em] text-stone-400">{t('packages.title')}</h2>
               <p className="mt-2 text-center text-xs text-stone-500">{t('packages.subtitle', { currency: packages[0].currency })}</p>
               <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {packages.map((p, i) => (
-                  <div key={p.code} className={`flex flex-col rounded-sm border p-5 ${i === 2 ? 'border-stone-900' : 'border-stone-200'}`}>
+                {packages.map((p) => (
+                  <div key={p.code} className={`flex flex-col rounded-sm border p-5 ${p.code === 'con_pases' ? 'border-stone-900' : 'border-stone-200'}`}>
                     <p className="font-serif text-2xl text-stone-900">{p.name}</p>
                     <p className="mt-1 text-lg text-stone-700">{formatPrice(p.price, p.currency, locale)}</p>
                     <ul className="mt-4 flex-1 space-y-1.5 text-sm text-stone-600">
@@ -184,6 +186,8 @@ export async function Landing({ locale }: { locale: Locale }) {
             </div>
           </section>
         ) : null}
+
+        <Reviews reviews={reviews} locale={locale} title={t('reviews.title')} subtitle={t('reviews.subtitle')} />
 
         {/* ----------------------------------------------------- formulario */}
         <section id="formulario" className="px-5 py-14">
